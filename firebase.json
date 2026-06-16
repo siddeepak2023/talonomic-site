@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "talonomic-site",
+    "public": ".",
+    "ignore": ["firebase.json", ".firebaserc", "*.md", ".gitignore", ".git"],
+    "headers": [
+      { "source": "**/*.@(js|css|woff2|png|jpg|svg|ico)", "headers": [{ "key": "Cache-Control", "value": "max-age=2592000,immutable" }] },
+      { "source": "index.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] }
+    ]
+  }
+}
