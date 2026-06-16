@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>talonomic — AI unit economics for ecommerce brands</title>
+<meta name="description" content="talonomic computes AI unit economics for any ecommerce brand — AOV, LTV, contribution margin, repeat rate, and a per-SKU profit screener. Every number computed, with the math shown. No pixel, no dev. By BizFalcon AI."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://talonomic.bizfalconai.com/"/>
+<meta property="og:title" content="talonomic — AI unit economics for ecommerce brands"/>
+<meta property="og:description" content="Drop an order export. Get LTV, contribution margin, repeat rate, and a per-SKU profit screener — computed, with the formula shown. From $39/mo."/>
+<meta property="og:image" content="https://talonomic.bizfalconai.com/falcon-bird-white.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="talonomic — AI unit economics for ecommerce brands"/>
+<meta name="twitter:description" content="Drop an order export → LTV, margin, repeat rate, per-SKU profit screener. Computed, not estimated. From $39/mo."/>
+<link rel="icon" href="falcon-bird-white.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --grad:linear-gradient(135deg,#1565c0 0%,#0d82a8 55%,#0d9e7e 100%);
+  --grad-hero:linear-gradient(120deg,#1565c0,#0d82a8 50%,#0d9e7e);
+  --ink:#0a0a0b;--body:#52525b;--muted:#71717a;--faint:#a1a1aa;
+  --line:#ebebed;--line-2:#dcdce0;--bg:#fff;--alt:#fafafa;
+  --teal:#0d9e7e;--teal-7:#0f766e;--blue:#1565c0;
+  --good:#0d9e7e;--warn:#e0922a;--bad:#dc2626;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --mx:1180px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+.wrap{max-width:var(--mx);margin:0 auto;padding:0 28px;}
+.mark{width:30px;height:30px;border-radius:7px;background:var(--grad);position:relative;overflow:hidden;display:inline-block;flex-shrink:0;}
+.mark img{position:absolute;inset:8%;width:84%;height:84%;object-fit:contain;}
+
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:linear-gradient(135deg,#ffffff 0%,#f5f8fb 58%,#eef2f6 100%);}
+#bgdots{position:absolute;inset:0;width:100%;height:100%;}
+#bg .wm{position:absolute;width:240px;top:-26px;right:-26px;opacity:.08;}
+@media(max-width:820px){#bg .wm{width:150px;}}
+#hero,#dash,.mk-sec,footer{position:relative;z-index:1;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.82);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);}
+.nav-in{max-width:var(--mx);margin:0 auto;padding:13px 28px;display:flex;align-items:center;justify-content:space-between;}
+.brand{display:flex;align-items:center;gap:9px;}
+.brand b{font-weight:800;letter-spacing:-.02em;font-size:16px;}
+.brand small{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600;}
+.tabs{display:flex;gap:26px;align-items:center;}
+.tabs a{font-size:14px;font-weight:500;color:var(--muted);transition:color .15s;cursor:pointer;}
+.tabs a:hover{color:var(--ink);}
+@media(max-width:820px){.tabs a.hideable{display:none;}}
+.ghost{font-size:13.5px;font-weight:600;color:var(--ink);border:1px solid var(--line-2);padding:8px 14px;border-radius:9px;transition:border-color .15s;cursor:pointer;background:none;}
+.ghost:hover{border-color:var(--teal);}
+.solid{font-size:13.5px;font-weight:600;color:#fff;background:var(--ink);padding:9px 16px;border-radius:9px;border:none;cursor:pointer;transition:transform .15s;}
+.solid:hover{transform:translateY(-1px);}
+
+#hero{padding:96px 0 80px;position:relative;overflow:hidden;}
+#hero::before{content:'';position:absolute;top:-260px;right:-160px;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(13,158,126,.13),rgba(21,101,192,.09) 42%,transparent 70%);pointer-events:none;}
+.eye{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:24px;}
+.eye i{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(13,158,126,.14);}
+#hero h1{font-size:clamp(38px,6.4vw,68px);font-weight:800;line-height:1.03;letter-spacing:-.035em;max-width:15ch;margin-bottom:22px;}
+#hero h1 .g{background:var(--grad-hero);-webkit-background-clip:text;background-clip:text;color:transparent;}
+#hero p.lede{font-size:clamp(16px,2vw,20px);color:var(--body);max-width:600px;margin-bottom:36px;}
+.drop{border:1.5px dashed var(--line-2);border-radius:18px;padding:36px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;background:var(--alt);max-width:580px;transition:border-color .2s,background .2s;cursor:pointer;position:relative;}
+.drop.over{border-color:var(--teal);background:rgba(13,158,126,.05);}
+.drop .ic{font-size:30px;}
+.drop b{font-weight:700;font-size:16px;}
+.drop span{font-size:13px;color:var(--muted);}
+.drop-actions{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap;justify-content:center;}
+.linkrow{display:flex;gap:8px;width:100%;max-width:470px;margin-top:4px;}
+.linkrow input{flex:1;border:1px solid var(--line-2);border-radius:9px;padding:10px 13px;font-family:var(--sans);font-size:13.5px;outline:none;}
+.linkrow input:focus{border-color:var(--teal);}
+.or-sep{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;margin:2px 0;}
+.hint{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:18px;}
+
+#dash{display:none;padding:36px 0 90px;}
+.dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
+.dash-head h2{font-size:26px;font-weight:800;letter-spacing:-.02em;}
+.dash-head .sub{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px;}
+.nav-links{display:flex;gap:10px;align-items:center;}
+.row-label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:34px 0 14px;display:flex;align-items:center;gap:12px;}
+.row-label::after{content:'';flex:1;height:1px;background:var(--line);}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(184px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+.kpi{background:var(--bg);padding:18px 18px 16px;position:relative;}
+.kpi .k-label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:7px;display:flex;align-items:center;gap:6px;}
+.kpi .k-val{font-size:25px;font-weight:800;letter-spacing:-.02em;}
+.kpi .k-val.good{color:var(--good);}.kpi .k-val.warn{color:var(--warn);}.kpi .k-val.bad{color:var(--bad);}
+.kpi .k-form{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:7px;line-height:1.4;border-top:1px solid var(--line);padding-top:7px;}
+.dotc{width:7px;height:7px;border-radius:50%;flex:none;}
+.dotc.good{background:var(--good);}.dotc.warn{background:var(--warn);}.dotc.bad{background:var(--bad);}
+
+.charts{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;}
+@media(max-width:760px){.charts{grid-template-columns:1fr;}.scr-wrap{overflow-x:auto;}}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:20px;}
+.card h4{font-size:14px;font-weight:700;margin-bottom:14px;}
+.chart-box{position:relative;height:230px;}
+
+.scr{width:100%;border-collapse:collapse;font-size:13px;}
+.scr th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);}
+.scr td{padding:10px;border-bottom:1px solid var(--line);}
+.scr tr:last-child td{border-bottom:none;}
+.scr .title{font-weight:600;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.score{font-family:var(--mono);font-weight:700;}
+.tagp{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:6px;}
+.tagp.up{background:rgba(13,158,126,.12);color:var(--teal-7);}
+.tagp.down{background:rgba(220,38,38,.1);color:var(--bad);}
+.tagp.mid{background:var(--alt);color:var(--muted);}
+
+.insights{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.ins{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:18px;border-left:3px solid var(--teal);}
+.ins .it{font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--teal-7);margin-bottom:8px;}
+.ins p{font-size:14px;color:var(--ink);line-height:1.55;}
+.ins p b{font-weight:700;}
+
+.report{background:var(--grad-hero);border-radius:20px;padding:34px;color:#fff;position:relative;overflow:hidden;}
+.report::after{content:'';position:absolute;inset:0;background:radial-gradient(120% 120% at 100% 0%,rgba(255,255,255,.16),transparent 55%);}
+.report .rh{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+.report .rh b{font-size:18px;font-weight:800;letter-spacing:-.01em;}
+.report .rh span{font-family:var(--mono);font-size:11px;opacity:.8;}
+.report .grade{font-size:46px;font-weight:800;line-height:1;}
+.rgrid{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:18px;}
+.rgrid .r b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;}
+.rgrid .r span{font-size:11px;opacity:.78;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;}
+.report .rfoot{position:relative;margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.report .rwm{font-size:12px;opacity:.85;display:flex;align-items:center;gap:7px;}
+.report .rshare{background:#fff;color:#0c2d6b;font-weight:700;font-size:13px;padding:9px 16px;border-radius:9px;border:none;cursor:pointer;transition:transform .15s;}
+.report .rshare:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.18);}
+
+.askbar{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.askbar input{flex:1;min-width:240px;border:1px solid var(--line-2);border-radius:10px;padding:12px 14px;font-family:var(--sans);font-size:14px;outline:none;}
+.askbar input:focus{border-color:var(--teal);}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.chip{font-size:12px;color:var(--muted);background:var(--alt);border:1px solid var(--line);padding:6px 11px;border-radius:999px;cursor:pointer;transition:all .15s;}
+.chip:hover{border-color:var(--teal);color:var(--teal-7);}
+#answer{margin-top:14px;background:var(--alt);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:14.5px;line-height:1.6;display:none;}
+#answer .formula{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:8px;}
+
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:14px;}
+.feat{background:rgba(255,255,255,.85);backdrop-filter:blur(4px);border:1px solid var(--line);border-radius:16px;padding:22px;}
+.feat .fi{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,rgba(21,101,192,.1),rgba(13,158,126,.12));display:grid;place-items:center;font-size:20px;margin-bottom:14px;}
+.feat h4{font-size:15.5px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em;}
+.feat p{font-size:13.5px;color:var(--body);line-height:1.55;}
+
+.mk-head{text-align:center;max-width:640px;margin:0 auto 30px;}
+.mk-head .eyebrow{display:inline-flex;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--teal-7);margin-bottom:12px;}
+.mk-head h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.08;}
+.mk-head p{color:var(--body);font-size:16px;margin-top:12px;}
+.mk-sec{padding:84px 0;}
+
+.loop3{display:flex;align-items:stretch;gap:14px;justify-content:center;flex-wrap:wrap;}
+.lstep{flex:1;min-width:230px;max-width:330px;background:rgba(255,255,255,.85);backdrop-filter:blur(4px);border:1px solid var(--line);border-radius:16px;padding:24px;}
+.lstep .ln{font-family:var(--mono);font-size:12px;color:var(--teal-7);margin-bottom:12px;}
+.lstep .li{font-size:26px;margin-bottom:10px;}
+.lstep h4{font-size:16px;font-weight:700;margin-bottom:6px;letter-spacing:-.01em;}
+.lstep p{font-size:13.5px;color:var(--body);line-height:1.55;}
+.larrow{display:flex;align-items:center;color:var(--faint);font-size:22px;}
+@media(max-width:760px){.larrow{transform:rotate(90deg);margin:0 auto;}}
+
+/* competitor wedge */
+.vs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;max-width:880px;margin:0 auto;}
+@media(max-width:760px){.vs{grid-template-columns:1fr;}}
+.vs .col{background:var(--bg);padding:22px;}
+.vs .col.hl{background:rgba(13,158,126,.05);}
+.vs .col h5{font-size:14px;font-weight:800;margin-bottom:12px;}
+.vs .col.hl h5{color:var(--teal-7);}
+.vs .col li{list-style:none;font-size:13px;color:var(--body);display:flex;gap:8px;padding:4px 0;}
+
+.band2{background:var(--grad-hero);border-radius:24px;padding:46px;display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:center;position:relative;overflow:hidden;}
+.band2::after{content:'';position:absolute;inset:0;background:radial-gradient(100% 120% at 100% 0,rgba(255,255,255,.14),transparent 55%);}
+.band2 h2{position:relative;color:#fff;font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.02em;margin:10px 0 12px;}
+.band2 p{position:relative;color:rgba(255,255,255,.88);font-size:15.5px;margin-bottom:20px;line-height:1.55;}
+.band2-cta{position:relative;display:inline-flex;background:#fff;color:#0c2d6b;font-weight:700;font-size:14px;padding:12px 22px;border-radius:11px;transition:transform .15s;cursor:pointer;}
+.band2-cta:hover{transform:translateY(-1px);}
+.band2-stats{position:relative;display:flex;flex-direction:column;gap:18px;}
+.band2-stats b{display:block;color:#fff;font-size:24px;font-weight:800;letter-spacing:-.02em;}
+.band2-stats span{color:rgba(255,255,255,.82);font-size:12.5px;}
+@media(max-width:760px){.band2{grid-template-columns:1fr;padding:32px;}}
+
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:980px;margin:0 auto;}
+.plan{background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;position:relative;}
+.plan.pop{border-color:var(--teal);box-shadow:0 16px 40px rgba(13,158,126,.14);}
+.plan .badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 12px;border-radius:999px;}
+.plan .pn{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-7);margin-bottom:10px;}
+.plan .pp{font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.plan .pp small{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:0;}
+.plan .pd{font-size:13px;color:var(--muted);margin:8px 0 18px;min-height:34px;}
+.plan ul{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:22px;flex:1;}
+.plan li{font-size:13.5px;color:var(--body);display:flex;gap:8px;align-items:flex-start;}
+.plan li::before{content:'✓';color:var(--teal);font-weight:800;flex:none;}
+.plan .pbtn{text-align:center;font-size:14px;font-weight:600;padding:11px;border-radius:10px;border:1px solid var(--line-2);color:var(--ink);transition:all .15s;cursor:pointer;}
+.plan .pbtn:hover{border-color:var(--teal);color:var(--teal-7);}
+.plan.pop .pbtn{background:var(--ink);color:#fff;border-color:var(--ink);}
+.plan.pop .pbtn:hover{transform:translateY(-1px);color:#fff;}
+
+footer{border-top:1px solid var(--line);background:rgba(255,255,255,.85);backdrop-filter:blur(6px);padding:52px 0 36px;margin-top:40px;}
+.foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;}
+.foot-brand{max-width:300px;}
+.foot-brand p{font-size:13px;color:var(--muted);line-height:1.55;margin-top:12px;}
+.foot-cols{display:flex;gap:54px;flex-wrap:wrap;}
+.foot-col h6{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:13px;}
+.foot-col a{display:block;font-size:14px;color:var(--body);padding:5px 0;cursor:pointer;transition:color .15s;}
+.foot-col a:hover{color:var(--teal-7);}
+.foot-base{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.muted-note{font-size:12px;color:var(--faint);margin-top:10px;}
+</style>
+</head>
+<body>
+
+<div id="bg" aria-hidden="true">
+  <canvas id="bgdots"></canvas>
+  <img class="wm" src="falcon-lines-dark.png" alt="">
+</div>
+
+<nav>
+  <div class="nav-in">
+    <a href="#" class="brand" onclick="reset();return false;">
+      <span class="mark"><img src="falcon-bird-white.png" alt=""></span>
+      <b>talonomic</b><small>by BizFalcon AI</small>
+    </a>
+    <div class="tabs">
+      <a class="hideable" onclick="reset();goto('features')">Features</a>
+      <a class="hideable" onclick="reset();goto('pricing')">Pricing</a>
+      <a class="hideable" onclick="loadSample()">Demo</a>
+      <a class="hideable" href="#" onclick="signin();return false;">Sign in</a>
+      <button class="solid" onclick="window.open(appUrl('/talonomic'),'_blank')">Get started →</button>
+    </div>
+  </div>
+</nav>
+
+<input type="file" id="file" accept=".csv,.xls,.xlsx" style="display:none">
+
+<!-- HERO -->
+<header id="hero" class="landing">
+  <div class="wrap">
+    <div class="eye"><i></i>AI unit economics for ecommerce brands · powered by the Talon engine</div>
+    <h1>Your order export, turned into <span class="g">real unit economics</span> in 60 seconds.</h1>
+    <p class="lede">talonomic computes the numbers Shopify hides — AOV, LTV, contribution margin, repeat rate, and a per-SKU profit screener — straight from your order export, with the math shown. No pixel, no dev, no $500/mo attribution tax.</p>
+    <div class="drop" id="drop">
+      <div class="ic">🛍️</div>
+      <b>Drop your orders export</b>
+      <span>CSV or Excel from Shopify, WooCommerce, BigCommerce or Amazon — or paste a Google Sheet link. Parsed in your browser, never uploaded.</span>
+      <div class="linkrow">
+        <input id="urlin" placeholder="…or paste a public Google Sheet link" onkeydown="if(event.key==='Enter')sheetLink()">
+        <button class="solid" onclick="sheetLink()">Analyze</button>
+      </div>
+      <div class="or-sep">— or —</div>
+      <div class="drop-actions">
+        <button class="ghost" onclick="document.getElementById('file').click()">Choose a file</button>
+        <button class="ghost" onclick="loadSample()">Try sample store data</button>
+      </div>
+    </div>
+    <div class="hint">Runs 100% in your browser — your data never leaves this page. Numbers are computed, not estimated.</div>
+  </div>
+</header>
+
+<!-- FEATURES -->
+<section class="mk-sec landing" id="features">
+  <div class="wrap">
+    <div class="mk-head">
+      <span class="eyebrow">Why talonomic</span>
+      <h2>The profit numbers Shopify reports won't show you.</h2>
+      <p>Shopify gives you revenue and top sellers. Attribution tools cost $250–3,000/mo and take weeks to wire. talonomic computes your real unit economics from a file you already have — in seconds.</p>
+    </div>
+    <div class="features">
+      <div class="feat"><div class="fi">🧮</div><h4>Computed, not guessed</h4><p>AOV, LTV, gross & contribution margin, repeat rate, return rate — every metric calculated from your real orders with the formula shown. No hallucinated numbers.</p></div>
+      <div class="feat"><div class="fi">🏷️</div><h4>Per-SKU profit screener</h4><p>Ranks every product by revenue and true margin, flags your return-rate problems. Know which SKUs to push and which quietly lose money.</p></div>
+      <div class="feat"><div class="fi">🔁</div><h4>Retention & whales</h4><p>New-vs-returning revenue split, purchase frequency, days-to-2nd-order, and top-10%-customer concentration. See who actually drives the business.</p></div>
+      <div class="feat"><div class="fi">⚡</div><h4>Live in 60 seconds</h4><p>No pixel, no OAuth, no developer. Drop a Shopify, WooCommerce, BigCommerce or Amazon export — CSV, Excel, or a Google Sheet.</p></div>
+      <div class="feat"><div class="fi">🔒</div><h4>Your data stays yours</h4><p>Parsed entirely in your browser on upload. Nothing is sent to a server, nothing is stored, nothing trains a model.</p></div>
+      <div class="feat"><div class="fi">📄</div><h4>Verified, shareable</h4><p>Every number shows its exact computation. Export a clean profit report your whole team — or your investors — can trust.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY SWITCH -->
+<section class="mk-sec landing" id="compare">
+  <div class="wrap">
+    <div class="mk-head">
+      <span class="eyebrow">Why operators switch</span>
+      <h2>Profit-first, not attribution-first.</h2>
+    </div>
+    <div class="vs">
+      <div class="col"><h5>Triple Whale / Northbeam</h5>
+        <li>Pixel + dev required</li><li>Weeks to onboard</li><li>$250–3,000 / mo</li><li>Attribution-first</li></div>
+      <div class="col"><h5>Shopify native reports</h5>
+        <li>Revenue + top sellers</li><li>No margin or LTV</li><li>No per-SKU profit</li><li>Vanity metrics</li></div>
+      <div class="col hl"><h5>talonomic</h5>
+        <li>Drop a file</li><li>60 seconds</li><li>From $39 / mo</li><li>Profit-first · per-SKU screener</li></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOOP -->
+<section class="mk-sec landing" id="loop">
+  <div class="wrap">
+    <div class="mk-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Export → drop → decide.</h2>
+      <p>No setup, no integration, no waiting on a data team.</p>
+    </div>
+    <div class="loop3">
+      <div class="lstep"><div class="ln">01</div><div class="li">📤</div><h4>Export your orders</h4><p>In Shopify: Orders → Export → Plain CSV → All orders. WooCommerce, BigCommerce, Amazon and Excel all work too.</p></div>
+      <div class="larrow">→</div>
+      <div class="lstep"><div class="ln">02</div><div class="li">🛍️</div><h4>Drop it in</h4><p>talonomic auto-detects your columns and computes your full unit economics in your browser — instantly.</p></div>
+      <div class="larrow">→</div>
+      <div class="lstep"><div class="ln">03</div><div class="li">💸</div><h4>Act on the profit</h4><p>See which SKUs make money, who your repeat buyers are, and where margin leaks. Fix it this week.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="mk-sec landing" id="pricing">
+  <div class="wrap">
+    <div class="mk-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>One saved SKU pays for the year.</h2>
+      <p>Flat pricing, no per-seat games, cancel anytime. A fraction of what attribution tools charge.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <div class="pn">Free</div>
+        <div class="pp">$0<small>/mo</small></div>
+        <div class="pd">See your headline numbers.</div>
+        <ul>
+          <li>Revenue, orders, AOV</li>
+          <li>Repeat order rate</li>
+          <li>CSV, Excel & Google Sheets</li>
+          <li>100% in-browser, no signup to try</li>
+        </ul>
+        <div class="pbtn" onclick="window.open(appUrl('/talonomic'),'_blank')">Try it free</div>
+      </div>
+      <div class="plan pop">
+        <div class="badge">Most popular</div>
+        <div class="pn">Growth</div>
+        <div class="pp">$39<small>/mo</small></div>
+        <div class="pd">The full profit report.</div>
+        <ul>
+          <li>LTV + contribution & gross margin</li>
+          <li>Per-SKU profit screener</li>
+          <li>New-vs-returning + whale concentration</li>
+          <li>Revenue trend + category & geo charts</li>
+          <li>Exportable verified report</li>
+        </ul>
+        <div class="pbtn" onclick="signin('growth')">Start Growth</div>
+      </div>
+      <div class="plan">
+        <div class="pn">Scale</div>
+        <div class="pp">$99<small>/mo</small></div>
+        <div class="pd">For multi-store operators.</div>
+        <ul>
+          <li>Everything in Growth</li>
+          <li>Multiple stores</li>
+          <li>Period-over-period deltas</li>
+          <li>Saved snapshots + history</li>
+          <li>Priority support</li>
+        </ul>
+        <div class="pbtn" onclick="signin('scale')">Start Scale</div>
+      </div>
+      <div class="plan">
+        <div class="pn">Agency</div>
+        <div class="pp">$199<small>/mo</small></div>
+        <div class="pd">For agencies & portfolios.</div>
+        <ul>
+          <li>Everything in Scale</li>
+          <li>Unlimited brands + team seats</li>
+          <li>White-label client reports</li>
+          <li>Bulk export</li>
+        </ul>
+        <div class="pbtn" onclick="signin('agency')">Talk to us</div>
+      </div>
+    </div>
+    <p class="muted-note" style="text-align:center;margin-top:18px">Save 2 months with annual billing · cancel anytime · Triple Whale starts at $150/mo and takes weeks to set up.</p>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<main id="dash">
+  <div class="wrap">
+    <div class="dash-head">
+      <div>
+        <h2 id="d-title">Your store metrics</h2>
+        <div class="sub" id="d-sub"></div>
+      </div>
+      <div class="nav-links">
+        <button class="ghost" onclick="reset()">↺ New upload</button>
+        <button class="solid" onclick="window.print()">Export report</button>
+      </div>
+    </div>
+
+    <div class="row-label">Key metrics</div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="row-label">Trends</div>
+    <div class="charts">
+      <div class="card"><h4>Revenue over time</h4><div class="chart-box"><canvas id="cRev"></canvas></div></div>
+      <div class="card"><h4>Revenue by category</h4><div class="chart-box"><canvas id="cCat"></canvas></div></div>
+    </div>
+
+    <div class="row-label">Product screener — ranked by revenue</div>
+    <div class="card scr-wrap">
+      <table class="scr" id="scr"></table>
+      <div class="muted-note">Margin = (revenue − COGS) ÷ revenue per SKU. Return % flags products with above-average returns.</div>
+    </div>
+
+    <div class="row-label">Auto-insights</div>
+    <div class="insights" id="insights"></div>
+
+    <div class="row-label">Ask talonomic</div>
+    <div class="card">
+      <div class="askbar">
+        <input id="ask" placeholder="Ask about your store — e.g. which SKU has the worst margin?" onkeydown="if(event.key==='Enter')answer()">
+        <button class="solid" onclick="answer()">Ask</button>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div id="answer"></div>
+      <div class="muted-note">Answers are computed deterministically from your data. Full conversational analysis ships in the talonomic app.</div>
+    </div>
+
+    <div class="row-label">Store report card</div>
+    <div class="report" id="report"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#" class="brand" onclick="reset();return false;"><span class="mark"><img src="falcon-bird-white.png" alt=""></span><b>talonomic</b></a>
+        <p>DTC unit economics, answered. The profit numbers Shopify hides — computed, with the math shown.</p>
+        <p style="margin-top:6px;font-size:12px">A product of <a href="https://bizfalconai.com" style="color:var(--teal-7);font-weight:600">BizFalcon AI</a>.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h6>Product</h6>
+          <a onclick="reset();goto('features')">Features</a>
+          <a onclick="reset();goto('pricing')">Pricing</a>
+          <a onclick="loadSample()">Live demo</a>
+          <a onclick="signin()">Sign in</a>
+        </div>
+        <div class="foot-col">
+          <h6>Company</h6>
+          <a href="https://bizfalconai.com">BizFalcon AI</a>
+          <a href="https://talon.bizfalconai.com">Talon</a>
+          <a href="mailto:sid.deepak2023@gmail.com">Contact</a>
+        </div>
+        <div class="foot-col">
+          <h6>Legal</h6>
+          <a onclick="legal('privacy')">Privacy Policy</a>
+          <a onclick="legal('terms')">Terms of Service</a>
+          <a onclick="legal('data')">Data &amp; Security</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-base"><span>© <span id="yr"></span> BizFalcon AI. All rights reserved.</span><span>talonomic — talonomic.bizfalconai.com</span></div>
+  </div>
+</footer>
+
+<script>
+/* background dot halftone — blue→teal, static */
+(function(){
+  const cv=document.getElementById('bgdots');if(!cv)return;
+  const cx=cv.getContext('2d');const DPR=Math.min(2,window.devicePixelRatio||1);
+  const c0=[21,101,192],c1=[13,130,168],c2=[13,158,126];
+  function col(t){let a,b,u;if(t<0.5){a=c0;b=c1;u=t/0.5;}else{a=c1;b=c2;u=(t-0.5)/0.5;}
+    return (a[0]+(b[0]-a[0])*u|0)+','+(a[1]+(b[1]-a[1])*u|0)+','+(a[2]+(b[2]-a[2])*u|0);}
+  function draw(){
+    const W=cv.clientWidth,H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;cx.setTransform(DPR,0,0,DPR,0,0);
+    cx.clearRect(0,0,W,H);
+    const step=22,r=2.0;
+    for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step){
+      const dTR=Math.hypot((W-x)/W,y/H), dBL=Math.hypot(x/W,(H-y)/H);
+      let al=Math.max(0,1-dTR*1.25)*0.9 + Math.max(0,1-dBL*1.55)*0.45;
+      if(al<0.03)continue; al=Math.min(0.85,al);
+      cx.fillStyle='rgba('+col(x/W)+','+al.toFixed(3)+')';
+      cx.beginPath();cx.arc(x,y,r,0,6.2832);cx.fill();
+    }
+  }
+  draw();addEventListener('resize',draw);
+})();
+
+/* ---------- sample store data (Shopify-style orders) ---------- */
+const PRODUCTS=[
+  {sku:"TEE-CLASSIC",name:"Classic Tee",cat:"Apparel",price:38,cogs:12},
+  {sku:"HOODIE-PRO",name:"Pro Hoodie",cat:"Apparel",price:84,cogs:34},
+  {sku:"MUG-12OZ",name:"Ceramic Mug 12oz",cat:"Home",price:22,cogs:7},
+  {sku:"BOTTLE-INS",name:"Insulated Bottle",cat:"Home",price:34,cogs:11},
+  {sku:"CAP-DAD",name:"Dad Cap",cat:"Accessories",price:28,cogs:8},
+  {sku:"SOCKS-3PK",name:"Sock 3-Pack",cat:"Accessories",price:18,cogs:5},
+  {sku:"SERUM-VIT",name:"Vitamin C Serum",cat:"Beauty",price:48,cogs:14},
+  {sku:"CANDLE-SOY",name:"Soy Candle",cat:"Home",price:30,cogs:9},
+];
+const COUNTRIES=["US","US","US","US","CA","UK","AU","DE"];
+function rnd(s){let x=Math.sin(s)*10000;return x-Math.floor(x);}
+function buildSample(){
+  const out=[];const start=new Date('2025-01-03');
+  const customers=[];for(let c=0;c<60;c++)customers.push('CUST-'+(200+c));
+  let oid=1000;
+  for(let i=0;i<140;i++){
+    oid++;
+    const d=new Date(start);d.setDate(start.getDate()+Math.floor(rnd(i)*150));
+    // ~38% of orders are repeat buyers (reuse a low-index customer = whale)
+    const repeat=rnd(i*3)>0.62;
+    const cIdx=repeat?Math.floor(rnd(i*5)*12):Math.floor(rnd(i*7)*customers.length);
+    const p=PRODUCTS[Math.floor(rnd(i*11)*PRODUCTS.length)];
+    const units=1+Math.floor(rnd(i*13)*3);
+    const revenue=+(p.price*units).toFixed(2);
+    const cogs=+(p.cogs*units).toFixed(2);
+    const shipping=+(4+rnd(i*17)*4).toFixed(2);
+    const status=rnd(i*19)>0.91?'refunded':'paid';
+    out.push({date:d.toISOString().slice(0,10),order_id:'#'+oid,customer:customers[cIdx],
+      product:p.name,sku:p.sku,category:p.cat,country:COUNTRIES[Math.floor(rnd(i*23)*COUNTRIES.length)],
+      units,revenue,cogs,shipping,status});
+  }
+  return out;
+}
+
+/* ---------- CSV parse (fuzzy header map) ---------- */
+const ALIASES={
+  date:[/order.*date/i,/^date$/i,/created/i,/processed/i,/day/i],
+  order:[/order.*id/i,/order.*number/i,/^order$/i,/^name$/i,/order.?no/i],
+  customer:[/customer.*id/i,/customer.*email/i,/^email$/i,/^customer$/i,/buyer/i],
+  product:[/product.*name/i,/lineitem.*name/i,/item.*name/i,/^product$/i,/title/i],
+  sku:[/^sku$/i,/lineitem.*sku/i,/variant.*sku/i,/product.*sku/i],
+  category:[/category/i,/product.*type/i,/^type$/i,/vendor/i,/collection/i],
+  country:[/shipping.*country/i,/billing.*country/i,/^country$/i,/province/i,/region/i,/^state$/i],
+  units:[/quantity/i,/^qty$/i,/^units$/i,/lineitem.*quantity/i],
+  revenue:[/^total$/i,/subtotal/i,/revenue/i,/^amount$/i,/^sales$/i,/gross/i,/lineitem.*price/i,/^price$/i],
+  cogs:[/^cogs$/i,/cost.*of.*goods/i,/^cost$/i,/landed/i,/unit.*cost/i],
+  shipping:[/shipping.*cost/i,/^shipping$/i,/fulfillment/i],
+  status:[/financial.*status/i,/^status$/i,/refund/i,/returned/i],
+};
+function parseCSV(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim().length);
+  if(lines.length<2)return {error:"Empty file — need a header row and at least one order."};
+  const split=l=>{const o=[];let c='',q=false;for(const ch of l){if(ch==='"')q=!q;else if(ch===','&&!q){o.push(c);c='';}else c+=ch;}o.push(c);return o.map(s=>s.trim());};
+  const headers=split(lines[0]);
+  const map={};
+  for(const f in ALIASES){for(let h=0;h<headers.length;h++){if(ALIASES[f].some(rx=>rx.test(headers[h]))){map[f]=h;break;}}}
+  if(map.revenue===undefined)return {error:"No revenue/total/amount column found. Export should include an order amount."};
+  const numAt=(c,k)=>{const idx=map[k];if(idx===undefined)return null;const raw=String(c[idx]||'').replace(/[$,%"]/g,'');const n=parseFloat(raw);return isNaN(n)?null:n;};
+  // order-id collapse: revenue blank on continuation rows → line-item export
+  const orders={};const flat=[];
+  for(let i=1;i<lines.length;i++){
+    const c=split(lines[i]);if(c.length<2)continue;
+    const row={
+      date:map.date!==undefined?c[map.date]:null,
+      order:map.order!==undefined?c[map.order]:('row'+i),
+      customer:map.customer!==undefined?c[map.customer]:null,
+      product:map.product!==undefined?c[map.product]:(map.sku!==undefined?c[map.sku]:'—'),
+      category:map.category!==undefined?c[map.category]:null,
+      country:map.country!==undefined?c[map.country]:null,
+      status:map.status!==undefined?c[map.status]:'',
+      units:numAt(c,'units'),revenue:numAt(c,'revenue'),
+      cogs:numAt(c,'cogs'),shipping:numAt(c,'shipping'),
+      linePrice:map.revenue!==undefined&&/lineitem.*price|^price$/i.test(headers[map.revenue])?numAt(c,'revenue'):null,
+    };
+    flat.push(row);
+  }
+  return flat.length?flat:{error:"Couldn't read any order rows."};
+}
+
+/* ---------- metrics (mirror the talonomic engine) ---------- */
+const fmtN=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':Math.round(n).toString();
+const fmtPct=n=>(n*100).toFixed(1)+'%';
+const fmt$=n=>{const a=Math.abs(n);return '$'+(a>=1e6?(n/1e6).toFixed(2)+'M':a>=1e3?(n/1e3).toFixed(1)+'K':n.toFixed(2));};
+let DATA=[],KPI={};
+function compute(rows){
+  // collapse to orders by order id (sum revenue/cogs/shipping; first non-blank customer/date/cat)
+  const om={};
+  rows.forEach(r=>{
+    const id=r.order||Math.random();
+    let o=om[id];if(!o){o={rev:0,cogs:0,ship:0,units:0,customer:'',date:null,cat:null,status:''};om[id]=o;}
+    o.rev+=(+r.revenue||0); o.cogs+=(+r.cogs||0); o.ship+=(+r.shipping||0); o.units+=(+r.units||0);
+    if(r.customer&&!o.customer)o.customer=r.customer;
+    if(r.date&&!o.date)o.date=r.date;
+    if(r.category&&!o.cat)o.cat=r.category;
+    if(r.status&&!o.status)o.status=r.status;
+  });
+  const orders=Object.values(om);
+  const n=orders.length;
+  const totRev=orders.reduce((s,o)=>s+o.rev,0);
+  const totCogs=orders.reduce((s,o)=>s+o.cogs,0);
+  const totShip=orders.reduce((s,o)=>s+o.ship,0);
+  const totUnits=orders.reduce((s,o)=>s+o.units,0);
+  const custs={};orders.forEach(o=>{if(o.customer)custs[o.customer]=(custs[o.customer]||0)+o.rev;});
+  const custKeys=Object.keys(custs);const nCust=custKeys.length||n;
+  const aov=n?totRev/n:0;
+  const repeatRate=n?Math.max(0,(n-nCust)/n):0;
+  const gross=totRev?(totRev-totCogs)/totRev:0;
+  const contrib=totRev?(totRev-totCogs-totShip)/totRev:0;
+  const ltv=nCust?(totRev-totCogs-totShip)/nCust:0;
+  const refunded=orders.filter(o=>/refund|return|cancel/i.test(o.status));
+  const returnRate=n?refunded.length/n:0;
+  const refundRev=refunded.reduce((s,o)=>s+o.rev,0);
+  const freq=nCust?n/nCust:0;
+  // returning revenue
+  const byCust={};orders.forEach(o=>{const k=o.customer||'—';(byCust[k]=byCust[k]||[]).push(o);});
+  let newRev=0,retRev=0;
+  Object.values(byCust).forEach(arr=>{arr.sort((a,b)=>(a.date||'').localeCompare(b.date||''));arr.forEach((o,i)=>{if(i===0)newRev+=o.rev;else retRev+=o.rev;});});
+  const retPct=(newRev+retRev)?retRev/(newRev+retRev):0;
+  // concentration top 10%
+  const spends=custKeys.map(k=>custs[k]).sort((a,b)=>b-a);
+  const concDenom=spends.reduce((s,v)=>s+v,0);
+  const topN=Math.max(1,Math.ceil(spends.length*0.1));
+  const conc=concDenom?spends.slice(0,topN).reduce((s,v)=>s+v,0)/concDenom:0;
+  KPI={n,totRev,aov,nCust,repeatRate,gross,contrib,ltv,returnRate,refundRev,freq,retPct,conc,totUnits,
+    haveCogs:totCogs>0,haveCust:custKeys.length>0,orders};
+  return KPI;
+}
+function skuAgg(rows){
+  const m={};
+  rows.forEach(r=>{
+    const k=r.product||'—';let a=m[k];if(!a){a={name:k,rev:0,cogs:0,units:0,orders:0,ret:0};m[k]=a;}
+    const rev=r.linePrice!=null?(r.linePrice*(+r.units||1)):(+r.revenue||0);
+    a.rev+=rev;a.cogs+=(+r.cogs||0);a.units+=(+r.units||0);a.orders++;
+    if(/refund|return|cancel/i.test(r.status))a.ret++;
+  });
+  return Object.values(m).sort((a,b)=>b.rev-a.rev);
+}
+
+/* ---------- render ---------- */
+let chRev,chCat;
+function render(rows){
+  DATA=rows.slice();
+  compute(DATA);
+  document.querySelectorAll('.landing').forEach(el=>el.style.display='none');
+  document.getElementById('dash').style.display='block';
+  const dates=DATA.map(r=>r.date).filter(Boolean).sort();
+  const span=dates.length?`${dates[0]} → ${dates[dates.length-1]}`:'';
+  document.getElementById('d-sub').textContent=`${KPI.n} orders · ${span}`;
+  renderKPIs();renderCharts();renderScreener();renderInsights();renderReport();renderChips();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function kpiCard(label,val,cls,form,status){
+  return `<div class="kpi"><div class="k-label">${status?`<span class="dotc ${status}"></span>`:''}${label}</div>
+   <div class="k-val ${cls||''}">${val}</div>${form?`<div class="k-form">${form}</div>`:''}</div>`;
+}
+function renderKPIs(){
+  const k=KPI;let h='';
+  h+=kpiCard('Total revenue',fmt$(k.totRev),'','Σ revenue over '+k.n+' orders');
+  h+=kpiCard('Orders',fmtN(k.n),'','distinct orders');
+  const as=k.aov>=50?'good':k.aov>=25?'warn':'bad';
+  h+=kpiCard('Avg order value',fmt$(k.aov),as,'revenue ÷ orders',as);
+  if(k.haveCust){
+    h+=kpiCard('Unique customers',fmtN(k.nCust),'','distinct customers');
+    const rs=k.repeatRate>=0.3?'good':k.repeatRate>=0.2?'warn':'bad';
+    h+=kpiCard('Repeat order rate',fmtPct(k.repeatRate),rs,'(orders − customers) ÷ orders',rs);
+    h+=kpiCard('Purchase frequency',k.freq.toFixed(2),'','orders ÷ customers');
+    const ps=k.retPct>=0.4?'good':k.retPct>=0.25?'warn':'bad';
+    h+=kpiCard('Returning revenue',fmtPct(k.retPct),ps,'repeat-order rev ÷ total',ps);
+    h+=kpiCard('LTV (contribution)',fmt$(k.ltv),'','(rev − COGS − ship) ÷ customers');
+    const cs=k.conc<=0.5?'good':k.conc<=0.7?'warn':'bad';
+    h+=kpiCard('Top 10% customers',fmtPct(k.conc),cs,'top decile rev ÷ total',cs);
+  }
+  if(k.haveCogs){
+    const gs=k.gross>=0.4?'good':k.gross>=0.2?'warn':'bad';
+    h+=kpiCard('Gross margin',fmtPct(k.gross),gs,'(rev − COGS) ÷ rev',gs);
+    const cms=k.contrib>=0.3?'good':k.contrib>=0.15?'warn':'bad';
+    h+=kpiCard('Contribution margin',fmtPct(k.contrib),cms,'(rev − COGS − ship) ÷ rev',cms);
+  }
+  const rrs=k.returnRate<=0.1?'good':k.returnRate<=0.15?'warn':'bad';
+  h+=kpiCard('Return rate',fmtPct(k.returnRate),rrs,'refunded ÷ orders',rrs);
+  document.getElementById('kpis').innerHTML=h;
+}
+function renderCharts(){
+  const G='#0d9e7e',B='#1565c0',MU='#71717a';
+  if(chRev)chRev.destroy();if(chCat)chCat.destroy();
+  // revenue by month
+  const months={};DATA.forEach(r=>{if(!r.date)return;const m=r.date.slice(0,7);months[m]=(months[m]||0)+(+r.revenue||0);});
+  const mk=Object.keys(months).sort();
+  chRev=new Chart(document.getElementById('cRev'),{type:'line',
+    data:{labels:mk,datasets:[{data:mk.map(m=>months[m]),borderColor:B,backgroundColor:'rgba(21,101,192,.08)',fill:true,tension:.35,pointRadius:2,borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:6,font:{size:10},color:MU},grid:{display:false}},y:{ticks:{font:{size:10},color:MU,callback:v=>fmt$(v)},grid:{color:'#f1f1f3'}}}}});
+  const cats={};DATA.forEach(r=>{const c=r.category||'Uncategorized';cats[c]=(cats[c]||0)+(+r.revenue||0);});
+  const ck=Object.keys(cats).sort((a,b)=>cats[b]-cats[a]).slice(0,8).reverse();
+  chCat=new Chart(document.getElementById('cCat'),{type:'bar',
+    data:{labels:ck,datasets:[{data:ck.map(c=>cats[c]),backgroundColor:G+'cc',borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt$(c.raw)}}},scales:{x:{ticks:{font:{size:9},color:MU,callback:v=>fmt$(v)},grid:{color:'#f1f1f3'}},y:{ticks:{font:{size:9},color:MU},grid:{display:false}}}}});
+}
+function renderScreener(){
+  const ranked=skuAgg(DATA);
+  const avgRet=ranked.reduce((s,a)=>s+(a.orders?a.ret/a.orders:0),0)/(ranked.length||1);
+  let h='<thead><tr><th>#</th><th>Product</th><th>Revenue</th><th>Units</th><th>Margin</th><th>Return %</th><th>Flag</th></tr></thead><tbody>';
+  ranked.forEach((a,i)=>{
+    const m=a.rev?(a.rev-a.cogs)/a.rev:0;
+    const rr=a.orders?a.ret/a.orders:0;
+    const ms=m>=0.4?'good':m>=0.2?'warn':'bad';
+    const flag=m>=0.4&&rr<=avgRet?'<span class="tagp up">▲ profit driver</span>':(m<0.2||rr>avgRet+0.05)?'<span class="tagp down">▼ margin risk</span>':'<span class="tagp mid">average</span>';
+    h+=`<tr><td class="score">${i+1}</td><td class="title" title="${a.name}">${a.name}</td><td>${fmt$(a.rev)}</td><td>${fmtN(a.units)}</td><td class="score" style="color:var(--${ms==='good'?'good':ms==='warn'?'warn':'bad'})">${a.cogs>0?fmtPct(m):'—'}</td><td>${fmtPct(rr)}</td><td>${flag}</td></tr>`;
+  });
+  document.getElementById('scr').innerHTML=h+'</tbody>';
+}
+function renderInsights(){
+  const k=KPI,ins=[];const ranked=skuAgg(DATA);
+  const top=ranked[0];
+  const worst=ranked.filter(a=>a.cogs>0).sort((a,b)=>((a.rev-a.cogs)/a.rev)-((b.rev-b.cogs)/b.rev))[0];
+  ins.push(['Best seller',`<b>"${top.name}"</b> is your top product — <b>${fmt$(top.rev)}</b> across ${fmtN(top.units)} units${top.cogs>0?` at <b>${fmtPct((top.rev-top.cogs)/top.rev)}</b> margin`:''}. Make sure it never goes out of stock.`]);
+  if(worst&&worst!==top){const wm=(worst.rev-worst.cogs)/worst.rev;ins.push(['Margin leak',`<b>"${worst.name}"</b> runs just <b>${fmtPct(wm)}</b> margin. Raise price, renegotiate COGS, or stop pushing it.`]);}
+  if(k.haveCust){
+    const rs=k.repeatRate>=0.3?'Strong':k.repeatRate>=0.2?'Healthy':'Weak';
+    ins.push(['Retention',`Repeat order rate is <b>${fmtPct(k.repeatRate)}</b> — <b>${rs}</b>. ${k.repeatRate<0.2?'Most buyers never come back — add a post-purchase email flow.':'Returning customers drive '+fmtPct(k.retPct)+' of revenue.'}`]);
+    ins.push(['Whale risk',`Your top 10% of customers drive <b>${fmtPct(k.conc)}</b> of revenue. ${k.conc>0.7?'Dangerously concentrated — diversify acquisition.':'Healthy spread across your base.'}`]);
+  }
+  if(k.haveCogs)ins.push(['Profitability',`Contribution margin is <b>${fmtPct(k.contrib)}</b> after COGS + shipping. ${k.contrib<0.15?'Thin — variable costs are eating each order.':'Solid — each order funds growth.'}`]);
+  const rrs=k.returnRate<=0.1?'in range':'above the 10% line';
+  ins.push(['Returns',`Return rate is <b>${fmtPct(k.returnRate)}</b> (${rrs})${k.refundRev>0?`, costing <b>${fmt$(k.refundRev)}</b> in refunded revenue`:''}. ${k.returnRate>0.15?'Check sizing/quality on your worst SKUs.':''}`]);
+  document.getElementById('insights').innerHTML=ins.map(i=>`<div class="ins"><div class="it">${i[0]}</div><p>${i[1]}</p></div>`).join('');
+}
+function grade(k){let s=0;s+=k.aov>=50?2:k.aov>=25?1:0;s+=k.repeatRate>=0.3?2:k.repeatRate>=0.2?1:0;s+=(k.haveCogs?(k.contrib>=0.3?2:k.contrib>=0.15?1:0):1);s+=k.returnRate<=0.1?1:0;s+=k.conc<=0.6?1:0;return s>=7?'A':s>=5?'B':s>=3?'C':'D';}
+function renderReport(){
+  const k=KPI;
+  document.getElementById('report').innerHTML=`
+   <div class="rh"><div><b>Store Report Card</b><br><span>${k.n} orders · ${KPI.haveCust?k.nCust+' customers':''}</span></div><div class="grade">${grade(k)}</div></div>
+   <div class="rgrid">
+     <div class="r"><b>${fmt$(k.totRev)}</b><span>Revenue</span></div>
+     <div class="r"><b>${fmt$(k.aov)}</b><span>AOV</span></div>
+     ${k.haveCust?`<div class="r"><b>${fmtPct(k.repeatRate)}</b><span>Repeat rate</span></div>`:''}
+     ${k.haveCogs?`<div class="r"><b>${fmtPct(k.contrib)}</b><span>Contribution</span></div>`:''}
+     ${k.haveCust?`<div class="r"><b>${fmt$(k.ltv)}</b><span>LTV</span></div>`:''}
+     <div class="r"><b>${fmtPct(k.returnRate)}</b><span>Return rate</span></div>
+   </div>
+   <div class="rfoot">
+     <span class="rwm"><span class="mark" style="width:16px;height:16px;border-radius:4px"><img src="falcon-bird-white.png" alt=""></span> Generated by talonomic — talonomic.bizfalconai.com</span>
+     <button class="rshare" onclick="shareCard()">Share my card ↗</button>
+   </div>`;
+}
+function shareCard(){
+  const k=KPI;
+  const txt=`My store report card from talonomic — grade ${grade(k)}: ${fmt$(k.totRev)} revenue · ${fmt$(k.aov)} AOV${k.haveCust?` · ${fmtPct(k.repeatRate)} repeat rate`:''}${k.haveCogs?` · ${fmtPct(k.contrib)} contribution margin`:''}. Get yours → talonomic.bizfalconai.com`;
+  if(navigator.share){navigator.share({title:"My talonomic Report Card"',text:txt,url:'https://talonomic.bizfalconai.com'}).catch(()=>{});}
+  else{try{navigator.clipboard.writeText(txt);}catch(e){}alert('Copied your report-card summary — paste it anywhere!');}
+}
+
+/* ---------- Ask (deterministic) ---------- */
+const QS=["Which SKU has the worst margin?","What's my best seller?","How's my repeat rate?","What should I fix?","What are returns costing me?"];
+function renderChips(){document.getElementById('chips').innerHTML=QS.map(q=>`<span class="chip" onclick="document.getElementById('ask').value='${q}';answer()">${q}</span>`).join('');}
+function answer(){
+  const q=document.getElementById('ask').value.toLowerCase(),k=KPI,el=document.getElementById('answer');
+  const ranked=skuAgg(DATA);let a='',f='';
+  if(/worst|margin|leak|losing/.test(q)){const w=ranked.filter(x=>x.cogs>0).sort((x,y)=>((x.rev-x.cogs)/x.rev)-((y.rev-y.cogs)/y.rev))[0];if(w){const m=(w.rev-w.cogs)/w.rev;a=`<b>"${w.name}"</b> has your worst margin at <b>${fmtPct(m)}</b> (${fmt$(w.rev)} revenue, ${fmt$(w.cogs)} COGS). Reprice or cut it.`;f='min (revenue − COGS) ÷ revenue per SKU';}else a='No cost/COGS column in this export — add it to see per-SKU margin.';}
+  else if(/best|top|seller|winner/.test(q)){const t=ranked[0];a=`Your best seller is <b>"${t.name}"</b> — ${fmt$(t.rev)} across ${fmtN(t.units)} units${t.cogs>0?` at ${fmtPct((t.rev-t.cogs)/t.rev)} margin`:''}.`;f='ranked by revenue per SKU';}
+  else if(/repeat|retention|return.*custom|loyal/.test(q)){a=k.haveCust?`Repeat order rate is <b>${fmtPct(k.repeatRate)}</b>; returning customers drive <b>${fmtPct(k.retPct)}</b> of revenue, and purchase frequency is <b>${k.freq.toFixed(2)}</b> orders/customer.`:'No customer column found — add customer id/email for retention metrics.';f=k.haveCust?'(orders − customers) ÷ orders':'';}
+  else if(/fix|improve|problem/.test(q)){a=`${k.haveCogs&&k.contrib<0.15?`Contribution margin is thin at <b>${fmtPct(k.contrib)}</b> — variable costs are eating orders. `:''}${k.repeatRate<0.2?`Repeat rate is low (<b>${fmtPct(k.repeatRate)}</b>) — add retention email. `:''}${k.returnRate>0.15?`Returns are high (<b>${fmtPct(k.returnRate)}</b>). `:''}`.trim()||`Healthy across the board — focus on scaling your best seller "${ranked[0].name}".`;f='thresholds vs DTC benchmarks';}
+  else if(/return|refund/.test(q)){a=`Return rate is <b>${fmtPct(k.returnRate)}</b>${k.refundRev>0?`, costing <b>${fmt$(k.refundRev)}</b> in refunded revenue`:''}.`;f='refunded orders ÷ orders';}
+  else{a=`Across ${k.n} orders: <b>${fmt$(k.totRev)}</b> revenue, <b>${fmt$(k.aov)}</b> AOV${k.haveCust?`, <b>${fmtPct(k.repeatRate)}</b> repeat rate`:''}${k.haveCogs?`, <b>${fmtPct(k.contrib)}</b> contribution margin`:''}. Try a suggestion below.`;}
+  el.style.display='block';el.innerHTML=a+(f?`<div class="formula">computed: ${f}</div>`:'');
+}
+
+/* ---------- app routing ---------- */
+var APP_ORIGIN="https://talon.bizfalconai.com";
+function appUrl(path,params){var u=new URL(APP_ORIGIN+path);if(params)Object.entries(params).forEach(function(e){u.searchParams.set(e[0],e[1]);});return u.toString();}
+// Growth plan maps to the live Stripe price key (frozen internal id). Scale/Agency
+// route to signup until their prices are wired.
+function signin(plan){
+  if(plan==='growth'){window.location.href=appUrl('/auth',{mode:'signup',plan:'kestrel-growth'});return;}
+  window.location.href=appUrl('/auth',{mode:'signup'});
+}
+function sheetLink(){
+  const v=(document.getElementById('urlin')||{}).value||'';
+  window.open(appUrl('/talonomic', v.trim()?{sheet:encodeURIComponent(v.trim())}:{}),'_blank');
+}
+function legal(t){const p={privacy:'/privacy',terms:'/terms',data:'/help'};window.open(APP_ORIGIN+(p[t]||'/privacy'),'_blank');}
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+function loadSample(){
+  render(buildSample());
+  if(!document.getElementById('app-cta')){
+    const cta=document.createElement('div');cta.id='app-cta';
+    cta.style.cssText='margin:32px 0 0;background:var(--grad-hero);border-radius:20px;padding:32px;color:#fff;text-align:center;';
+    cta.innerHTML=`<p style="font-size:18px;font-weight:800;margin-bottom:8px">This is the preview — on sample data.</p>
+      <p style="font-size:14px;opacity:.88;margin-bottom:20px;max-width:500px;margin-left:auto;margin-right:auto">Run it on your real store: drop your Shopify export and unlock LTV, margins, and the full per-SKU profit screener.</p>
+      <a href="${appUrl('/talonomic')}" target="_blank" style="display:inline-block;background:#fff;color:#0c2d6b;font-weight:700;font-size:14px;padding:11px 22px;border-radius:10px;text-decoration:none">Open talonomic — free to start →</a>`;
+    const report=document.getElementById('report');if(report&&report.parentNode)report.parentNode.insertBefore(cta,report.nextSibling);
+  }
+}
+function reset(){
+  document.getElementById('dash').style.display='none';
+  document.querySelectorAll('.landing').forEach(el=>el.style.display='');
+  document.getElementById('answer').style.display='none';
+  const cta=document.getElementById('app-cta');if(cta)cta.remove();
+  window.scrollTo({top:0});
+}
+function goto(id){const dash=document.getElementById('dash');if(dash.style.display==='block'){reset();}setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},60);}
+
+/* ---------- file handling ---------- */
+function handleFile(file){
+  const ext=(file.name.split('.').pop()||'').toLowerCase();
+  if(ext==='xlsx'||ext==='xls'){
+    alert("Excel parsing runs in the full talonomic app — for this in-page demo, export to CSV or hit “Try sample store data”. Opening the app…");
+    window.open(appUrl('/talonomic'),'_blank');return;
+  }
+  const rd=new FileReader();
+  rd.onload=e=>{const r=parseCSV(e.target.result);if(r&&r.error){alert(r.error);return;}if(!r||!r.length){alert('Could not parse this file.');return;}render(r);};
+  rd.readAsText(file);
+}
+document.getElementById('file').addEventListener('change',e=>{if(e.target.files[0])handleFile(e.target.files[0]);});
+const drop=document.getElementById('drop');
+['dragover','dragenter'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>{if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0]);});
+</script>
+</body>
+</html>
