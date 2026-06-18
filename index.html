@@ -8,11 +8,11 @@
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://talonomic.bizfalconai.com/"/>
 <meta property="og:title" content="talonomic — AI unit economics for ecommerce brands"/>
-<meta property="og:description" content="Drop an order export. Get LTV, contribution margin, repeat rate, and a per-SKU profit screener — computed, with the formula shown. From $39/mo."/>
+<meta property="og:description" content="Drop an order export. Get LTV, contribution margin, repeat rate, and a per-SKU profit screener — computed, with the formula shown. From $20/mo."/>
 <meta property="og:image" content="https://talonomic.bizfalconai.com/falcon-bird-white.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="talonomic — AI unit economics for ecommerce brands"/>
-<meta name="twitter:description" content="Drop an order export → LTV, margin, repeat rate, per-SKU profit screener. Computed, not estimated. From $39/mo."/>
+<meta name="twitter:description" content="Drop an order export → LTV, margin, repeat rate, per-SKU profit screener. Computed, not estimated. From $20/mo."/>
 <link rel="icon" href="falcon-bird-white.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -322,7 +322,7 @@ footer{border-top:1px solid var(--line);background:var(--alt);padding:52px 0 36p
       <div class="col"><h5>Shopify native reports</h5>
         <li>Revenue + top sellers</li><li>No margin or LTV</li><li>No per-SKU profit</li><li>Vanity metrics</li></div>
       <div class="col hl"><h5>talonomic</h5>
-        <li>Drop a file</li><li>60 seconds</li><li>From $39 / mo</li><li>Profit-first · per-SKU screener</li></div>
+        <li>Drop a file</li><li>60 seconds</li><li>From $20 / mo</li><li>Profit-first · per-SKU screener</li></div>
     </div>
   </div>
 </section>
@@ -369,8 +369,8 @@ footer{border-top:1px solid var(--line);background:var(--alt);padding:52px 0 36p
       <div class="plan pop">
         <div class="badge">Most popular</div>
         <div class="pn">Growth</div>
-        <div class="pp">$39<small>/mo</small></div>
-        <div class="pd">The full profit report.</div>
+        <div class="pp">$20<small>/mo</small></div>
+        <div class="pd">The full profit report. <span style="opacity:.7">Billed annually ($240/yr) · or $24/mo monthly.</span></div>
         <ul>
           <li>LTV + contribution & gross margin</li>
           <li>Per-SKU profit screener</li>
@@ -382,8 +382,8 @@ footer{border-top:1px solid var(--line);background:var(--alt);padding:52px 0 36p
       </div>
       <div class="plan">
         <div class="pn">Scale</div>
-        <div class="pp">$99<small>/mo</small></div>
-        <div class="pd">For multi-store operators.</div>
+        <div class="pp">$49<small>/mo</small></div>
+        <div class="pd">For multi-store operators. <span style="opacity:.7">Billed annually ($590/yr) · or $59/mo monthly.</span></div>
         <ul>
           <li>Everything in Growth</li>
           <li>Multiple stores</li>
@@ -395,8 +395,8 @@ footer{border-top:1px solid var(--line);background:var(--alt);padding:52px 0 36p
       </div>
       <div class="plan">
         <div class="pn">Agency</div>
-        <div class="pp">$199<small>/mo</small></div>
-        <div class="pd">For agencies & portfolios.</div>
+        <div class="pp">$166<small>/mo</small></div>
+        <div class="pd">For agencies & portfolios. <span style="opacity:.7">Billed annually ($1,990/yr) · or $199/mo monthly.</span></div>
         <ul>
           <li>Everything in Scale</li>
           <li>Unlimited brands + team seats</li>
@@ -823,7 +823,7 @@ function appUrl(path,params){var u=new URL(APP_ORIGIN+path);if(params)Object.ent
 var PLAN_KEYS={growth:'talonomic-growth',scale:'talonomic-scale',agency:'talonomic-agency'};
 function signin(plan){
   var key=PLAN_KEYS[plan];
-  window.location.href=appUrl('/auth',key?{mode:'signup',plan:key}:{mode:'signup'});
+  window.location.href=appUrl('/auth',key?{mode:'signup',plan:key,interval:'year'}:{mode:'signup'});
 }
 function sheetLink(){
   const v=(document.getElementById('urlin')||{}).value||'';
