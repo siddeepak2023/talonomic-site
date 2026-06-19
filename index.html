@@ -352,6 +352,19 @@ nav:not(.scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.32);}
 
 /* Respect reduced-motion. */
 @media (prefers-reduced-motion:reduce){*{transition:none!important;}.feat:hover,.lstep:hover,.ins:hover,.card:hover,.plan:hover{transform:none;}}
+
+/* ── Billing toggle (annual / monthly segmented pill) ── */
+.billtoggle{display:flex;width:max-content;gap:4px;padding:4px;border-radius:999px;border:1px solid var(--line-2);background:var(--bg);margin:0 auto 32px;box-shadow:var(--shadow-sm)}
+.bt-opt{display:inline-flex;align-items:center;gap:7px;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--muted);padding:9px 18px;border-radius:999px;transition:background var(--t-fast),color var(--t-fast)}
+.bt-opt:hover{color:var(--ink)}
+.bt-opt.active{background:var(--ink);color:var(--bg)}
+.bt-opt.active:hover{color:var(--bg)}
+.bt-opt em{font-style:normal;font-size:11px;font-weight:700;color:var(--teal-7);background:var(--tint);padding:2px 7px;border-radius:999px}
+.bt-opt.active em{color:var(--on-brand);background:rgba(255,255,255,.18)}
+.psub{font-size:12px;color:var(--muted);margin-top:4px;min-height:16px}
+.plans .pm{display:none}
+.plans.monthly .pa{display:none}
+.plans.monthly .pm{display:inline}
 </style>
 </head>
 <body>
@@ -487,10 +500,15 @@ nav:not(.scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.32);}
       <h2>One saved SKU pays for the year.</h2>
       <p>Flat pricing, no per-seat games, cancel anytime. A fraction of what attribution tools charge.</p>
     </div>
-    <div class="plans">
+    <div class="billtoggle" role="group" aria-label="Billing period">
+      <button class="bt-opt active" data-bill="year" onclick="setBilling('year')">Annually <em>2 months free</em></button>
+      <button class="bt-opt" data-bill="month" onclick="setBilling('month')">Monthly</button>
+    </div>
+    <div class="plans" id="plans">
       <div class="plan">
         <div class="pn">Free</div>
         <div class="pp">$0<small>/mo</small></div>
+        <div class="psub">forever</div>
         <div class="pd">See your headline numbers.</div>
         <ul>
           <li>Revenue, orders, AOV</li>
@@ -501,10 +519,11 @@ nav:not(.scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.32);}
         <div class="pbtn" onclick="window.open(appUrl('/talonomic'),'_blank')">Try it free</div>
       </div>
       <div class="plan pop">
-        <div class="badge">Most popular</div>
+        <div class="badge">Recommended</div>
         <div class="pn">Growth</div>
-        <div class="pp">$20<small>/mo</small></div>
-        <div class="pd">The full profit report. <span style="opacity:.7">Billed annually ($240/yr) · or $24/mo monthly.</span></div>
+        <div class="pp"><span class="pa">$20<small>/mo</small></span><span class="pm">$24<small>/mo</small></span></div>
+        <div class="psub"><span class="pa">billed annually · $240/yr</span><span class="pm">billed monthly</span></div>
+        <div class="pd">The full profit report.</div>
         <ul>
           <li>LTV + contribution & gross margin</li>
           <li>Per-SKU profit screener</li>
@@ -516,8 +535,9 @@ nav:not(.scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.32);}
       </div>
       <div class="plan">
         <div class="pn">Scale</div>
-        <div class="pp">$49<small>/mo</small></div>
-        <div class="pd">For multi-store operators. <span style="opacity:.7">Billed annually ($590/yr) · or $59/mo monthly.</span></div>
+        <div class="pp"><span class="pa">$49<small>/mo</small></span><span class="pm">$59<small>/mo</small></span></div>
+        <div class="psub"><span class="pa">billed annually · $590/yr</span><span class="pm">billed monthly</span></div>
+        <div class="pd">For multi-store operators.</div>
         <ul>
           <li>Everything in Growth</li>
           <li>Multiple stores</li>
@@ -529,8 +549,9 @@ nav:not(.scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.32);}
       </div>
       <div class="plan">
         <div class="pn">Agency</div>
-        <div class="pp">$166<small>/mo</small></div>
-        <div class="pd">For agencies & portfolios. <span style="opacity:.7">Billed annually ($1,990/yr) · or $199/mo monthly.</span></div>
+        <div class="pp"><span class="pa">$166<small>/mo</small></span><span class="pm">$199<small>/mo</small></span></div>
+        <div class="psub"><span class="pa">billed annually · $1,990/yr</span><span class="pm">billed monthly</span></div>
+        <div class="pd">For agencies & portfolios.</div>
         <ul>
           <li>Everything in Scale</li>
           <li>Unlimited brands + team seats</li>
@@ -955,9 +976,17 @@ function appUrl(path,params){var u=new URL(APP_ORIGIN+path);if(params)Object.ent
 // Pricing tier → backend plan key (see functions/src/types.ts STRIPE_PRICES).
 // AuthPage reads ?plan and kicks into Stripe checkout after signup.
 var PLAN_KEYS={growth:'talonomic-growth',scale:'talonomic-scale',agency:'talonomic-agency'};
+// Billing period from the pricing toggle (annual default → 2 months free).
+var billingInterval='year';
+function setBilling(p){
+  billingInterval=(p==='month')?'month':'year';
+  var plans=document.getElementById('plans');
+  if(plans)plans.classList.toggle('monthly',billingInterval==='month');
+  document.querySelectorAll('.bt-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-bill')===billingInterval);});
+}
 function signin(plan){
   var key=PLAN_KEYS[plan];
-  window.location.href=appUrl('/auth',key?{mode:'signup',plan:key,interval:'year'}:{mode:'signup'});
+  window.location.href=appUrl('/auth',key?{mode:'signup',plan:key,interval:billingInterval}:{mode:'signup'});
 }
 function sheetLink(){
   const v=(document.getElementById('urlin')||{}).value||'';
