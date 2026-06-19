@@ -365,6 +365,31 @@ nav:not(.scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.32);}
 .plans .pm{display:none}
 .plans.monthly .pa{display:none}
 .plans.monthly .pm{display:inline}
+
+/* ── Mega-menu (multi-column dropdown, Supermetrics-style) ── */
+.menu{position:relative;display:flex;align-items:center;}
+.menu-trigger{display:inline-flex;align-items:center;gap:5px;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:14px;font-weight:500;color:var(--muted);transition:color var(--t-fast);}
+.menu-trigger:hover,.menu:hover .menu-trigger,.menu:focus-within .menu-trigger{color:var(--ink);}
+.menu-trigger .chev{transition:transform var(--t-mid);}
+.menu:hover .menu-trigger .chev,.menu:focus-within .menu-trigger .chev{transform:rotate(180deg);}
+nav:not(.scrolled) .menu-trigger{color:#fff;}
+.megapanel{position:absolute;top:calc(100% + 14px);right:-12px;left:auto;width:min(760px,92vw);background:var(--bg);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-lg);padding:24px;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity var(--t-mid),transform var(--t-mid),visibility var(--t-mid);z-index:120;}
+.megapanel::before{content:'';position:absolute;top:-14px;left:0;right:0;height:14px;} /* hover bridge */
+.menu:hover .megapanel,.menu:focus-within .megapanel{opacity:1;visibility:visible;transform:translateY(0);}
+.mega-grid{display:grid;grid-template-columns:1.15fr 1fr .95fr 200px;gap:22px;}
+.mega-h{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:12px;}
+.mega-col a{display:block;padding:8px 9px;margin:0 -9px;border-radius:9px;cursor:pointer;transition:background var(--t-fast);}
+.mega-col a:hover{background:var(--tint);}
+.mega-col a b{display:block;font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.01em;}
+.mega-col a span{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.mega-promo{display:flex;flex-direction:column;gap:6px;background:var(--alt);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;position:relative;transition:border-color var(--t-fast),transform var(--t-fast);}
+.mega-promo:hover{border-color:var(--tint-line);transform:translateY(-2px);}
+.mp-tag{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;color:var(--on-brand);background:var(--grad);padding:2px 8px;border-radius:999px;}
+.mp-art{width:48px;height:48px;border-radius:12px;background:var(--grad-hero);display:grid;place-items:center;font-size:24px;margin-bottom:4px;}
+.mega-promo b{font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.01em;}
+.mp-sub{font-size:12px;color:var(--muted);line-height:1.45;}
+.mp-learn{font-size:12.5px;font-weight:700;color:var(--teal-7);margin-top:2px;}
+@media(max-width:980px){.megapanel{width:min(600px,92vw);}.mega-grid{grid-template-columns:1fr 1fr;}.mega-promo{grid-column:1/-1;flex-direction:row;align-items:center;}.mp-art{margin-bottom:0;}}
 </style>
 </head>
 <body>
@@ -381,7 +406,42 @@ nav:not(.scrolled) .theme-toggle{color:#fff;border-color:rgba(255,255,255,.32);}
       <b>talonomic</b><span class="bsub">AI unit economics for ecommerce brands</span>
     </a>
     <div class="tabs">
-      <a class="hideable" onclick="reset();goto('features')">Features</a>
+      <div class="menu hideable">
+        <button class="menu-trigger" aria-haspopup="true" aria-expanded="false">Product
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="megapanel" role="menu">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <div class="mega-h">Computes</div>
+              <a onclick="reset();goto('features')" role="menuitem"><b>LTV &amp; contribution margin</b><span>True profit per order, not vanity revenue</span></a>
+              <a onclick="reset();goto('features')" role="menuitem"><b>Per-SKU profit screener</b><span>Rank every product by real margin</span></a>
+              <a onclick="reset();goto('features')" role="menuitem"><b>Repeat rate &amp; cohorts</b><span>New-vs-returning, whale concentration</span></a>
+              <a onclick="reset();goto('features')" role="menuitem"><b>MER · CAC · ROAS</b><span>True profit after ad spend</span></a>
+            </div>
+            <div class="mega-col">
+              <div class="mega-h">Connect</div>
+              <a onclick="reset();goto('hero')" role="menuitem"><b>Shopify</b><span>One-click order import</span></a>
+              <a onclick="reset();goto('hero')" role="menuitem"><b>Meta Ads</b><span>Auto-pull spend → ROAS</span></a>
+              <a onclick="reset();goto('hero')" role="menuitem"><b>CSV &amp; Excel</b><span>Drop any order export</span></a>
+              <a onclick="reset();goto('hero')" role="menuitem"><b>Google Sheets</b><span>Paste a link, parsed in-browser</span></a>
+            </div>
+            <div class="mega-col">
+              <div class="mega-h">Who it's for</div>
+              <a onclick="reset();goto('features')" role="menuitem"><b>DTC founders</b><span>Know your real unit economics</span></a>
+              <a onclick="reset();goto('features')" role="menuitem"><b>Finance &amp; ops</b><span>Margin + cohort truth, no pixel</span></a>
+              <a onclick="reset();goto('pricing')" role="menuitem"><b>Agencies</b><span>White-label client profit reports</span></a>
+            </div>
+            <a class="mega-promo" onclick="reset();goto('hero')" role="menuitem">
+              <span class="mp-tag">NEW</span>
+              <div class="mp-art" aria-hidden="true">🛍️</div>
+              <b>Connect Shopify</b>
+              <span class="mp-sub">Auto-import orders — no CSV, no pixel.</span>
+              <span class="mp-learn">Try it free →</span>
+            </a>
+          </div>
+        </div>
+      </div>
       <a class="hideable" onclick="reset();goto('pricing')">Pricing</a>
       <a class="hideable" onclick="loadSample()">Demo</a>
       <a class="hideable" href="#" onclick="signin();return false;">Sign in</a>
