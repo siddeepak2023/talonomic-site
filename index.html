@@ -1052,7 +1052,7 @@ function sheetLink(){
   const v=(document.getElementById('urlin')||{}).value||'';
   window.open(appUrl('/talonomic', v.trim()?{sheet:encodeURIComponent(v.trim())}:{}),'_blank');
 }
-function legal(t){const p={privacy:'/privacy',terms:'/terms',data:'/help'};window.open(APP_ORIGIN+(p[t]||'/privacy'),'_blank');}
+function legal(t){const p={privacy:'/privacy.html',terms:'/terms.html',data:'/privacy.html'};window.open(p[t]||'/privacy.html','_blank');}
 document.getElementById('yr').textContent=new Date().getFullYear();
 
 function loadSample(){
