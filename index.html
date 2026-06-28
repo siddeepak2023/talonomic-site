@@ -10,7 +10,7 @@
 <meta property="og:type" content="website"/>
 <meta name="theme-color" content="#f1f1ea"/>
 <link rel="icon" href="https://talon.bizfalconai.com/falcon-bird-white.png"/>
-<script>(function(){try{var t=localStorage.getItem('bf-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('bf-theme');if(!t)t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;overflow-x:hidden;}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s,color .3s;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .18s ease,color .18s ease;}
 a{text-decoration:none;color:inherit;}svg{display:block;}
 ::selection{background:var(--accent-soft);color:var(--accent-2);}
 .wrap{max-width:var(--mx);margin:0 auto;padding:0 32px;}
@@ -98,9 +98,9 @@ nav.scrolled{background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-fi
 .hero .wrap{position:relative;z-index:2;}
 .hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:54px;align-items:center;}
 @media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:44px;}}
-.eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--mono);font-size:13px;letter-spacing:.01em;color:var(--accent-2);margin-bottom:22px;}
+.eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12px;letter-spacing:0;color:var(--accent-2);margin-bottom:22px;white-space:nowrap;}@media(max-width:680px){.eyebrow{white-space:normal;}}
 .eyebrow i{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 9px 1px var(--accent),0 0 0 4px var(--accent-soft);}
-h1{font-family:var(--display);font-size:clamp(38px,5.2vw,60px);font-weight:700;line-height:1.06;letter-spacing:-.03em;margin-bottom:24px;color:var(--ink);}
+h1{font-family:var(--display);font-size:clamp(38px,5.2vw,60px);font-weight:700;line-height:1.1;letter-spacing:-.03em;text-wrap:balance;margin-bottom:24px;color:var(--ink);}
 h1 .hl{position:relative;color:var(--accent-2);white-space:nowrap;}
 h1 .hl::after{content:'';position:absolute;left:0;bottom:-.04em;height:3px;width:100%;background:var(--accent);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .85s .35s cubic-bezier(.22,.61,.36,1);}
 .reveal.in h1 .hl::after{transform:scaleX(1);}
@@ -150,7 +150,7 @@ h1 .hl::after{content:'';position:absolute;left:0;bottom:-.04em;height:3px;width
 /* trust */
 .trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--card);}
 .trust-in{max-width:var(--mx);margin:0 auto;padding:18px 32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.trust .lab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);}
+.trust .lab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
 .chip{font-family:var(--mono);font-size:12px;color:var(--body);border:1px solid var(--line-2);padding:5px 11px;border-radius:7px;background:var(--surface-2);}
 @media(max-width:640px){.trust-in{padding:16px 20px;}}
 
@@ -169,21 +169,21 @@ section.alt{background:var(--bg-2);border-block:1px solid var(--line);}
 .feat:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--line-2);}
 .feat-ico{width:42px;height:42px;border-radius:12px;background:var(--brand-soft);border:1px solid var(--line);display:grid;place-items:center;color:var(--brand);margin-bottom:18px;}
 .feat-ico svg{width:21px;height:21px;}
-.feat h4{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:8px;}
+.feat h3{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:8px;}
 .feat p{font-size:14px;color:var(--body);line-height:1.6;}
 
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s;}
 @media(max-width:760px){.steps{grid-template-columns:1fr;}}
 .step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--sh-sm);}
 .step::before{counter-increment:s;content:'0' counter(s);font-family:var(--display);font-size:13px;font-weight:700;color:var(--accent);display:block;margin-bottom:14px;}
-.step h4{font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:7px;}
+.step h3{font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:7px;}
 .step p{font-size:14px;color:var(--body);line-height:1.6;}
 
 .compare{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh-sm);}
 @media(max-width:760px){.compare{grid-template-columns:1fr;}}
 .col{background:var(--card);padding:24px;}
 .col.win{background:var(--surface-2);}
-.col h5{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:3px;}
+.col h3{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:3px;}
 .col .who{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:16px;}
 .col .who.acc{color:var(--accent);}
 .col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
@@ -238,10 +238,10 @@ footer{border-top:1px solid var(--line);padding:54px 0 44px;background:var(--car
 .foot-brand{max-width:300px;}
 .foot-brand p{color:var(--muted);font-size:13.5px;line-height:1.6;margin-top:14px;}
 .foot-links{display:flex;gap:54px;flex-wrap:wrap;}
-.foot-col h6{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:14px;}
+.foot-col .fh{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
 .foot-col a{display:block;color:var(--body);font-size:14px;padding:5px 0;transition:color .15s;}
 .foot-col a:hover{color:var(--accent-2);}
-.foot-base{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.foot-base{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1);}
 .reveal.in{opacity:1;transform:none;}
@@ -310,6 +310,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 44px;background:var(--car
     </div>
   </div>
 </header>
+<main>
 
 <div class="trust"><div class="trust-in"><span class="lab">Works with</span><span class="chip">Shopify</span><span class="chip">WooCommerce</span><span class="chip">BigCommerce</span><span class="chip">Amazon</span><span class="chip">CSV / Excel</span><span class="chip">Google Sheets</span></div></div>
 
@@ -317,12 +318,12 @@ footer{border-top:1px solid var(--line);padding:54px 0 44px;background:var(--car
   <div class="wrap reveal">
     <div class="sec-head"><span class="sec-label">What you get</span><h2 class="sec-h">The profit numbers Shopify reports won’t show you.</h2><p class="sec-sub">Shopify gives you revenue and top sellers. Attribution tools cost $250–3,000/mo and take weeks to wire. Talonomic computes the unit economics — exactly, with the formula shown.</p></div>
     <div class="feats">
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-calc"/></svg></div><h4>Computed, not guessed</h4><p>AOV, LTV, gross &amp; contribution margin, repeat rate, return rate — every metric calculated from your real orders with the formula shown. No estimates.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-sku"/></svg></div><h4>Per-SKU profit screener</h4><p>Ranks every product by revenue and true margin, flags your return-rate problems. Know which SKUs to push and which quietly lose money.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-users"/></svg></div><h4>Retention &amp; whales</h4><p>New-vs-returning revenue split, purchase frequency, days-to-2nd-order, and top-10%-customer concentration. See who actually drives the business.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-bolt"/></svg></div><h4>Live in 60 seconds</h4><p>No pixel, no OAuth, no developer. Drop a Shopify, WooCommerce, BigCommerce or Amazon export — CSV, Excel, or a Google Sheet.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-shield"/></svg></div><h4>Your data stays yours</h4><p>Parsed entirely in your browser on upload. Nothing is sent to a server, nothing is stored, nothing trains a model.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-doc"/></svg></div><h4>Verified, shareable</h4><p>Every number shows its exact computation. Export a clean profit report your whole team — or your investors — can trust.</p></div>
+      <div class="feat"><div class="feat-ico"><svg><use href="#i-calc"/></svg></div><h3>Computed, not guessed</h3><p>AOV, LTV, gross &amp; contribution margin, repeat rate, return rate — every metric calculated from your real orders with the formula shown. No estimates.</p></div>
+      <div class="feat"><div class="feat-ico"><svg><use href="#i-sku"/></svg></div><h3>Per-SKU profit screener</h3><p>Ranks every product by revenue and true margin, flags your return-rate problems. Know which SKUs to push and which quietly lose money.</p></div>
+      <div class="feat"><div class="feat-ico"><svg><use href="#i-users"/></svg></div><h3>Retention &amp; whales</h3><p>New-vs-returning revenue split, purchase frequency, days-to-2nd-order, and top-10%-customer concentration. See who actually drives the business.</p></div>
+      <div class="feat"><div class="feat-ico"><svg><use href="#i-bolt"/></svg></div><h3>Live in 60 seconds</h3><p>No pixel, no OAuth, no developer. Drop a Shopify, WooCommerce, BigCommerce or Amazon export — CSV, Excel, or a Google Sheet.</p></div>
+      <div class="feat"><div class="feat-ico"><svg><use href="#i-shield"/></svg></div><h3>Your data stays yours</h3><p>Parsed entirely in your browser on upload. Nothing is sent to a server, nothing is stored, nothing trains a model.</p></div>
+      <div class="feat"><div class="feat-ico"><svg><use href="#i-doc"/></svg></div><h3>Verified, shareable</h3><p>Every number shows its exact computation. Export a clean profit report your whole team — or your investors — can trust.</p></div>
     </div>
   </div>
 </section>
@@ -331,9 +332,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 44px;background:var(--car
   <div class="wrap reveal">
     <div class="sec-head"><span class="sec-label">How it works</span><h2 class="sec-h">Export → drop → decide.</h2><p class="sec-sub">From raw order export to real unit economics in three steps. No integration, no waiting on a developer.</p></div>
     <div class="steps">
-      <div class="step"><h4>Export your orders</h4><p>In Shopify: Orders → Export → Plain CSV → All orders. WooCommerce, BigCommerce, Amazon and Excel all work too.</p></div>
-      <div class="step"><h4>Drop it in</h4><p>Talonomic auto-detects your columns and computes your full unit economics in your browser — instantly.</p></div>
-      <div class="step"><h4>Act on the profit</h4><p>See which SKUs make money, who your repeat buyers are, and where margin leaks. Fix it this week.</p></div>
+      <div class="step"><h3>Export your orders</h3><p>In Shopify: Orders → Export → Plain CSV → All orders. WooCommerce, BigCommerce, Amazon and Excel all work too.</p></div>
+      <div class="step"><h3>Drop it in</h3><p>Talonomic auto-detects your columns and computes your full unit economics in your browser — instantly.</p></div>
+      <div class="step"><h3>Act on the profit</h3><p>See which SKUs make money, who your repeat buyers are, and where margin leaks. Fix it this week.</p></div>
     </div>
   </div>
 </section>
@@ -342,9 +343,9 @@ footer{border-top:1px solid var(--line);padding:54px 0 44px;background:var(--car
   <div class="wrap reveal">
     <div class="sec-head"><span class="sec-label">Why Talonomic</span><h2 class="sec-h">Profit-first, not attribution-first.</h2></div>
     <div class="compare">
-      <div class="col"><h5>Attribution tools</h5><div class="who">Triple Whale &amp; co.</div><ul><li><svg class="x"><use href="#i-x"/></svg>Weeks to onboard</li><li><svg class="x"><use href="#i-x"/></svg>$250–3,000 / mo</li><li><svg class="x"><use href="#i-x"/></svg>Attribution-first, not profit</li></ul></div>
-      <div class="col"><h5>Shopify reports</h5><div class="who">Built-in</div><ul><li><svg class="x"><use href="#i-x"/></svg>Revenue + top sellers only</li><li><svg class="x"><use href="#i-x"/></svg>No margin or LTV</li><li><svg class="x"><use href="#i-x"/></svg>No per-SKU profit</li></ul></div>
-      <div class="col win"><h5>Talonomic</h5><div class="who acc">Profit-first</div><ul><li><svg class="ok"><use href="#i-check"/></svg>Drop a file, 60 seconds</li><li><svg class="ok"><use href="#i-check"/></svg>From $20 / mo</li><li><svg class="ok"><use href="#i-check"/></svg>Per-SKU profit screener</li></ul></div>
+      <div class="col"><h3>Attribution tools</h3><div class="who">Triple Whale &amp; co.</div><ul><li><svg class="x"><use href="#i-x"/></svg>Weeks to onboard</li><li><svg class="x"><use href="#i-x"/></svg>$250–3,000 / mo</li><li><svg class="x"><use href="#i-x"/></svg>Attribution-first, not profit</li></ul></div>
+      <div class="col"><h3>Shopify reports</h3><div class="who">Built-in</div><ul><li><svg class="x"><use href="#i-x"/></svg>Revenue + top sellers only</li><li><svg class="x"><use href="#i-x"/></svg>No margin or LTV</li><li><svg class="x"><use href="#i-x"/></svg>No per-SKU profit</li></ul></div>
+      <div class="col win"><h3>Talonomic</h3><div class="who acc">Profit-first</div><ul><li><svg class="ok"><use href="#i-check"/></svg>Drop a file, 60 seconds</li><li><svg class="ok"><use href="#i-check"/></svg>From $20 / mo</li><li><svg class="ok"><use href="#i-check"/></svg>Per-SKU profit screener</li></ul></div>
     </div>
   </div>
 </section>
@@ -380,14 +381,15 @@ footer{border-top:1px solid var(--line);padding:54px 0 44px;background:var(--car
   <div class="wrap reveal"><div class="cta"><h2>See your real margins today.</h2><p>Drop an order export and Talonomic computes your unit economics in under a minute. Free to try, no card.</p><a href="https://talon.bizfalconai.com/talonomic">Analyze my store <svg><use href="#i-arrow"/></svg></a></div></div>
 </section>
 
+</main>
 <footer>
   <div class="wrap">
     <div class="foot-in">
       <div class="foot-brand"><a href="#top" class="brand"><span class="mark"><img src="https://talon.bizfalconai.com/falcon-bird-white.png" alt=""></span><span><b>Talonomic</b></span></a><p>AI unit economics for ecommerce brands. Computed, not guessed. A BizFalcon AI product.</p></div>
       <div class="foot-links">
-        <div class="foot-col"><h6>Product</h6><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="https://talon.bizfalconai.com/talonomic">Open app</a></div>
-        <div class="foot-col"><h6>BizFalcon</h6><a href="https://bizfalconai.com">Company</a><a href="https://talon.bizfalconai.com">Talon</a><a href="https://talonmark.bizfalconai.com">Talonmark</a><a href="https://fledge.bizfalconai.com">Fledge</a></div>
-        <div class="foot-col"><h6>Connect</h6><a href="https://github.com/siddeepak2023">GitHub</a><a href="mailto:sid.deepak2023@gmail.com">Email</a></div>
+        <div class="foot-col"><div class="fh">Product</div><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="https://talon.bizfalconai.com/talonomic">Open app</a></div>
+        <div class="foot-col"><div class="fh">BizFalcon</div><a href="https://bizfalconai.com">Company</a><a href="https://talon.bizfalconai.com">Talon</a><a href="https://talonmark.bizfalconai.com">Talonmark</a><a href="https://fledge.bizfalconai.com">Fledge</a></div>
+        <div class="foot-col"><div class="fh">Connect</div><a href="https://github.com/siddeepak2023">GitHub</a><a href="mailto:sid.deepak2023@gmail.com">Email</a></div>
       </div>
     </div>
     <div class="foot-base"><span>© <span id="yr"></span> BizFalcon AI — Talonomic</span><span>Every number shows its math</span></div>
