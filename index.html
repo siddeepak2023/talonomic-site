@@ -66,28 +66,6 @@
           <span>LIVE IN <b>60 SECONDS</b></span>
         </div>
       </div>
-      <div class="shot" aria-label="Talonomic: per-SKU contribution margin and a queued recommendation">
-        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — margin screener</span></div>
-        <div class="shot-body">
-          <div class="sku-bars" aria-hidden="true">
-            <div class="bar" style="height:46%"></div><div class="bar" style="height:72%"></div>
-            <div class="bar" style="height:58%"></div><div class="bar hot" style="height:24%"></div>
-            <div class="bar" style="height:88%"></div><div class="bar" style="height:64%"></div>
-            <div class="bar hot" style="height:15%"></div><div class="bar" style="height:79%"></div>
-            <div class="bar" style="height:52%"></div><div class="bar" style="height:68%"></div>
-          </div>
-          <div class="demo-tiles show">
-            <div class="tile neg"><b>−$1.82</b><s>Margin / unit, “Trail Mini”</s></div>
-            <div class="tile"><b>$48.10</b><s>90-day LTV</s></div>
-            <div class="tile"><b>2 / 10</b><s>SKUs below water</s></div>
-          </div>
-          <div class="rec-mini" style="margin-top:14px">
-            <div class="rt"><span>PLAYBOOK MARGIN-02</span><span>CONF 0.74</span></div>
-            “Trail Mini” loses <span class="sv">$1.82/unit</span> after ad cost — recommend +8% price test before scaling spend.
-          </div>
-        </div>
-        <div class="shot-foot"><span>SHADOW MODE · EXECUTES NOTHING</span><a href="#demo">SEE IT RUN ▸</a></div>
-      </div>
     </div>
   </div>
 </section>
@@ -108,12 +86,44 @@
           <div class="demo-q" id="demoQ"></div>
           <div class="demo-code" id="demoCode"></div>
           <div class="demo-tiles" id="demoTiles"></div>
+          <div class="demo-ins" id="demoIns" aria-live="polite"></div>
         </div>
         <div class="shot-foot"><span>COMPUTED FROM YOUR EXPORT</span><a href="https://talon.bizfalconai.com/talonomic">RUN IT ON YOUR STORE ▸</a></div>
       </div>
       <div class="demo-prog" id="demoProg" aria-hidden="true"><i></i></div>
       <div class="demo-cap" id="demoCap" aria-live="polite"></div>
     </div>
+  </div>
+</section>
+
+<!-- INSIDE THE PRODUCT — the actual app screen, same design system -->
+<section id="product">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Inside the product</div>
+      <h2>This is the app.</h2>
+      <p>What you see the moment you open Talonomic: drop an export, get unit economics. No dashboard maze.</p>
+    </div>
+    <div class="shot rv d1" aria-label="The Talonomic upload screen">
+      <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — app</span><span style="margin-left:auto">POWERED BY THE TALON ENGINE</span></div>
+      <div class="replica-main">
+        <div class="replica-h">Your order data, turned into AI unit economics in seconds.</div>
+        <div class="replica-sub">No pixel · no dev · no monthly attribution tax</div>
+        <div class="replica-box">
+          <div class="replica-drop">
+            <b>Drop your orders export</b>
+            CSV or Excel · or click to choose a file
+          </div>
+          <div class="replica-chips" aria-hidden="true">
+            <span>▶ Try it with sample store data</span>
+            <span>Google Sheet</span>
+            <span>Shopify API</span>
+          </div>
+          <div class="replica-cols">Columns we read: <code>order_id, order_date, customer_email, product_name, category, units, revenue, cogs, shipping_cost, status</code></div>
+        </div>
+      </div>
+    </div>
+    <canvas class="art art--falcon rv" data-art="image" data-src="./falcon-lines-dark.png" aria-hidden="true"></canvas>
   </div>
 </section>
 
@@ -334,6 +344,7 @@ window.DUSK.demoRunner({
   tilesEl: document.getElementById("demoTiles"),
   capEl: document.getElementById("demoCap"),
   progEl: document.getElementById("demoProg"),
+  insEl: document.getElementById("demoIns"),
   scenarios: [
     {
       label: "MARGIN", cap: "PER-SKU PROFIT SCREENER — LOSERS SURFACE FIRST",
@@ -343,7 +354,8 @@ window.DUSK.demoRunner({
         { v: 2, label: "SKUs below water" },
         { static: "−$1.82", label: "Worst margin / unit", neg: true },
         { v: 214, label: "SKUs screened" }
-      ]
+      ],
+      ins: "<b>“Trail Mini” is below water</b> — every ad dollar spent on it loses money. Pause spend or reprice; the math is attached."
     },
     {
       label: "LTV", cap: "RETENTION COHORTS — WHO PAYS FOR YOUR GROWTH",
@@ -353,7 +365,8 @@ window.DUSK.demoRunner({
         { v: 48, prefix: "$", suffix: ".10", label: "90-day LTV" },
         { v: 31, suffix: "%", label: "Repeat rate" },
         { v: 2841, label: "Customers in cohorts" }
-      ]
+      ],
+      ins: "<b>Repeat buyers carry this store</b> — the top cohort generates most of the margin. Retention beats acquisition here."
     },
     {
       label: "REORDER", cap: "AI PRODUCT MANAGER — REORDER BEFORE YOU STOCK OUT",
@@ -363,7 +376,8 @@ window.DUSK.demoRunner({
         { v: 12, label: "Days of stock left" },
         { v: 18, label: "Supplier lead time, days", neg: true },
         { static: "QUEUED", label: "Rec → your approval" }
-      ]
+      ],
+      ins: "<b>Stock-out lands before the reorder does</b> — 12 days left vs an 18-day lead time. Recommendation queued; nothing executes without you."
     },
     {
       label: "PRICE", cap: "PRICE TESTS — RECOMMENDED ONLY WHEN THE MATH SAYS SO",
@@ -373,7 +387,8 @@ window.DUSK.demoRunner({
         { v: 8, prefix: "+", suffix: "%", label: "Suggested price test" },
         { static: "−$1.82 → +$0.71", label: "Margin / unit, simulated" },
         { static: "QUEUED", label: "Rec → your approval" }
-      ]
+      ],
+      ins: "<b>A +8% test flips Trail Mini profitable</b> in simulation — margin goes −$1.82 to +$0.71 per unit. Queued for your approval."
     }
   ]
 });

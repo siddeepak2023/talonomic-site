@@ -313,6 +313,11 @@ window.DUSK = {
       bar.offsetWidth; /* reflow — restart the bar */
       if (ms) { bar.style.transitionDuration = ms + "ms"; bar.classList.add("run"); }
     }
+    function setIns(sc, show){
+      if (!cfg.insEl) return;
+      cfg.insEl.innerHTML = sc.ins ? "<span>" + sc.ins + "</span>" : "";
+      cfg.insEl.classList.toggle("show", !!show && !!sc.ins);
+    }
     function play(i){
       runRef.v++;
       clearTimeout(runRef.t);
@@ -321,11 +326,13 @@ window.DUSK = {
       tabs.forEach(function(tb, j){ tb.classList.toggle("on", j === i); });
       if (cfg.capEl) cfg.capEl.innerHTML = "FEATURE 0" + (i + 1) + " — <b>" + sc.cap + "</b>";
       renderTiles(sc);
+      setIns(sc, false);
       cfg.qEl.textContent = ""; cfg.codeEl.textContent = "";
       if (D.reduceMotion) {
         cfg.qEl.textContent = sc.q;
         cfg.codeEl.innerHTML = sc.code.replace(/\n/g, "<br>");
         D.countUp(cfg.tilesEl, runRef);
+        setIns(sc, true);
         setProg(0);
         return;
       }
@@ -336,6 +343,7 @@ window.DUSK = {
           D.typeInto(cfg.codeEl, sc.code, 8, function(){
             runRef.t = setTimeout(function(){
               D.countUp(cfg.tilesEl, runRef);
+              (function(){ var v = runRef.v; setTimeout(function(){ if (v === runRef.v) setIns(sc, true); }, 500); })();
               runRef.t = setTimeout(function(){
                 play((active + 1) % cfg.scenarios.length);
               }, HOLD);
@@ -358,6 +366,7 @@ window.DUSK = {
           + parseInt(b.getAttribute("data-count"), 10).toLocaleString()
           + (b.getAttribute("data-suffix") || "");
       });
+      setIns(sc, true);
     })();
     new IntersectionObserver(function(en){
       if (en[0].isIntersecting) play(active);
