@@ -53,7 +53,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 :focus-visible{outline:2px solid var(--signal);outline-offset:3px}
 h1,h2,h3{font-family:"Sora",sans-serif;font-weight:600;letter-spacing:-.03em;line-height:1.05}
 .mono{font-family:"JetBrains Mono",monospace}
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 24px;min-width:0}
 section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .dotbg{background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:26px 26px}
 
@@ -340,6 +340,7 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
   .nav-in{gap:14px;padding:0 16px}
   .nav .btn{white-space:nowrap;padding:9px 13px;font-size:10.5px;letter-spacing:.08em}
   .brand{letter-spacing:.1em;font-size:12px}
+  .brand .sub{display:none}
 }
 
 /* ============ REDUCED MOTION ============ */
@@ -400,7 +401,7 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .art--falcon{width:min(440px,84vw);height:310px;margin:56px auto 0;display:block;opacity:.85}
 
 /* app-style prompt box (talon hero) */
-.promptbox{max-width:560px;border:1px solid var(--line);background:var(--card);margin-top:4px}
+.promptbox{width:100%;max-width:560px;border:1px solid var(--line);background:var(--card);margin-top:4px;min-width:0}
 .promptbox .pb-in{display:flex;gap:10px;padding:13px 15px;border-bottom:1px solid var(--line-soft);align-items:center}
 .promptbox input{flex:1;background:transparent;border:0;outline:none;color:var(--fg);font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:14px;min-width:0}
 .promptbox input::placeholder{color:var(--mut)}
@@ -409,3 +410,18 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .promptbox .pb-tools{display:flex;gap:16px;padding:10px 15px;font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);flex-wrap:wrap;border-bottom:1px solid var(--line-soft)}
 .promptbox .pb-tools b{color:var(--fg);font-weight:500}
 .promptbox .quick{padding:10px 15px 13px;margin-top:0}
+
+/* replica starter-tab bar (mirrors the real prompt library) */
+.replica-tabs{display:flex;gap:2px;padding:6px 12px 0;border-bottom:1px solid var(--line-soft);overflow-x:auto;scrollbar-width:none;max-width:100%;min-width:0}
+.replica-tabs::-webkit-scrollbar{display:none}
+.replica-tabs button,.replica-tabs span{font-family:"Hanken Grotesk",system-ui,sans-serif;font-size:12.5px;font-weight:600;color:var(--mut);background:none;border:0;border-bottom:2px solid transparent;padding:8px 10px 10px;cursor:pointer;white-space:nowrap;transition:color .15s ease,border-color .15s ease}
+.replica-tabs button:hover{color:var(--fg)}
+.replica-tabs button.on,.replica-tabs span.on{color:var(--fg);border-bottom-color:var(--signal)}
+
+/* FAQ + in-frame falcon art (art supplements the frame, never its own scroll) */
+.faq-grid{display:grid;grid-template-columns:minmax(0,760px) 300px;gap:56px;align-items:center}
+.faq-grid .art--falcon{width:300px;height:280px;margin:0;opacity:.85}
+@media(max-width:920px){.faq-grid{grid-template-columns:1fr}.faq-grid .art--falcon{display:none}}
+
+/* small greeting above the hero prompt box (chat-app register) */
+.pb-greet{font-family:"Sora",sans-serif;font-weight:600;font-size:19px;letter-spacing:-.015em;color:var(--fg);margin:26px 0 12px}

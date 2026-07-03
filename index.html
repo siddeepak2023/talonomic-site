@@ -6,7 +6,10 @@
 <meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0A0A0B" media="(prefers-color-scheme: dark)">
 <title>Talonomic — Know which SKUs actually make money</title>
-<meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, or Amazon exports — plus an AI Product Manager that drafts your next move.">
+<meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI Product Manager that drafts your next move.">
+<link rel="icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -55,7 +58,7 @@
       <div>
         <span class="chip hero-chip"><i class="pulse"></i>NEW — AI PRODUCT MANAGER · SHADOW MODE</span>
         <h1>Know which SKUs actually make money.</h1>
-        <p class="hero-sub">Talonomic computes <strong>LTV, contribution margin, and per-SKU profit</strong> straight from your Shopify, WooCommerce, or Amazon exports — then drafts the next move and waits for your approval.</p>
+        <p class="hero-sub">Talonomic computes <strong>LTV, contribution margin, and per-SKU profit</strong> straight from your Shopify, WooCommerce, BigCommerce, or Amazon exports — then drafts the next move and waits for your approval.</p>
         <div class="hero-ctas">
           <a class="btn btn--primary" href="https://talon.bizfalconai.com/talonomic">Start free</a>
           <a class="btn btn--ghost" href="#pricing">See pricing</a>
@@ -101,8 +104,8 @@
   <div class="wrap">
     <div class="sec-head rv">
       <div class="eyebrow">Inside the product</div>
-      <h2>This is the app.</h2>
-      <p>What you see the moment you open Talonomic: drop an export, get unit economics. No dashboard maze.</p>
+      <h2>The product, exactly as it runs.</h2>
+      <p>Open Talonomic and drop an order export — margins, LTV, and per-SKU profit are computed in about a minute.</p>
     </div>
     <div class="shot rv d1" aria-label="The Talonomic upload screen">
       <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — app</span><span style="margin-left:auto">POWERED BY THE TALON ENGINE</span></div>
@@ -123,7 +126,6 @@
         </div>
       </div>
     </div>
-    <canvas class="art art--falcon rv" data-art="image" data-src="./falcon-lines-dark.png" aria-hidden="true"></canvas>
   </div>
 </section>
 
@@ -162,7 +164,7 @@
       <article class="cell rv d1">
         <span class="cell-idx">B4 / INPUT</span>
         <h3>Works with your store</h3>
-        <p>Shopify, WooCommerce, and Amazon exports drop straight in. No pixel, no engineer, no migration.</p>
+        <p>Shopify, WooCommerce, BigCommerce, and Amazon exports drop straight in. No pixel, no engineer, no migration.</p>
       </article>
       <article class="cell rv d2">
         <span class="cell-idx">B5 / TRUST</span>
@@ -281,20 +283,21 @@
   <div class="wrap">
     <div class="sec-head rv">
       <div class="eyebrow">FAQ</div>
-      <h2>Before you ask.</h2>
+      <h2>Frequently asked questions.</h2>
     </div>
-    <div class="faq rv">
+    <div class="faq-grid rv">
+    <div class="faq">
       <details>
         <summary>Will the AI Product Manager touch my store?</summary>
         <div class="a">No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust.</div>
       </details>
       <details>
-        <summary>Does my order data leave my browser?</summary>
-        <div class="a">Computation runs in a WebAssembly Python runtime in your browser. The AI sees your questions and summary context, not your raw customer rows.</div>
+        <summary>Is my store data safe?</summary>
+        <div class="a">Your file is parsed and your numbers are computed in your browser. When you use AI insights or save a report, the data needed is sent over an encrypted connection and stored in your account until you delete it. Your data is never sold or used to train our models.</div>
       </details>
       <details>
         <summary>What exports do you support?</summary>
-        <div class="a">Standard order exports from Shopify, WooCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works.</div>
+        <div class="a">Standard order exports from Shopify, WooCommerce, BigCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works.</div>
       </details>
       <details>
         <summary>Can I cancel anytime?</summary>
@@ -304,6 +307,8 @@
         <summary>How is margin actually computed?</summary>
         <div class="a">Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — executed as real pandas against your export. Click any figure and Talonomic shows the code that produced it.</div>
       </details>
+    </div>
+    <canvas class="art art--falcon" data-art="image" data-src="./falcon-lines-dark.png" aria-hidden="true"></canvas>
     </div>
   </div>
 </section>
