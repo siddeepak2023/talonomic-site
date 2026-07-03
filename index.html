@@ -1,408 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Talonomic — AI unit economics for ecommerce brands</title>
-<meta name="description" content="Talonomic computes the profit numbers Shopify hides — AOV, LTV, contribution margin, repeat rate, and a per-SKU profit screener — straight from your order export, with the math shown. No pixel, no dev. From $25/mo."/>
-<meta property="og:title" content="Talonomic — AI unit economics for ecommerce brands"/>
-<meta property="og:description" content="Your order export, turned into real unit economics in 60 seconds. Computed, not guessed."/>
-<meta property="og:type" content="website"/>
-<meta name="theme-color" content="#f1f1ea"/>
-<link rel="icon" href="https://talon.bizfalconai.com/falcon-bird-white.png"/>
-<script>(function(){try{var t=localStorage.getItem('bf-theme');if(!t)t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talonomic — Know which SKUs actually make money</title>
+<meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, or Amazon exports — plus an AI Product Manager that drafts your next move.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./dusk.css">
 <style>
-:root{
-  --bg:#f1f1ea; --bg-2:#e9e9e1; --card:#fbfbf9; --surface-2:#f0f0e8;
-  --line:#dedfd6; --line-2:#cccdc2;
-  --ink:#20232a; --body:#4d525e; --muted:#6f7480; --faint:#a7abb5;
-  --brand:#41555f; --brand-2:#4e6571; --on-brand:#f3f4f3;
-  --accent:#7e3b41; --accent-2:#8c454b;
-  --slate:#9cabb4; --slate-ink:#41555f; --ice:#d2dce6;
-  --accent-soft:rgba(126,59,65,.12); --brand-soft:rgba(65,85,95,.12); --slate-soft:rgba(156,171,180,.26);
-  --dot:rgba(32,35,42,.10); --diadot:rgba(65,85,95,.24); --grid:rgba(32,35,42,.09); --cross:#9cabb4;
-  --diafill:rgba(65,85,95,.05); --dialine:rgba(65,85,95,.07); --diaacc:rgba(126,59,65,.06);
-  --fx-a:154,171,180; --fx-b:126,59,65; --fx-c:65,85,95; --fx-alpha:.6;
-  --chip:#1c1f25;
-  --btn-bg:#41555f; --btn-text:#f3f4f3; --btn-bg-h:#4e6571;
-  --sh-sm:0 1px 2px rgba(32,35,42,.06),0 1px 1px rgba(32,35,42,.04);
-  --sh-md:0 6px 16px rgba(32,35,42,.09),0 2px 5px rgba(32,35,42,.05);
-  --sh-lg:0 28px 64px -18px rgba(20,23,30,.24),0 10px 24px -10px rgba(20,23,30,.12);
-  --display:'Sora',system-ui,sans-serif;
-  --sans:'Hanken Grotesk',system-ui,-apple-system,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
-  --mx:1200px;
-}
-:root[data-theme="dark"]{
-  --bg:#0b0c0f; --bg-2:#101216; --card:#15171d; --surface-2:#1b1e25;
-  --line:#262a33; --line-2:#353a45;
-  --ink:#f2f4f7; --body:#b8bdc8; --muted:#888d9a; --faint:#5c616d;
-  --brand:#9fb3bf; --brand-2:#aec0cb; --on-brand:#0b0c0f;
-  --accent:#b14a56; --accent-2:#c66a73;
-  --slate:#9cabb4; --slate-ink:#b0bdc5; --ice:#33454f;
-  --accent-soft:rgba(177,74,86,.16); --brand-soft:rgba(159,179,191,.13); --slate-soft:rgba(156,171,180,.12);
-  --dot:rgba(242,244,247,.05); --diadot:rgba(176,189,197,.22); --grid:rgba(176,189,197,.085); --cross:#5b7a88;
-  --diafill:rgba(176,189,197,.04); --dialine:rgba(176,189,197,.055); --diaacc:rgba(177,74,86,.08);
-  --fx-a:156,171,180; --fx-b:177,74,86; --fx-c:159,179,191; --fx-alpha:.58;
-  --chip:#222831;
-  --btn-bg:#eceef2; --btn-text:#14161b; --btn-bg-h:#fbfcff;
-  --sh-sm:0 1px 2px rgba(0,0,0,.3);
-  --sh-md:0 6px 18px rgba(0,0,0,.42);
-  --sh-lg:0 30px 70px -18px rgba(0,0,0,.62),0 10px 26px -10px rgba(0,0,0,.42);
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;overflow-x:hidden;}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .18s ease,color .18s ease;}
-a{text-decoration:none;color:inherit;}svg{display:block;}
-::selection{background:var(--accent-soft);color:var(--accent-2);}
-.wrap{max-width:var(--mx);margin:0 auto;padding:0 32px;}
-@media(max-width:640px){.wrap{padding:0 20px;}}
-.mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(140deg,#41555f 0%,#4e6571 48%,#7e3b41 108%);position:relative;overflow:hidden;display:inline-grid;place-items:center;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 2px 6px rgba(20,23,30,.22);}
-.mark img{width:78%;height:78%;object-fit:contain;}
-
-nav{position:fixed;top:0;inset-inline:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .3s,border-color .3s,backdrop-filter .3s;}
-nav.scrolled{background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--line);}
-.nav-in{max-width:var(--mx);margin:0 auto;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;}
-@media(max-width:640px){.nav-in{padding:12px 20px;}}
-.brand{display:flex;align-items:center;gap:10px;}
-.brand b{font-family:var(--display);font-weight:700;letter-spacing:-.02em;font-size:16px;}
-.brand .by{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-left:7px;}
-.nav-right{display:flex;align-items:center;gap:20px;}
-.nav-links{display:flex;gap:26px;align-items:center;}
-.nav-links a{font-size:14px;font-weight:500;color:var(--muted);transition:color .15s;}
-.nav-links a:hover{color:var(--ink);}
-.theme-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line-2);background:var(--card);color:var(--body);display:grid;place-items:center;cursor:pointer;transition:border-color .2s,color .2s;}
-.theme-btn:hover{border-color:var(--brand);color:var(--brand);}
-.theme-btn svg{width:17px;height:17px;}
-.theme-btn .moon{display:block;}.theme-btn .sun{display:none;}
-:root[data-theme="dark"] .theme-btn .moon{display:none;}:root[data-theme="dark"] .theme-btn .sun{display:block;}
-.nav-cta{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:13.5px!important;font-weight:700!important;color:var(--btn-text)!important;background:var(--btn-bg);padding:9px 16px;border-radius:9px;box-shadow:var(--sh-sm);transition:transform .15s,box-shadow .2s,background .2s;white-space:nowrap;}
-.nav-cta:hover{transform:translateY(-1px);background:var(--btn-bg-h);box-shadow:var(--sh-md);}
-.nav-cta svg{width:14px;height:14px;}
-@media(max-width:820px){.nav-links a{display:none;}}
-@media(max-width:600px){.brand .by{display:none;}}
-
-.hero{padding:148px 0 80px;position:relative;overflow:hidden;}
-.hero-fx{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-.hero-fx .glow{position:absolute;inset:0;background:radial-gradient(50% 58% at 90% 8%,rgba(var(--fx-a),.16),transparent 72%),radial-gradient(20% 22% at 87% 12%,rgba(var(--fx-b),.17),transparent 66%),radial-gradient(40% 48% at 58% 88%,rgba(var(--fx-a),.14),transparent 70%),radial-gradient(34% 42% at 6% 28%,rgba(var(--fx-c),.12),transparent 70%);}
-.hero-fx .grid{position:absolute;inset:0;background-image:linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(180deg,var(--grid) 1px,transparent 1px);background-size:72px 72px;-webkit-mask:radial-gradient(120% 86% at 70% 34%,#000 6%,transparent 76%);mask:radial-gradient(120% 86% at 70% 34%,#000 6%,transparent 76%);}
-.hero-fx .cross{position:absolute;inset:0;background-image:radial-gradient(var(--dot) 1.3px,transparent 1.3px);background-size:72px 72px;background-position:36px 36px;-webkit-mask:radial-gradient(110% 80% at 72% 32%,#000 4%,transparent 72%);mask:radial-gradient(110% 80% at 72% 32%,#000 4%,transparent 72%);}
-.hero-fx .ddot{position:absolute;color:var(--diadot);pointer-events:none;}.hero-fx .ddot.tr{top:30px;right:18px;}.hero-fx .ddot.bl{bottom:18px;left:18px;opacity:.72;}@media(max-width:760px){.hero-fx .ddot{display:none;}}
-.hero-fx .dia span{position:absolute;border-radius:9px;transform:rotate(45deg);background:var(--diafill);box-shadow:inset 0 0 0 1px var(--dialine);}
-.hero-fx .dia span.acc{background:var(--diaacc);box-shadow:inset 0 0 0 1px var(--diaacc);}
-#wave{position:absolute;inset:0;width:100%;height:100%;}
-.hero::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(56% 62% at 16% 42%,var(--bg) 24%,transparent 74%);}
-.hero .wrap{position:relative;z-index:2;}
-.hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:54px;align-items:center;}
-@media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:44px;}}
-.eyebrow{display:inline-flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12px;letter-spacing:0;color:var(--accent-2);margin-bottom:22px;white-space:nowrap;}@media(max-width:680px){.eyebrow{white-space:normal;}}
-.eyebrow i{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 9px 1px var(--accent),0 0 0 4px var(--accent-soft);}
-h1{font-family:var(--display);font-size:clamp(38px,5.2vw,60px);font-weight:700;line-height:1.1;letter-spacing:-.03em;text-wrap:balance;margin-bottom:24px;color:var(--ink);}
-h1 .hl{position:relative;color:var(--accent-2);white-space:nowrap;}
-h1 .hl::after{content:'';position:absolute;left:0;bottom:-.04em;height:3px;width:100%;background:var(--accent);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .85s .35s cubic-bezier(.22,.61,.36,1);}
-.reveal.in h1 .hl::after{transform:scaleX(1);}
-.hero-lede{font-size:clamp(16px,1.7vw,19px);color:var(--body);max-width:540px;line-height:1.62;margin-bottom:32px;}
-.hero-cta{display:flex;gap:13px;flex-wrap:wrap;align-items:center;}
-.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:15px;font-weight:700;padding:13px 22px;border-radius:11px;transition:transform .16s,box-shadow .18s,background .18s,border-color .18s,color .18s;cursor:pointer;}
-.btn svg{width:16px;height:16px;}
-.btn-p{background:var(--btn-bg);color:var(--btn-text);box-shadow:var(--sh-sm);}
-.btn-p:hover{transform:translateY(-2px);background:var(--btn-bg-h);box-shadow:var(--sh-md);}
-.btn-s{color:var(--ink);border:1px solid var(--line-2);background:var(--card);box-shadow:var(--sh-sm);}
-.btn-s:hover{border-color:var(--brand);color:var(--brand);}
-.btn-s .ar{transition:transform .18s;}.btn-s:hover .ar{transform:translateX(3px);}
-.hero-note{margin-top:22px;font-family:var(--mono);font-size:11.5px;color:var(--muted);}
-
-/* artifact */
-.art{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh-lg);overflow:hidden;}
-.art-bar{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line);background:var(--surface-2);}
-.art-dots{display:flex;gap:6px;}.art-dots i{width:9px;height:9px;border-radius:50%;background:var(--line-2);}
-.art-file{font-family:var(--mono);font-size:11px;color:var(--muted);}.art-file b{color:var(--ink);font-weight:600;}
-.art-pill{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;font-weight:600;color:var(--brand);background:var(--brand-soft);border:1px solid var(--line);padding:3px 8px;border-radius:6px;letter-spacing:.02em;}
-.art-pill svg{width:11px;height:11px;}
-.art-body{padding:16px;}
-.art-prompt{font-family:var(--mono);font-size:11.5px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;margin-bottom:14px;display:flex;gap:8px;align-items:center;}
-.art-prompt .cue{color:var(--accent);font-weight:700;}
-.art-prompt .cur{width:7px;height:14px;background:var(--accent);opacity:.5;border-radius:1px;animation:blink 1.1s step-end infinite;}
-@keyframes blink{50%{opacity:0;}}
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;}
-.kpi{border:1px solid var(--line);border-radius:11px;padding:11px;background:var(--surface-2);}
-.kpi .l{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px;}
-.kpi .v{font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1;}
-.kpi .d{font-family:var(--mono);font-size:9.5px;margin-top:6px;display:inline-flex;gap:3px;}
-.kpi .d.up{color:var(--slate-ink);}.kpi .d.dn{color:var(--accent);}
-.chart{border:1px solid var(--line);border-radius:11px;padding:13px 13px 9px;background:var(--surface-2);}
-.chart-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:11px;}
-.chart-h .t{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
-.chart-h .n{font-family:var(--display);font-size:13px;font-weight:700;color:var(--ink);}
-.bars{display:flex;align-items:flex-end;gap:7px;height:64px;}
-.bars .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;}
-.bars .col .b{width:100%;border-radius:4px 4px 2px 2px;transform:scaleY(0);transform-origin:bottom;transition:transform .9s cubic-bezier(.2,.7,.2,1);background:var(--slate);}
-.bars .col:last-child .b{background:var(--accent);}
-.bars.in .col .b{transform:scaleY(1);}
-.art-code{margin-top:11px;font-family:var(--mono);font-size:10.5px;color:var(--muted);background:var(--brand-soft);border:1px solid var(--line);border-radius:9px;padding:9px 11px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
-.art-code .k{color:var(--brand);font-weight:600;}.art-code .res{color:var(--accent-2);font-weight:700;white-space:nowrap;}
-.art-insight{margin-top:10px;font-size:12px;color:var(--body);line-height:1.45;display:flex;gap:8px;align-items:flex-start;}
-.art-insight svg{width:15px;height:15px;color:var(--accent);flex-shrink:0;margin-top:1px;}.art-insight b{color:var(--ink);font-weight:700;}
-
-/* trust */
-.trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--card);}
-.trust-in{max-width:var(--mx);margin:0 auto;padding:18px 32px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.trust .lab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
-.chip{font-family:var(--mono);font-size:12px;color:var(--body);border:1px solid var(--line-2);padding:5px 11px;border-radius:7px;background:var(--surface-2);}
-@media(max-width:640px){.trust-in{padding:16px 20px;}}
-
-section{padding:92px 0;position:relative;}
-section.alt{background:var(--bg-2);border-block:1px solid var(--line);}
-.sec-head{margin-bottom:46px;max-width:660px;}
-.sec-label{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-2);margin-bottom:16px;}
-.sec-label::before{content:'';width:20px;height:2px;background:var(--accent);border-radius:2px;}
-.sec-h{font-family:var(--display);font-size:clamp(27px,3.6vw,40px);font-weight:700;letter-spacing:-.028em;line-height:1.1;margin-bottom:14px;color:var(--ink);}
-.sec-sub{color:var(--body);font-size:16px;line-height:1.6;}
-
-.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-@media(max-width:880px){.feats{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:560px){.feats{grid-template-columns:1fr;}}
-.feat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--sh-sm);transition:transform .25s,box-shadow .25s,border-color .25s;}
-.feat:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--line-2);}
-.feat-ico{width:42px;height:42px;border-radius:12px;background:var(--brand-soft);border:1px solid var(--line);display:grid;place-items:center;color:var(--brand);margin-bottom:18px;}
-.feat-ico svg{width:21px;height:21px;}
-.feat h3{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:8px;}
-.feat p{font-size:14px;color:var(--body);line-height:1.6;}
-
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s;}
-@media(max-width:760px){.steps{grid-template-columns:1fr;}}
-.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--sh-sm);}
-.step::before{counter-increment:s;content:'0' counter(s);font-family:var(--display);font-size:13px;font-weight:700;color:var(--accent);display:block;margin-bottom:14px;}
-.step h3{font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:7px;}
-.step p{font-size:14px;color:var(--body);line-height:1.6;}
-
-.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh-sm);}
-@media(max-width:760px){.compare{grid-template-columns:1fr;}}
-.col{background:var(--card);padding:24px;}
-.col.win{background:var(--surface-2);}
-.col h3{font-family:var(--display);font-size:15px;font-weight:700;margin-bottom:3px;}
-.col .who{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:16px;}
-.col .who.acc{color:var(--accent);}
-.col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
-.col li{display:flex;gap:9px;font-size:13px;color:var(--body);line-height:1.45;}
-.col li svg{width:15px;height:15px;flex-shrink:0;margin-top:2px;}
-.x{color:var(--faint);}.ok{color:var(--accent);}
-
-.toggle{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line-2);border-radius:100px;padding:4px;background:var(--card);margin-top:22px;box-shadow:var(--sh-sm);}
-.toggle button{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--muted);background:transparent;border:0;padding:8px 16px;border-radius:100px;cursor:pointer;transition:color .2s,background .2s;}
-.toggle button.on{color:var(--btn-text);background:var(--btn-bg);}
-.toggle .save{font-family:var(--mono);font-size:10px;color:var(--accent);margin-left:6px;}
-.toggle button.on .save{color:var(--btn-text);}
-.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:36px;}
-@media(max-width:980px){.tiers{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:520px){.tiers{grid-template-columns:1fr;}}
-.tier{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px;display:flex;flex-direction:column;box-shadow:var(--sh-sm);}
-.tier.rec{border-color:var(--accent);}
-.tier .badge{position:absolute;top:-10px;left:24px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--accent);padding:4px 9px;border-radius:6px;}
-.tier .tn{font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:4px;}
-.tier .td{font-size:12.5px;color:var(--muted);margin-bottom:16px;min-height:34px;}
-.price{display:flex;align-items:baseline;gap:5px;margin-bottom:4px;}
-.price .amt{font-family:var(--display);font-size:33px;font-weight:700;letter-spacing:-.03em;color:var(--ink);}
-.price .per{font-size:13px;color:var(--muted);}
-.price .was{font-size:14px;color:var(--faint);text-decoration:line-through;margin-left:4px;}
-.bill{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-bottom:18px;min-height:15px;}
-.tier .go{display:block;text-align:center;font-size:13.5px;font-weight:700;padding:11px;border-radius:10px;border:1px solid var(--line-2);color:var(--ink);background:var(--card);transition:border-color .2s,color .2s;margin-bottom:18px;}
-.tier .go:hover{border-color:var(--accent);color:var(--accent);}
-.tier.rec .go{background:var(--btn-bg);color:var(--btn-text);border-color:transparent;}
-.tier ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
-.tier li{display:flex;gap:9px;font-size:13px;color:var(--body);line-height:1.4;}
-.tier li svg{width:15px;height:15px;color:var(--accent);flex-shrink:0;margin-top:2px;}
-.pnote{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:24px;}
-
-.faq{max-width:760px;}
-.faq details{border-bottom:1px solid var(--line);}
-.faq summary{list-style:none;cursor:pointer;padding:18px 0;font-family:var(--display);font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:16px;}
-.faq summary::-webkit-details-marker{display:none;}
-.faq summary .pm{color:var(--accent);font-size:20px;transition:transform .2s;flex-shrink:0;line-height:1;}
-.faq details[open] summary .pm{transform:rotate(45deg);}
-.faq p{font-size:14.5px;color:var(--body);line-height:1.65;padding:0 0 20px;max-width:64ch;}
-
-.cta{position:relative;border-radius:24px;overflow:hidden;background:#5a2c31;padding:70px 40px;text-align:center;box-shadow:var(--sh-lg);}
-.cta::after{content:'';position:absolute;inset:0;background:radial-gradient(80% 130% at 50% -10%,rgba(156,171,180,.22),transparent 60%);pointer-events:none;}
-.cta h2{position:relative;font-family:var(--display);font-size:clamp(26px,3.5vw,38px);font-weight:700;letter-spacing:-.03em;color:#f6f1ea;margin-bottom:14px;}
-.cta p{position:relative;color:rgba(246,241,234,.82);font-size:16px;margin-bottom:26px;max-width:50ch;margin-inline:auto;}
-.cta a{position:relative;display:inline-flex;align-items:center;gap:8px;background:#f3f2ec;color:#2a1417;font-weight:700;font-size:15px;padding:14px 26px;border-radius:11px;transition:transform .15s,box-shadow .15s,background .15s;}
-.cta a svg{width:16px;height:16px;}
-.cta a:hover{transform:translateY(-2px);background:#fff;box-shadow:0 16px 34px -10px rgba(0,0,0,.4);}
-
-footer{border-top:1px solid var(--line);padding:54px 0 44px;background:var(--card);}
-.foot-in{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap;}
-.foot-brand{max-width:300px;}
-.foot-brand p{color:var(--muted);font-size:13.5px;line-height:1.6;margin-top:14px;}
-.foot-links{display:flex;gap:54px;flex-wrap:wrap;}
-.foot-col .fh{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
-.foot-col a{display:block;color:var(--body);font-size:14px;padding:5px 0;transition:color .15s;}
-.foot-col a:hover{color:var(--accent-2);}
-.foot-base{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1);}
-.reveal.in{opacity:1;transform:none;}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;}.reveal{opacity:1;transform:none;transition:none;}.bars .col .b{transform:scaleY(1)!important;transition:none;}html{scroll-behavior:auto;}}
+.hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
+.sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
+.sku-bars .bar{flex:1;background:var(--line)}
+.sku-bars .bar.hot{background:var(--signal)}
+.rec-mini{border:1px solid var(--line-soft);padding:14px 16px;font-size:12px}
+.rec-mini .rt{display:flex;justify-content:space-between;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.rec-mini .sv{color:var(--signal);font-weight:700}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <symbol id="i-calc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h4M8 15h2M12 15h4"/></symbol>
-  <symbol id="i-sku" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><rect x="7" y="12" width="3" height="5" rx="1"/><rect x="12" y="8" width="3" height="9" rx="1"/><rect x="17" y="14" width="3" height="3" rx="1"/></symbol>
-  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5.5M16.5 20a5.5 5.5 0 0 0-2-4.3"/></symbol>
-  <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 13h6l-1 8 8-10h-6l1-8Z"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
-  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
-  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/><circle cx="12" cy="12" r="2.4"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></symbol>
-  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 6l6 6-6 6"/></symbol>
-  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
-  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8Z"/></symbol>
-</defs></svg>
 
-<nav>
+<header class="nav">
   <div class="nav-in">
-    <a href="#top" class="brand"><span class="mark"><img src="https://talon.bizfalconai.com/falcon-bird-white.png" alt=""></span><span><b>Talonomic</b><span class="by">by BizFalcon</span></span></a>
+    <a class="brand" href="#" aria-label="Talonomic home">
+      <img src="./falcon-bird-white.png" alt="">
+      TALONOMIC <span class="sub">/ BIZFALCON AI</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#demo">Live demo</a>
+      <a href="#benefits">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
     <div class="nav-right">
-      <div class="nav-links"><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a></div>
-      <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode"><svg class="moon"><use href="#i-moon"/></svg><svg class="sun"><use href="#i-sun"/></svg></button>
-      <a href="https://talon.bizfalconai.com/talonomic" class="nav-cta">Open Talonomic <svg><use href="#i-arrow"/></svg></a>
-    </div>
-  </div>
-</nav>
-
-<header class="hero" id="top">
-  <div class="hero-fx" aria-hidden="true"><div class="grid"></div><div class="cross"></div><svg class="ddot tr" viewBox="0 0 300 300" width="300" height="300"><defs><pattern id="dpt" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2.1" fill="currentColor"/></pattern><radialGradient id="dft" cx="100%" cy="0%" r="100%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#000"/></radialGradient><mask id="dmt"><rect width="300" height="300" fill="url(#dft)"/></mask></defs><rect width="300" height="300" fill="url(#dpt)" mask="url(#dmt)"/></svg><svg class="ddot bl" viewBox="0 0 260 260" width="260" height="260"><defs><pattern id="dpb" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2.1" fill="currentColor"/></pattern><radialGradient id="dfb" cx="0%" cy="100%" r="100%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#000"/></radialGradient><mask id="dmb"><rect width="260" height="260" fill="url(#dfb)"/></mask></defs><rect width="260" height="260" fill="url(#dpb)" mask="url(#dmb)"/></svg><div class="dia"><span style="width:360px;height:360px;top:-120px;right:-90px;opacity:.92"></span><span style="width:250px;height:250px;top:-30px;right:150px;opacity:.78"></span><span class="acc" style="width:170px;height:170px;top:80px;right:-20px;opacity:.82"></span><span style="width:120px;height:120px;top:46px;right:250px;opacity:.7"></span><span style="width:84px;height:84px;top:215px;right:130px;opacity:.6"></span><span style="width:200px;height:200px;bottom:-70px;right:60px;opacity:.72"></span><span class="acc" style="width:110px;height:110px;bottom:54px;right:235px;opacity:.66"></span><span style="width:150px;height:150px;top:54%;left:-60px;opacity:.5"></span><span style="width:90px;height:90px;top:63%;left:120px;opacity:.4"></span><span style="width:220px;height:220px;bottom:-90px;left:-80px;opacity:.55"></span><span style="width:120px;height:120px;bottom:60px;left:90px;opacity:.45"></span></div><div class="glow"></div></div>
-  <div class="wrap">
-    <div class="hero-grid">
-      <div class="reveal">
-        <div class="eyebrow"><i></i>AI unit economics for ecommerce brands · powered by the Talon engine</div>
-        <h1>Your order export, turned into real <span class="hl">unit economics</span> in 60 seconds.</h1>
-        <p class="hero-lede">Talonomic computes the profit numbers Shopify hides — AOV, LTV, contribution margin, repeat rate, and a per-SKU profit screener — straight from your order export, with the math shown. No pixel, no dev, no monthly attribution tax.</p>
-        <div class="hero-cta">
-          <a href="https://talon.bizfalconai.com/talonomic" class="btn btn-p">Analyze my store <svg><use href="#i-arrow"/></svg></a>
-          <a href="#pricing" class="btn btn-s">See pricing <span class="ar"><svg><use href="#i-arrow"/></svg></span></a>
-        </div>
-        <div class="hero-note">Runs in your browser · no signup to try · from $25/mo</div>
-      </div>
-      <div class="reveal">
-        <div class="art" role="img" aria-label="Talonomic computing unit economics from an order export">
-          <div class="art-bar"><div class="art-dots"><i></i><i></i><i></i></div><div class="art-file"><b>shopify_orders.csv</b> · 8,140 rows</div><div class="art-pill"><svg><use href="#i-check"/></svg>VERIFIED</div></div>
-          <div class="art-body">
-            <div class="art-prompt"><span class="cue">▷</span>Which SKUs actually make money?<span class="cur"></span></div>
-            <div class="kpis">
-              <div class="kpi"><div class="l">Contribution margin</div><div class="v"><span data-count="42.8" data-suffix="%">0%</span></div><div class="d up">▲ 3.1 pts</div></div>
-              <div class="kpi"><div class="l">LTV</div><div class="v"><span data-count="312" data-prefix="$">$0</span></div><div class="d up">▲ 11%</div></div>
-              <div class="kpi"><div class="l">Repeat rate</div><div class="v"><span data-count="31" data-suffix="%">0%</span></div><div class="d dn">▼ 2%</div></div>
-            </div>
-            <div class="chart"><div class="chart-h"><span class="t">Profit by SKU · top 6</span><span class="n">net margin</span></div>
-              <div class="bars" id="bars"><div class="col"><div class="b" style="height:88%"></div></div><div class="col"><div class="b" style="height:72%"></div></div><div class="col"><div class="b" style="height:64%"></div></div><div class="col"><div class="b" style="height:52%"></div></div><div class="col"><div class="b" style="height:40%"></div></div><div class="col"><div class="b" style="height:22%"></div></div></div>
-            </div>
-            <div class="art-code"><span><span class="k">df</span>.groupby('sku').margin.mean()</span><span class="res">→ 42.8%</span></div>
-            <div class="art-insight"><svg><use href="#i-spark"/></svg><span>3 SKUs sell well but lose money on returns. <b>Cut SKU-118</b>; push the top contribution-margin line.</span></div>
-          </div>
-        </div>
-      </div>
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle light and dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a class="btn btn--primary" href="https://talon.bizfalconai.com/talonomic">Start free</a>
     </div>
   </div>
 </header>
-<main>
 
-<div class="trust"><div class="trust-in"><span class="lab">Works with</span><span class="chip">Shopify</span><span class="chip">WooCommerce</span><span class="chip">BigCommerce</span><span class="chip">Amazon</span><span class="chip">CSV / Excel</span><span class="chip">Google Sheets</span></div></div>
-
-<section id="features">
-  <div class="wrap reveal">
-    <div class="sec-head"><span class="sec-label">What you get</span><h2 class="sec-h">The profit numbers Shopify reports won’t show you.</h2><p class="sec-sub">Shopify gives you revenue and top sellers — not your true margins. Talonomic computes the unit economics — exactly, with the formula shown.</p></div>
-    <div class="feats">
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-calc"/></svg></div><h3>Computed, not guessed</h3><p>AOV, LTV, gross &amp; contribution margin, repeat rate, return rate — every metric calculated from your real orders with the formula shown. No estimates.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-sku"/></svg></div><h3>Per-SKU profit screener</h3><p>Ranks every product by revenue and true margin, flags your return-rate problems. Know which SKUs to push and which quietly lose money.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-users"/></svg></div><h3>Retention &amp; whales</h3><p>New-vs-returning revenue split, purchase frequency, days-to-2nd-order, and top-10%-customer concentration. See who actually drives the business.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-bolt"/></svg></div><h3>Live in 60 seconds</h3><p>No pixel, no OAuth, no developer. Drop a Shopify, WooCommerce, BigCommerce or Amazon export — CSV, Excel, or a Google Sheet.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-shield"/></svg></div><h3>Your data stays yours</h3><p>Your numbers are computed in your browser. AI insights and saved reports run over an encrypted connection and live in your account until you delete them — never sold, never used to train our own models.</p></div>
-      <div class="feat"><div class="feat-ico"><svg><use href="#i-doc"/></svg></div><h3>Verified, shareable</h3><p>Every number shows its exact computation. Export a clean profit report your whole team — or your investors — can trust.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="how" class="alt">
-  <div class="wrap reveal">
-    <div class="sec-head"><span class="sec-label">How it works</span><h2 class="sec-h">Export → drop → decide.</h2><p class="sec-sub">From raw order export to real unit economics in three steps. No integration, no waiting on a developer.</p></div>
-    <div class="steps">
-      <div class="step"><h3>Export your orders</h3><p>In Shopify: Orders → Export → Plain CSV → All orders. WooCommerce, BigCommerce, Amazon and Excel all work too.</p></div>
-      <div class="step"><h3>Drop it in</h3><p>Talonomic auto-detects your columns and computes your full unit economics in your browser — instantly.</p></div>
-      <div class="step"><h3>Act on the profit</h3><p>See which SKUs make money, who your repeat buyers are, and where margin leaks. Fix it this week.</p></div>
-    </div>
-  </div>
-</section>
-
-
-<section id="pricing" class="alt">
-  <div class="wrap reveal">
-    <div class="sec-head"><span class="sec-label">Pricing</span><h2 class="sec-h">One saved SKU pays for the year.</h2><p class="sec-sub">Start free, upgrade when the numbers earn it. Cancel anytime.</p>
-      <div class="toggle" role="group" aria-label="Billing period"><button id="bMonthly" onclick="setBill('m')">Monthly</button><button id="bAnnual" class="on" onclick="setBill('a')">Annual<span class="save">2 mo free</span></button></div>
-    </div>
-    <div class="tiers" data-bill="a">
-      <div class="tier"><div class="tn">Free</div><div class="td">Try the full engine, no card.</div><div class="price"><span class="amt">$0</span><span class="per">/mo</span></div><div class="bill">up to 50 orders/mo</div><a class="go" href="https://talon.bizfalconai.com/talonomic">Start free</a><ul><li><svg><use href="#i-check"/></svg>Revenue, orders, AOV</li><li><svg><use href="#i-check"/></svg>Repeat order rate</li><li><svg><use href="#i-check"/></svg>CSV, Excel &amp; Google Sheets</li><li><svg><use href="#i-check"/></svg>Runs in your browser, no signup to try</li></ul></div>
-      <div class="tier"><div class="tn">Basic</div><div class="td">For a growing store.</div><div class="price"><span class="amt" data-m="$25" data-a="$21">$21</span><span class="per">/mo</span><span class="was" data-m="" data-a="$25">$25</span></div><div class="bill" data-m="300 orders/mo · billed monthly" data-a="300 orders/mo · billed annually · $250/yr">300 orders/mo · billed annually · $250/yr</div><a class="go" href="https://talon.bizfalconai.com/talonomic">Start Basic</a><ul><li><svg><use href="#i-check"/></svg>LTV + contribution &amp; gross margin</li><li><svg><use href="#i-check"/></svg>Per-SKU profit screener</li><li><svg><use href="#i-check"/></svg>New-vs-returning + whale concentration</li><li><svg><use href="#i-check"/></svg>Revenue trend + category &amp; geo charts</li><li><svg><use href="#i-check"/></svg>Exportable verified report</li></ul></div>
-      <div class="tier rec"><div class="badge">Recommended</div><div class="tn">Advanced</div><div class="td">Full unit economics + history.</div><div class="price"><span class="amt" data-m="$45" data-a="$38">$38</span><span class="per">/mo</span><span class="was" data-m="" data-a="$45">$45</span></div><div class="bill" data-m="600 orders/mo · billed monthly" data-a="600 orders/mo · billed annually · $450/yr">600 orders/mo · billed annually · $450/yr</div><a class="go" href="https://talon.bizfalconai.com/talonomic">Start Advanced</a><ul><li><svg><use href="#i-check"/></svg>Everything in Growth</li><li><svg><use href="#i-check"/></svg>Multiple stores</li><li><svg><use href="#i-check"/></svg>Period-over-period deltas</li><li><svg><use href="#i-check"/></svg>Saved snapshots + history</li><li><svg><use href="#i-check"/></svg>Priority support</li></ul></div>
-      <div class="tier"><div class="tn">Scale</div><div class="td">Multiple stores &amp; white-label.</div><div class="price"><span class="amt" data-m="$75" data-a="$63">$63</span><span class="per">/mo</span><span class="was" data-m="" data-a="$75">$75</span></div><div class="bill" data-m="1,500 orders/mo · billed monthly" data-a="1,500 orders/mo · billed annually · $750/yr">1,500 orders/mo · billed annually · $750/yr</div><a class="go" href="https://talon.bizfalconai.com/talonomic">Start Scale</a><ul><li><svg><use href="#i-check"/></svg>Everything in Scale</li><li><svg><use href="#i-check"/></svg>Unlimited brands + team seats</li><li><svg><use href="#i-check"/></svg>White-label client reports</li><li><svg><use href="#i-check"/></svg>Bulk export</li></ul></div>
-    </div>
-    <p class="pnote">Enterprise — 3,500+ orders from $149/mo. Save 2 months annually · cancel anytime · live in 60 seconds.</p>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="wrap reveal">
-    <div class="sec-head"><span class="sec-label">FAQ</span><h2 class="sec-h">Questions, answered.</h2></div>
-    <div class="faq">
-      <details><summary>Do I need to install a pixel or connect my store? <span class="pm">+</span></summary><p>No. Talonomic reads a plain order export — CSV, Excel, or a Google Sheet. There’s no pixel, no OAuth, and no developer setup. Export your orders and drop the file in.</p></details>
-      <details><summary>Is my store data safe? <span class="pm">+</span></summary><p>Your file is parsed and your numbers computed in your browser. When you use AI insights or save a report, the data needed is sent over an encrypted connection and stored in your account until you delete it. We never sell your data or use it to train our own models.</p></details>
-      <details><summary>How is this different from attribution tools? <span class="pm">+</span></summary><p>Attribution tools focus on where sales came from. Talonomic is profit-first: it computes your real unit economics — margin, LTV, per-SKU profit — from a file you already have, in 60 seconds, from $25/mo.</p></details>
-      <details><summary>Which platforms work? <span class="pm">+</span></summary><p>Shopify, WooCommerce, BigCommerce, and Amazon exports all work, plus any CSV, Excel file, or Google Sheet. Talonomic auto-detects your columns.</p></details>
-    </div>
-  </div>
-</section>
-
-<section class="alt">
-  <div class="wrap reveal"><div class="cta"><h2>See your real margins today.</h2><p>Drop an order export and Talonomic computes your unit economics in under a minute. Free to try, no card.</p><a href="https://talon.bizfalconai.com/talonomic">Analyze my store <svg><use href="#i-arrow"/></svg></a></div></div>
-</section>
-
-</main>
-<footer>
-  <div class="wrap">
-    <div class="foot-in">
-      <div class="foot-brand"><a href="#top" class="brand"><span class="mark"><img src="https://talon.bizfalconai.com/falcon-bird-white.png" alt=""></span><span><b>Talonomic</b></span></a><p>AI unit economics for ecommerce brands. Computed, not guessed. A BizFalcon AI product.</p></div>
-      <div class="foot-links">
-        <div class="foot-col"><div class="fh">Product</div><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Pricing</a><a href="https://talon.bizfalconai.com/talonomic">Open app</a></div>
-        <div class="foot-col"><div class="fh">BizFalcon</div><a href="https://bizfalconai.com">Company</a><a href="https://talon.bizfalconai.com">Talon</a><a href="https://talonmark.bizfalconai.com">Talonmark</a><a href="https://fledge.bizfalconai.com">Fledge</a></div>
-        <div class="foot-col"><div class="fh">Connect</div><a href="https://github.com/siddeepak2023">GitHub</a><a href="mailto:sid.deepak2023@gmail.com">Email</a></div>
+<!-- HERO -->
+<section class="hero">
+  <canvas class="hero-canvas" id="terrain" aria-hidden="true"></canvas>
+  <div class="hero-fade" aria-hidden="true"></div>
+  <div class="wrap hero-in">
+    <div class="hero-grid">
+      <div>
+        <span class="chip hero-chip"><i class="pulse"></i>NEW — AI PRODUCT MANAGER · SHADOW MODE</span>
+        <h1>Know which SKUs actually make money.</h1>
+        <p class="hero-sub">Talonomic computes <strong>LTV, contribution margin, and per-SKU profit</strong> straight from your Shopify, WooCommerce, or Amazon exports — then drafts the next move and waits for your approval.</p>
+        <div class="hero-ctas">
+          <a class="btn btn--primary" href="https://talon.bizfalconai.com/talonomic">Start free</a>
+          <a class="btn btn--ghost" href="#pricing">See pricing</a>
+        </div>
+        <div class="trust">
+          <span>NO CARD <b>TO TRY</b></span>
+          <span>COMPUTED <b>NOT GUESSED</b></span>
+          <span>LIVE IN <b>60 SECONDS</b></span>
+        </div>
+      </div>
+      <div class="shot" aria-label="Talonomic: per-SKU contribution margin and a queued recommendation">
+        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — margin screener</span></div>
+        <div class="shot-body">
+          <div class="sku-bars" aria-hidden="true">
+            <div class="bar" style="height:46%"></div><div class="bar" style="height:72%"></div>
+            <div class="bar" style="height:58%"></div><div class="bar hot" style="height:24%"></div>
+            <div class="bar" style="height:88%"></div><div class="bar" style="height:64%"></div>
+            <div class="bar hot" style="height:15%"></div><div class="bar" style="height:79%"></div>
+            <div class="bar" style="height:52%"></div><div class="bar" style="height:68%"></div>
+          </div>
+          <div class="demo-tiles show">
+            <div class="tile neg"><b>−$1.82</b><s>Margin / unit, “Trail Mini”</s></div>
+            <div class="tile"><b>$48.10</b><s>90-day LTV</s></div>
+            <div class="tile"><b>2 / 10</b><s>SKUs below water</s></div>
+          </div>
+          <div class="rec-mini" style="margin-top:14px">
+            <div class="rt"><span>PLAYBOOK MARGIN-02</span><span>CONF 0.74</span></div>
+            “Trail Mini” loses <span class="sv">$1.82/unit</span> after ad cost — recommend +8% price test before scaling spend.
+          </div>
+        </div>
+        <div class="shot-foot"><span>SHADOW MODE · EXECUTES NOTHING</span><a href="#demo">SEE IT RUN ▸</a></div>
       </div>
     </div>
-    <div class="foot-base"><span>© <span id="yr"></span> BizFalcon AI — Talonomic</span><span>Every number shows its math</span></div>
+  </div>
+</section>
+
+<!-- DEMO VIDEO — auto-running feature showcase -->
+<section id="demo" class="dotbg">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Live demo</div>
+      <h2>Watch it find the money.</h2>
+      <p>Four features, running on a real Shopify export. Click a scene or let it roll.</p>
+    </div>
+    <div class="rv d1">
+      <div class="demo-tabs" id="demoTabs" role="tablist" aria-label="Demo scenes"></div>
+      <div class="shot" id="demoRoot">
+        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — live session</span></div>
+        <div class="shot-body">
+          <div class="demo-q" id="demoQ"></div>
+          <div class="demo-code" id="demoCode"></div>
+          <div class="demo-tiles" id="demoTiles"></div>
+        </div>
+        <div class="shot-foot"><span>COMPUTED FROM YOUR EXPORT</span><a href="https://talon.bizfalconai.com/talonomic">RUN IT ON YOUR STORE ▸</a></div>
+      </div>
+      <div class="demo-prog" id="demoProg" aria-hidden="true"><i></i></div>
+      <div class="demo-cap" id="demoCap" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="wrap">
+    <div class="sec-row">
+      <div class="sec-head rv">
+        <div class="eyebrow">What you get</div>
+        <h2>Unit economics, computed.</h2>
+        <p>Blended ROAS hides losers. Talonomic computes profit per SKU, per cohort, per order — from your actual exports, not estimates.</p>
+      </div>
+      <canvas class="art art--sphere rv d1" data-art="sphere" aria-hidden="true"></canvas>
+    </div>
+    <div class="bento">
+      <article class="cell wide rv">
+        <span class="cell-idx">B1 / CORE</span>
+        <h3>Per-SKU profit screener</h3>
+        <p>Revenue − COGS − fees − ad cost, per SKU. Sorted by contribution margin so the SKUs quietly draining cash surface first — with the computation attached.</p>
+      </article>
+      <article class="cell rv d1">
+        <span class="cell-idx">B2 / RETENTION</span>
+        <h3>LTV and whales</h3>
+        <p>Repeat-order cohorts, 90-day LTV, and the customers who actually pay for your growth.</p>
+        <svg class="spark" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true">
+          <path class="fill" d="M0,56 L50,50 L100,46 L150,38 L200,34 L250,26 L300,22 L350,14 L400,10 L400,64 L0,64 Z"/>
+          <path d="M0,56 L50,50 L100,46 L150,38 L200,34 L250,26 L300,22 L350,14 L400,10"/>
+          <circle class="flag" cx="350" cy="14" r="3"/>
+        </svg>
+      </article>
+      <article class="cell rv">
+        <span class="cell-idx">B3 / AGENTIC</span>
+        <h3>AI Product Manager</h3>
+        <p>Deterministic playbooks watch your data and queue recommendations — cut spend, reorder, price test. You approve or dismiss. Execution stays off until the hit rate earns it.</p>
+      </article>
+      <article class="cell rv d1">
+        <span class="cell-idx">B4 / INPUT</span>
+        <h3>Works with your store</h3>
+        <p>Shopify, WooCommerce, and Amazon exports drop straight in. No pixel, no engineer, no migration.</p>
+      </article>
+      <article class="cell rv d2">
+        <span class="cell-idx">B5 / TRUST</span>
+        <h3>Verified and shareable</h3>
+        <p>Every figure links to its math. Share a read-only report your cofounder can audit.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">How it works</div>
+      <h2>Export. Drop. Act.</h2>
+    </div>
+    <div class="steps">
+      <div class="step rv">
+        <h3>Export your orders</h3>
+        <p>Shopify, WooCommerce, or Amazon — the standard order export you already know how to download.</p>
+      </div>
+      <div class="step rv d1">
+        <h3>Drop it in</h3>
+        <p>Talonomic computes <code>margin</code>, <code>LTV</code>, and per-SKU profit in your browser. Your data stays yours.</p>
+      </div>
+      <div class="step rv d2">
+        <h3>Act on the profit</h3>
+        <p>Approve or dismiss queued recommendations. Every rec is logged against what actually happened.</p>
+      </div>
+    </div>
+    <div class="obs rv" aria-hidden="true">
+      <canvas class="art" data-art="massif"></canvas>
+      <div class="obs-label obs-label--tl">DATASET <b>SHOPIFY_ORDERS.CSV</b><br>SKUS <b>214</b><br>ENGINE <b>PANDAS · WASM</b></div>
+      <div class="obs-label obs-label--tr">DISTRIBUTION <b>MARGIN / SKU</b><br>BELOW WATER <b class="sig">2 SKUS</b><br>REPEAT RATE <b>31%</b></div>
+      <div class="obs-label obs-label--br">−$1.82/unit</div>
+      <div class="obs-label obs-label--bl">FIG. 01 — <b>PROFIT HAS A SHAPE</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="dotbg">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">Pricing</div>
+      <h2>Cheaper than one bad SKU.</h2>
+      <p>Annual plans save ~2 months. Cancel anytime.</p>
+    </div>
+    <div class="plans">
+      <div class="plan rv">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0</div>
+        <div class="plan-bill">No card required</div>
+        <ul>
+          <li>Upload one store export</li>
+          <li>Core margin + LTV screeners</li>
+          <li>Computed, not guessed</li>
+        </ul>
+        <a class="btn btn--ghost" href="https://talon.bizfalconai.com/talonomic">Start free</a>
+      </div>
+      <div class="plan rv d1">
+        <div class="plan-name">Basic</div>
+        <div class="plan-price">$25<span class="per">/mo</span></div>
+        <div class="plan-bill">$21/mo billed annually · $250/yr</div>
+        <ul>
+          <li>Everything in Free, and:</li>
+          <li>Full per-SKU profit screener</li>
+          <li>Retention + whale cohorts</li>
+          <li>Shareable verified reports</li>
+        </ul>
+        <a class="btn btn--ghost" href="https://talon.bizfalconai.com/talonomic">Start Basic</a>
+      </div>
+      <div class="plan hot rv d2">
+        <div class="plan-flag">Recommended</div>
+        <div class="plan-name">Advanced</div>
+        <div class="plan-price">$45<span class="per">/mo</span></div>
+        <div class="plan-bill">$38/mo billed annually · $450/yr</div>
+        <ul>
+          <li>Everything in Basic, and:</li>
+          <li>Higher order volume</li>
+          <li>Full anomaly detection</li>
+          <li>Priority compute</li>
+        </ul>
+        <a class="btn btn--primary" href="https://talon.bizfalconai.com/talonomic">Start Advanced</a>
+      </div>
+      <div class="plan rv d3">
+        <div class="plan-name">Scale</div>
+        <div class="plan-price">$75<span class="per">/mo</span></div>
+        <div class="plan-bill">$63/mo billed annually · $750/yr</div>
+        <ul>
+          <li>Everything in Advanced, and:</li>
+          <li>Unlimited brands + team seats</li>
+          <li>White-label client reports</li>
+          <li>Bulk export</li>
+        </ul>
+        <a class="btn btn--ghost" href="https://talon.bizfalconai.com/talonomic">Start Scale</a>
+      </div>
+    </div>
+    <div class="ap-band rv" aria-label="Talonomic Autopilot add-on">
+      <div>
+        <div class="apt"><i class="pulse" style="width:6px;height:6px;border-radius:50%;background:var(--signal);display:inline-block"></i>AI PRODUCT MANAGER · NEW</div>
+        <h3>Talonomic Autopilot</h3>
+        <p>Everything in Scale, plus the agentic layer: the recommendation feed, one-click approvals, live Shopify + Meta signals, safety guardrails, and a full audit log. Turn insight into action without leaving Talonomic.</p>
+      </div>
+      <div class="apr">
+        <div class="apprice">$79<span>/mo</span></div>
+        <div class="apnote">Beta · outcome-based tiers coming</div>
+        <a class="btn btn--primary" href="https://talon.bizfalconai.com/talonomic">Get Autopilot</a>
+      </div>
+    </div>
+    <div class="obs rv" aria-hidden="true">
+      <canvas class="art" data-art="massif" data-variant="twin" data-seed="4.19"></canvas>
+      <div class="obs-label obs-label--tl">SERIES <b>CONTRIBUTION MARGIN / WEEK</b><br>STORE <b>SHOPIFY · 214 SKUS</b></div>
+      <div class="obs-label obs-label--tr">TWIN PEAKS <b>BFCM · RESTOCK</b><br>BELOW WATER <b class="sig">2 SKUS</b></div>
+      <div class="obs-label obs-label--br">+$8,940</div>
+      <div class="obs-label obs-label--bl">FIG. 02 — <b>PROFIT HAS A SHAPE</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">FAQ</div>
+      <h2>Before you ask.</h2>
+    </div>
+    <div class="faq rv">
+      <details>
+        <summary>Will the AI Product Manager touch my store?</summary>
+        <div class="a">No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust.</div>
+      </details>
+      <details>
+        <summary>Does my order data leave my browser?</summary>
+        <div class="a">Computation runs in a WebAssembly Python runtime in your browser. The AI sees your questions and summary context, not your raw customer rows.</div>
+      </details>
+      <details>
+        <summary>What exports do you support?</summary>
+        <div class="a">Standard order exports from Shopify, WooCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works.</div>
+      </details>
+      <details>
+        <summary>Can I cancel anytime?</summary>
+        <div class="a">Yes — one click from your billing page. Your plan stays active until the end of the period you paid for, and your reports stay exportable.</div>
+      </details>
+      <details>
+        <summary>How is margin actually computed?</summary>
+        <div class="a">Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — executed as real pandas against your export. Click any figure and Talonomic shows the code that produced it.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="wrap rv">
+    <div class="eyebrow">No card. No demo call.</div>
+    <h2>Find the SKUs draining your cash.</h2>
+    <p>Drop in one export. See per-SKU profit, computed.</p>
+    <a class="btn btn--primary" href="https://talon.bizfalconai.com/talonomic">Start free</a>
+    <canvas class="art art--dome" data-art="diamond" aria-hidden="true" style="max-width:760px;margin:60px auto 0"></canvas>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap foot-in">
+    <span>© 2026 BIZFALCON AI — TALONOMIC</span>
+    <nav class="foot-links" aria-label="Footer">
+      <a href="https://bizfalconai.com">BizFalcon AI</a>
+      <a href="https://talon.bizfalconai.com">Talon</a>
+      <a href="https://talonmark.bizfalconai.com">Talonmark</a>
+      <a href="./privacy.html">Privacy</a>
+      <a href="./terms.html">Terms</a>
+    </nav>
   </div>
 </footer>
 
+<script src="./dusk-art.js"></script>
 <script>
-document.getElementById('yr').textContent=new Date().getFullYear();
-(function(){const b=document.getElementById('themeBtn');if(!b)return;b.addEventListener('click',()=>{const c=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',c);try{localStorage.setItem('bf-theme',c);}catch(e){}const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',c==='dark'?'#0b0c0f':'#f1f1ea');window.dispatchEvent(new Event('themechange'));});})();
-(function(){const nav=document.querySelector('nav');const on=()=>nav.classList.toggle('scrolled',scrollY>16);on();addEventListener('scroll',on,{passive:true});})();
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.06});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-function setBill(p){document.querySelector('.tiers').dataset.bill=p;document.getElementById('bMonthly').classList.toggle('on',p==='m');document.getElementById('bAnnual').classList.toggle('on',p==='a');document.querySelectorAll('.amt[data-m],.was[data-m],.bill[data-m]').forEach(el=>{const v=el.dataset[p];el.textContent=v;el.style.visibility=v?'visible':'hidden';});}
-(function(){const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;const bars=document.getElementById('bars');
-  function run(){if(bars)bars.classList.add('in');document.querySelectorAll('[data-count]').forEach(el=>{const target=parseFloat(el.dataset.count),pre=el.dataset.prefix||'',suf=el.dataset.suffix||'',dec=(el.dataset.count.indexOf('.')>-1)?1:0;if(reduce){el.textContent=pre+target.toFixed(dec)+suf;return;}const dur=1100,t0=performance.now();function step(now){const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+(target*e).toFixed(dec)+suf;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);});}
-  const art=document.querySelector('.art');if(!art)return;const o=new IntersectionObserver(([e])=>{if(e.isIntersecting){run();o.disconnect();}},{threshold:.4});o.observe(art);})();
-(function(){const cv=document.getElementById('wave');if(!cv)return;const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;const cx=cv.getContext('2d');const DPR=Math.min(1.5,devicePixelRatio||1);let W=0,H=0,grad=null;
-  function colors(){const cs=getComputedStyle(document.documentElement);return {a:(cs.getPropertyValue('--fx-a').trim()||'154,171,180'),b:(cs.getPropertyValue('--fx-b').trim()||'126,59,65'),al:(parseFloat(cs.getPropertyValue('--fx-alpha'))||.6)};}
-  function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;cx.setTransform(DPR,0,0,DPR,0,0);const c=colors();grad=cx.createLinearGradient(0,0,W,0);grad.addColorStop(0,'rgba('+c.a+',0)');grad.addColorStop(.3,'rgba('+c.a+','+c.al+')');grad.addColorStop(.7,'rgba('+c.b+','+c.al+')');grad.addColorStop(1,'rgba('+c.b+',0)');}
-  size();addEventListener('resize',size);addEventListener('themechange',size);const LINES=28;let t=0,last=0,running=false;
-  function draw(){cx.clearRect(0,0,W,H);cx.strokeStyle=grad;cx.lineWidth=1.05;const top=H*0.06,band=H*1.0,amp=H*0.13;for(let i=0;i<LINES;i++){const f=i/(LINES-1),baseY=top+f*band,ph=i*0.48;cx.globalAlpha=(0.4+0.45*Math.sin(i*0.5))*0.8;cx.beginPath();for(let x=0;x<=W;x+=20){const k=x/W,edge=Math.min(1,Math.min(k,1-k)*4);const y=baseY+Math.sin(k*Math.PI*2+t+ph)*amp*edge+Math.sin(k*Math.PI*4-t*0.5+ph)*amp*0.3*edge;x===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.stroke();}cx.globalAlpha=1;}
-  function frame(now){if(!running)return;requestAnimationFrame(frame);if(now-last<42)return;last=now;t+=0.014;draw();}
-  if(reduce){size();draw();}else{const io2=new IntersectionObserver(([e])=>{if(e.isIntersecting){if(!running){running=true;requestAnimationFrame(frame);}}else running=false;},{threshold:0});io2.observe(cv);}})();
+(function(){
+"use strict";
+window.DUSK.demoRunner({
+  root: document.getElementById("demoRoot"),
+  tabsEl: document.getElementById("demoTabs"),
+  qEl: document.getElementById("demoQ"),
+  codeEl: document.getElementById("demoCode"),
+  tilesEl: document.getElementById("demoTiles"),
+  capEl: document.getElementById("demoCap"),
+  progEl: document.getElementById("demoProg"),
+  scenarios: [
+    {
+      label: "MARGIN", cap: "PER-SKU PROFIT SCREENER — LOSERS SURFACE FIRST",
+      q: "which SKUs are below water?",
+      code: 'margin = (rev - cogs - fees - ads)\nper_sku = margin.groupby(df.sku).sum()\nunder = per_sku[per_sku < 0]',
+      tiles: [
+        { v: 2, label: "SKUs below water" },
+        { static: "−$1.82", label: "Worst margin / unit", neg: true },
+        { v: 214, label: "SKUs screened" }
+      ]
+    },
+    {
+      label: "LTV", cap: "RETENTION COHORTS — WHO PAYS FOR YOUR GROWTH",
+      q: "what's my 90-day LTV by cohort?",
+      code: 'cohort = df.groupby(\n    [first_order.dt.to_period("M"), "customer"]\n).rev.sum().unstack()',
+      tiles: [
+        { v: 48, prefix: "$", suffix: ".10", label: "90-day LTV" },
+        { v: 31, suffix: "%", label: "Repeat rate" },
+        { v: 2841, label: "Customers in cohorts" }
+      ]
+    },
+    {
+      label: "REORDER", cap: "AI PRODUCT MANAGER — REORDER BEFORE YOU STOCK OUT",
+      q: "should I reorder BF-204?",
+      code: 'velocity = sales_28d / 28\ndays_left = on_hand / velocity\nrec = playbook("INV-REORDER-01")',
+      tiles: [
+        { v: 12, label: "Days of stock left" },
+        { v: 18, label: "Supplier lead time, days", neg: true },
+        { static: "QUEUED", label: "Rec → your approval" }
+      ]
+    },
+    {
+      label: "PRICE", cap: "PRICE TESTS — RECOMMENDED ONLY WHEN THE MATH SAYS SO",
+      q: "can Trail Mini carry a price increase?",
+      code: 'elast = est_elasticity(sku="TRAIL-MINI")\nsim = simulate(price=price * 1.08)\nrec = playbook("MARGIN-02")',
+      tiles: [
+        { v: 8, prefix: "+", suffix: "%", label: "Suggested price test" },
+        { static: "−$1.82 → +$0.71", label: "Margin / unit, simulated" },
+        { static: "QUEUED", label: "Rec → your approval" }
+      ]
+    }
+  ]
+});
+})();
 </script>
 </body>
 </html>
