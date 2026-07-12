@@ -1,0 +1,32 @@
+/* Talonomic blog — DUSK Instrument skin, extends ../dusk.css tokens */
+.blog-wrap{max-width:760px;margin:0 auto;padding:112px 24px 80px}
+.blog-head{margin-bottom:56px}
+.blog-head h1{font-size:clamp(1.8rem,3.6vw,2.7rem);margin-bottom:14px}
+.blog-head p{color:var(--mut);font-size:15px;max-width:56ch}
+.post-card{display:block;border:1px solid var(--line);background:var(--card);padding:26px 28px;margin-bottom:14px;transition:border-color .2s ease}
+.post-card:hover{border-color:var(--signal)}
+.post-meta{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.post-meta .cat{color:var(--signal)}
+.post-card h2{font-size:19px;font-weight:600;letter-spacing:-.02em;margin:0 0 9px;transition:color .2s ease}
+.post-card:hover h2{color:var(--signal)}
+.post-card p{font-size:13.5px;color:var(--mut);line-height:1.65;margin:0}
+.post-card .go{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--signal)}
+
+.art-back{display:inline-flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:28px;transition:color .2s ease}
+.art-back:hover{color:var(--signal)}
+.art h1{font-size:clamp(1.7rem,3.4vw,2.5rem);margin:14px 0 16px}
+.art .lede{font-size:16.5px;color:var(--mut);line-height:1.7;margin-bottom:44px}
+.art-body h2{font-size:20px;font-weight:600;letter-spacing:-.02em;margin:40px 0 12px}
+.art-body p{font-size:15px;color:var(--fg);line-height:1.75;margin:12px 0}
+.art-body ul{margin:12px 0 12px 4px;list-style:none;display:flex;flex-direction:column;gap:8px;padding:0}
+.art-body li{display:flex;gap:10px;font-size:15px;line-height:1.7}
+.art-body li::before{content:"—";color:var(--signal);flex-shrink:0}
+.art-body .formula{font-family:"JetBrains Mono",monospace;font-size:13px;border:1px solid var(--line);background:var(--card);padding:14px 18px;margin:18px 0;overflow-x:auto;color:var(--fg)}
+.art-body .formula b{color:var(--signal);font-weight:600}
+.art-note{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);border-left:2px solid var(--signal);padding-left:12px;margin:20px 0}
+.art-cta{margin-top:52px;border:1px solid var(--line);background:var(--card);padding:36px 24px;text-align:center}
+.art-cta .eyebrow{justify-content:center}
+.art-cta p{font-size:15px;margin:0 0 18px}
+.blog-foot{border-top:1px solid var(--line-soft);padding:26px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;max-width:1180px;margin:0 auto;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.blog-foot a{margin-left:18px;transition:color .2s ease}
+.blog-foot a:hover{color:var(--signal)}

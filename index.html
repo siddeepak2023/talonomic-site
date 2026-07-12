@@ -37,6 +37,7 @@
       <a href="#benefits">Features</a>
       <a href="#how">How it works</a>
       <a href="#pricing">Pricing</a>
+      <a href="./blog/">Blog</a>
       <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-right">
@@ -71,24 +72,125 @@
     </div>
   </div>
 </section>
+<section id="demo" class="dotbg">
+  <div class="wrap">
+    <!-- sec-head only — the falcon docks in the open right column of this row -->
+    <div class="sec-head rv" data-dock>
+      <div class="eyebrow">See it in action</div>
+      <h2>Watch it find the money.</h2>
+      <p>Four features on a sample Shopify export — the flow and report structure are the real product. Click a scene or let it roll.</p>
+    </div>
+    <!-- onboarding walkthrough video — appears when ./media/onboarding.mp4 ships -->
+    <div class="onb-video rv" id="onbVideo" style="display:none">
+      <div class="shot-bar"><span>talonomic — onboarding walkthrough</span><span style="margin-left:auto">REAL SESSION · 90 SEC</span></div>
+      <video src="./media/onboarding.mp4" controls playsinline preload="metadata"
+             aria-label="Talonomic walkthrough: uploading an order export and reading the computed report"></video>
+    </div>
+    <div class="rv d1">
+      <div class="demo-tabs" id="demoTabs" role="tablist" aria-label="Demo scenes"></div>
+      <div class="shot" id="demoRoot">
+        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — sample session</span></div>
+        <div class="shot-body">
+          <div class="demo-q" id="demoQ"></div>
+          <div class="demo-code" id="demoCode"></div>
+          <div class="demo-tiles" id="demoTiles"></div>
+          <div class="demo-ins" id="demoIns" aria-live="polite"></div>
+        </div>
+        <div class="shot-foot"><span>COMPUTED FROM YOUR EXPORT</span><a href="https://talon.bizfalconai.com/talonomic">RUN IT ON YOUR STORE ▸</a></div>
+      </div>
+      <div class="demo-prog" id="demoProg" aria-hidden="true"><i></i></div>
+      <div class="demo-cap" id="demoCap" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
 
 <!-- DEMO VIDEO — auto-running feature showcase -->
 <section id="product">
   <div class="wrap">
-    <div class="sec-head rv" data-dock>
-      <div class="eyebrow">Inside the product</div>
-      <h2>The product, exactly as it runs.</h2>
-      <p>Open Talonomic and drop an order export — margins, LTV, and per-SKU profit are computed in about a minute.</p>
+    <div class="sec-row">
+      <div class="sec-head rv">
+        <div class="eyebrow">Inside the product</div>
+        <h2>What your upload becomes.</h2>
+        <p>Drop an order export — margins, LTV, and per-SKU profit are computed in about a minute. Audit any figure — every number carries the formula that produced it. Sample-store numbers below; the structure is the real report.</p>
+      </div>
+      <canvas class="art art--inline rv d1" data-art="ghostchart" aria-hidden="true"></canvas>
     </div>
-    <div class="shot rv d1" aria-label="The Talonomic upload screen">
-      <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — app</span><span style="margin-left:auto">POWERED BY THE TALON ENGINE</span></div>
-      <!-- Real screenshot: sample-store report, verified formulas visible -->
-      <img src="talonomic-report-dark.webp" class="shot-dark"
-           alt="The real Talonomic report: store metrics with verified formulas — total revenue, AOV, repeat order rate"
-           style="width:100%;height:auto" loading="lazy" />
-      <img src="talonomic-report.webp" class="shot-light"
-           alt="The real Talonomic report in light mode: store metrics with verified formulas"
-           style="width:100%;height:auto" loading="lazy" />
+    <!-- Built mockup fragments (no screenshots) — mirrors the app's metric pack -->
+    <div class="sc-panel rv d1" aria-label="The Talonomic metric pack (illustrative)">
+      <span class="sc-tag">METRIC PACK · SAMPLE STORE</span>
+      <div class="sc-kpis">
+        <div class="sc-card sc-kpi sc-kpi--hero sc-float">
+          <div class="k-label">Net revenue · June <span class="sc-delta up">12.4%</span></div>
+          <div class="k-val">$306,612</div>
+          <div class="k-formula"><b>=</b> Σ gross_amount − refunds · 1,616 orders</div>
+        </div>
+        <div class="sc-card sc-kpi sc-float f2">
+          <div class="k-label">Contribution margin <span class="sc-delta up">2.1pt</span></div>
+          <div class="k-val">31.8%</div>
+          <div class="k-formula"><b>=</b> (rev − cogs − ads) / rev</div>
+        </div>
+        <div class="sc-card sc-kpi sc-float f3">
+          <div class="k-label">Refund rate <span class="sc-delta down neg">0.8pt</span></div>
+          <div class="k-val">3.2%</div>
+          <div class="k-formula"><b>=</b> refunds / orders · 52 rows</div>
+        </div>
+      </div>
+      <div class="sc-duo">
+        <div class="sc-card sc-pack sc-float f2" id="scPack">
+          <div class="p-tabs" role="tablist" aria-label="Metric pack tabs">
+            <button type="button" class="on">Overview</button>
+            <button type="button">Peers</button>
+            <button type="button">Operator</button>
+            <button type="button">Deep dive</button>
+            <span class="p-live">4,820 orders · computed</span>
+          </div>
+          <div class="p-body">
+            <div class="p-pane on">
+              <div class="sc-row"><b>Net profit</b><span class="r-val">$41,208</span></div>
+              <div class="sc-row"><b>Net margin</b><span class="r-val">13.4%</span></div>
+              <div class="sc-row"><b>Profit after ads</b><span class="r-val">$28,414</span></div>
+            </div>
+            <div class="p-pane">
+              <div class="sc-bench">
+                <div class="b-label"><span>Contribution margin — <b>you 31.8%</b></span><span>peer median 27%</span></div>
+                <div class="b-track"><span class="b-you" style="width:72%"></span><span class="b-med" style="left:61%"></span></div>
+                <div class="b-label"><span>Refund rate — <b>you 3.2%</b></span><span>peer median 4.1%</span></div>
+                <div class="b-track"><span class="b-you" style="width:44%"></span><span class="b-med" style="left:56%"></span></div>
+              </div>
+            </div>
+            <div class="p-pane">
+              <div class="sc-act"><span class="a-pri">P1</span><p><b>Cut supplier B freight</b> — 7 SKUs ship at a loss</p><span class="a-imp">+$3,412/mo</span></div>
+              <div class="sc-act"><span class="a-pri">P2</span><p><b>Raise AOV floor</b> — free shipping at $45, not $35</p><span class="a-imp">+$1,890/mo</span></div>
+            </div>
+            <div class="p-pane">
+              <table class="sc-table">
+                <thead><tr><th>SKU</th><th class="num">Rev</th><th class="num">Margin</th><th class="num">P&amp;L</th></tr></thead>
+                <tbody>
+                  <tr><td>HDL-201</td><td class="num">$48.2K</td><td class="num">41%</td><td class="num">$19.8K</td></tr>
+                  <tr><td>ACC-090</td><td class="num">$12.4K</td><td class="num sig">−4%</td><td class="num sig">−$496</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="sc-card sc-costd sc-float f3">
+          <div class="cd-ring">
+            <svg width="120" height="120" viewBox="0 0 42 42" aria-hidden="true">
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--line-soft)" stroke-width="5.5"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--signal)" stroke-width="5.5" stroke-dasharray="38 62" stroke-dashoffset="25"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--mut)" stroke-width="5.5" stroke-dasharray="24 76" stroke-dashoffset="-13" opacity=".55"/>
+            </svg>
+            <div class="cd-center"><b>$41.2K</b><span>Net profit</span></div>
+          </div>
+          <div class="cd-rows">
+            <div class="cd-row"><i style="background:var(--signal)"></i>COGS<span class="cd-val">38%</span></div>
+            <div class="cd-row"><i style="background:var(--mut)"></i>Ads<span class="cd-val">24%</span></div>
+            <div class="cd-row"><i style="background:var(--line)"></i>Other<span class="cd-val">38%</span></div>
+            <div class="cd-row"><i style="background:transparent;border:1px solid var(--line)"></i>Net margin<span class="cd-val">13.4%</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -108,63 +210,76 @@
         <span class="cell-idx">B1 / CORE</span>
         <h3>Per-SKU profit screener</h3>
         <p>Revenue − COGS − fees − ad cost, per SKU. Sorted by contribution margin so the SKUs quietly draining cash surface first — with the computation attached.</p>
+        <div class="scm sc-drift" aria-hidden="true">
+          <span class="scm-tag">Screener</span>
+          <div class="scm-acts">
+            <div class="ar"><span class="pri">−8.2%</span><p>SKU-2231 · bamboo organizer</p><span class="imp">−$1,204/mo</span></div>
+            <div class="ar"><span class="pri">−3.1%</span><p>SKU-0917 · travel kit</p><span class="imp">−$688/mo</span></div>
+          </div>
+          <div class="scm-meta"><span>Sorted <b>contribution margin</b></span><span>Rows <b>1,616</b></span><span>Engine <b>Python</b></span></div>
+        </div>
       </article>
       <article class="cell rv d1">
         <span class="cell-idx">B2 / RETENTION</span>
         <h3>LTV and whales</h3>
         <p>Repeat-order cohorts, 90-day LTV, and the customers who actually pay for your growth.</p>
-        <svg class="spark" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true">
-          <path class="fill" d="M0,56 L50,50 L100,46 L150,38 L200,34 L250,26 L300,22 L350,14 L400,10 L400,64 L0,64 Z"/>
-          <path d="M0,56 L50,50 L100,46 L150,38 L200,34 L250,26 L300,22 L350,14 L400,10"/>
-          <circle class="flag" cx="350" cy="14" r="3"/>
-        </svg>
+        <div class="scm" aria-hidden="true">
+          <span class="scm-tag">LTV · 90d</span>
+          <svg class="scm-chart" viewBox="0 0 260 86" preserveAspectRatio="none">
+            <rect class="bar" x="8"   y="60" width="14" height="18" rx="2" style="--i:0"/>
+            <rect class="bar" x="32"  y="52" width="14" height="26" rx="2" style="--i:1"/>
+            <rect class="bar" x="56"  y="46" width="14" height="32" rx="2" style="--i:2"/>
+            <rect class="bar" x="80"  y="40" width="14" height="38" rx="2" style="--i:3"/>
+            <rect class="bar" x="104" y="36" width="14" height="42" rx="2" style="--i:4"/>
+            <rect class="bar" x="128" y="28" width="14" height="50" rx="2" style="--i:5"/>
+            <rect class="bar" x="152" y="24" width="14" height="54" rx="2" style="--i:6"/>
+            <rect class="bar hot" x="176" y="14" width="14" height="64" rx="2" style="--i:7"/>
+            <polyline class="fc" points="202,22 218,17 234,13 252,8" pathLength="160"/>
+          </svg>
+          <div class="scm-exp"><b>top 8%</b> of customers · <b>41%</b> of profit<span class="x">whales</span></div>
+        </div>
       </article>
       <article class="cell rv">
         <span class="cell-idx">B3 / AGENTIC</span>
         <h3>AI Product Manager</h3>
         <p>Deterministic playbooks watch your data and queue recommendations — cut spend, reorder, price test. You approve or dismiss. Execution stays off until the hit rate earns it.</p>
+        <div class="scm" aria-hidden="true">
+          <span class="scm-tag">Queue</span>
+          <div class="scm-sched">
+            <div class="sr2"><b>REC</b> pause ad set "US-broad"<span class="st live">queued</span></div>
+            <div class="sr2"><b>REC</b> reorder SKU-0441 ×200<span class="st">✓ approved</span></div>
+          </div>
+        </div>
       </article>
       <article class="cell rv d1">
         <span class="cell-idx">B4 / INPUT</span>
         <h3>Works with your store</h3>
         <p>Shopify, WooCommerce, BigCommerce, and Amazon exports drop straight in. No pixel, no engineer, no migration.</p>
+        <div class="scm" aria-hidden="true">
+          <span class="scm-tag">Source</span>
+          <div class="scm-modl">
+            <div class="mr">Shopify orders export<span class="tag2">Loaded</span></div>
+            <div class="mr">WooCommerce CSV<span class="tag2">Loaded</span></div>
+            <div class="mr">BigCommerce CSV<span class="tag2">Loaded</span></div>
+            <div class="mr">Amazon settlement report<span class="tag2">Loaded</span></div>
+          </div>
+        </div>
       </article>
       <article class="cell rv d2">
         <span class="cell-idx">B5 / TRUST</span>
         <h3>Verified and shareable</h3>
         <p>Every figure links to its math. Share a read-only report your cofounder can audit.</p>
+        <div class="scm sc-drift dr2" aria-hidden="true">
+          <span class="scm-tag">Verified</span>
+          <span class="scm-vbadge">Verified</span>
+          <div class="scm-code"><b>(rev - cogs - fees - ads) / rev</b> → 31.8%</div>
+          <div class="scm-meta"><span>Share <b>read-only link</b></span><span>Audit <b>every figure</b></span></div>
+        </div>
       </article>
     </div>
   </div>
 </section>
 
-<section id="demo" class="dotbg">
-  <div class="wrap">
-    <div class="sec-row">
-      <div class="sec-head rv">
-      <div class="eyebrow">Preview</div>
-      <h2>Watch it find the money.</h2>
-      <p>Four features, running on a real Shopify export. Click a scene or let it roll.</p>
-      </div>
-      <canvas class="art art--inline rv d1" data-art="ghostchart" aria-hidden="true"></canvas>
-    </div>
-    <div class="rv d1">
-      <div class="demo-tabs" id="demoTabs" role="tablist" aria-label="Demo scenes"></div>
-      <div class="shot" id="demoRoot">
-        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>talonomic — live session</span></div>
-        <div class="shot-body">
-          <div class="demo-q" id="demoQ"></div>
-          <div class="demo-code" id="demoCode"></div>
-          <div class="demo-tiles" id="demoTiles"></div>
-          <div class="demo-ins" id="demoIns" aria-live="polite"></div>
-        </div>
-        <div class="shot-foot"><span>COMPUTED FROM YOUR EXPORT</span><a href="https://talon.bizfalconai.com/talonomic">RUN IT ON YOUR STORE ▸</a></div>
-      </div>
-      <div class="demo-prog" id="demoProg" aria-hidden="true"><i></i></div>
-      <div class="demo-cap" id="demoCap" aria-live="polite"></div>
-    </div>
-  </div>
-</section>
 
 <!-- INSIDE THE PRODUCT — the actual app screen, same design system -->
 
@@ -186,27 +301,70 @@
       <div class="step rv">
         <h3>Export your orders</h3>
         <p>Shopify, WooCommerce, or Amazon — the standard order export you already know how to download.</p>
+        <div class="scm" aria-hidden="true">
+          <span class="scm-tag">Export</span>
+          <div class="scm-up"><span class="fchip2">⌁ orders_export.csv</span>
+            <div class="scm-meta" style="margin-top:9px"><span>Period <b>Jun 1–30</b></span><span>Rows <b>1,616</b></span></div>
+          </div>
+        </div>
       </div>
       <div class="step rv d1">
         <h3>Drop it in</h3>
         <p>Talonomic computes <code>margin</code>, <code>LTV</code>, and per-SKU profit in your browser. Your data stays yours.</p>
+        <div class="scm" aria-hidden="true">
+          <span class="scm-tag">Compute</span>
+          <div class="scm-up">
+            <div class="track" style="margin-top:4px"><div class="fill"></div></div>
+            <div class="lbl">
+              <span class="busy">computing margin · ltv · per-sku…</span>
+              <span class="done">✓ 31 KPIs computed in-browser</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="step rv d2">
         <h3>Act on the profit</h3>
         <p>Approve or dismiss queued recommendations. Every rec is logged against what actually happened.</p>
+        <div class="scm" aria-hidden="true">
+          <span class="scm-tag">Act</span>
+          <div class="scm-acts scm-acts--anim">
+            <div class="ar"><span class="pri">P1</span><p>Kill SKU-2231 ad spend</p><span class="imp">+$1,204/mo</span></div>
+            <div class="ar"><span class="pri">P2</span><p>Bundle travel kit + refill</p><span class="imp">+$540/mo</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
+
+<!-- ============ PROOF (hidden until real quotes exist) ============
+     To activate: set style="display:block" on #proof, replace the sample
+     structure below with REAL customer quotes (name + store/agency, with
+     permission). Never ship invented testimonials. -->
+<section id="proof" style="display:none" aria-hidden="true">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="eyebrow">From operators</div>
+      <h2>What early users say</h2>
+    </div>
+    <div class="proof-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <!-- <figure class="proof-card" style="border:1px solid var(--line);background:var(--card);padding:22px">
+        <blockquote style="font-size:14.5px;line-height:1.7">"QUOTE"</blockquote>
+        <figcaption style="margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)">NAME - COMPANY</figcaption>
+      </figure> -->
+    </div>
+  </div>
+</section>
+
 <section id="pricing" class="dotbg">
   <div class="wrap">
     <div class="sec-row">
       <div class="sec-head rv">
         <div class="eyebrow">Pricing</div>
         <h2>Cheaper than one bad SKU.</h2>
-        <p>Annual plans save ~2 months. Cancel anytime.</p>
+        <p>Flat pricing — no per-order surcharges, no metering as your store grows. Founding pricing, locked for early accounts: there's no sales team or ad budget baked in — the analysis runs in your browser and the company is one person. Annual plans save ~2 months. Cancel anytime.</p>
       </div>
       <canvas class="art art--inline rv d1" data-art="curve" aria-hidden="true"></canvas>
     </div>
@@ -224,8 +382,8 @@
       </div>
       <div class="plan rv d1">
         <div class="plan-name">Basic</div>
-        <div class="plan-price">$25<span class="per">/mo</span></div>
-        <div class="plan-bill">$21/mo billed annually · $250/yr</div>
+        <div class="plan-price">$19<span class="per">/mo</span></div>
+        <div class="plan-bill">$16/mo billed annually · $190/yr</div>
         <ul>
           <li>Everything in Free, and:</li>
           <li>Full per-SKU profit screener</li>
@@ -249,8 +407,8 @@
       </div>
       <div class="plan rv d3">
         <div class="plan-name">Scale</div>
-        <div class="plan-price">$75<span class="per">/mo</span></div>
-        <div class="plan-bill">$63/mo billed annually · $750/yr</div>
+        <div class="plan-price">$99<span class="per">/mo</span></div>
+        <div class="plan-bill">$83/mo billed annually · $990/yr</div>
         <ul>
           <li>Everything in Advanced, and:</li>
           <li>Unlimited brands + team seats</li>
@@ -334,6 +492,16 @@
         <a href="https://talon.bizfalconai.com/talonomic">Talonomic</a>
         <a href="https://talon.bizfalconai.com/talonmark">Talonmark</a>
       </nav>
+      <nav class="foot-col" aria-label="Resources">
+        <h4>Resources</h4>
+        <a href="https://talon.bizfalconai.com/demo">Live preview</a>
+        <a href="./blog/">Blog</a>
+        <a href="./compare.html">vs Triple Whale / Polar</a>
+        <a href="https://talon.bizfalconai.com/benchmarks">DTC benchmarks</a>
+        <a href="https://talon.bizfalconai.com/calculators">Calculators</a>
+        <a href="https://talon.bizfalconai.com/state-of-dtc">State of DTC</a>
+        <a href="https://talon.bizfalconai.com/help">Help</a>
+      </nav>
       <nav class="foot-col" aria-label="Company">
         <h4>Company</h4>
         <a href="https://bizfalconai.com">BizFalcon AI</a>
@@ -412,6 +580,37 @@ window.DUSK.demoRunner({
     }
   ]
 });
+})();
+</script>
+<script>
+// Metric-pack tab peek: click to switch, auto-cycle until touched.
+// Skipped entirely under prefers-reduced-motion.
+(function () {
+  var pack = document.getElementById("scPack");
+  if (!pack) return;
+  var tabs = pack.querySelectorAll(".p-tabs button");
+  var panes = pack.querySelectorAll(".p-pane");
+  var idx = 0, touched = false;
+  function show(i) {
+    idx = i;
+    tabs.forEach(function (t, j) { t.classList.toggle("on", j === i); });
+    panes.forEach(function (p, j) { p.classList.toggle("on", j === i); });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener("click", function () { touched = true; show(i); });
+  });
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    setInterval(function () { if (!touched && !pack.matches(":hover")) show((idx + 1) % tabs.length); }, 3200);
+  }
+})();
+</script>
+<script>
+// Reveal the onboarding video frame only when the file actually exists.
+(function () {
+  var box = document.getElementById("onbVideo");
+  if (!box) return;
+  var v = box.querySelector("video");
+  v.addEventListener("loadedmetadata", function () { box.style.display = "block"; });
 })();
 </script>
 </body>
