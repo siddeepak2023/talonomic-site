@@ -391,62 +391,12 @@ function dottedVGrid(c2, w, h, step, fg){
   }
   c2.globalAlpha = 1;
 }
-function drawGhostChart(cv){
+/* Route massif — dust ridge + dotted climbing route + waypoints. Shared by
+   the preview slot (seed varies the terrain). */
+function routeMassif(cv, SEED){
   var p = prepArt(cv); if (!p) return;
   var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  dottedVGrid(c2, w, h, w / 9, fg);
-  var SEED = 4.7, COLSN = Math.max(200, Math.floor(w / 1.6));
-  var curves = [{off:0,amp:1,a:1},{off:0.13,amp:0.82,a:0.55},{off:0.24,amp:0.66,a:0.3}];
-  function line(u, off, amp){
-    return 0.72 + off * 0.85 - amp * (0.40 * u + 0.13 * Math.sin(u * 5.2 + 1.2) * (1 - u * 0.4) + 0.09 * fbm(u * 3.2, off * 9, SEED));
-  }
-  curves.forEach(function(cu, ci){
-    for (var q = 0; q <= COLSN; q++) {
-      var u = q / COLSN, cy = line(u, cu.off, cu.amp);
-      var thick = 0.015 + 0.05 * fbm(u * 4.6, ci * 3.1, SEED + 2) + 0.02 * (1 - u);
-      for (var s = 0; s < 22; s++) {
-        var g = (hash2(q + ci * 971, s) + hash2(q + 13, s + ci * 57) - 1);
-        var v = cy + g * thick * 2.2;
-        var a = Math.max(0, 0.65 - Math.abs(g) * 0.9) * cu.a * (0.4 + 0.6 * hash2(q, s + 91));
-        if (a < 0.03) continue;
-        c2.fillStyle = fg; c2.globalAlpha = Math.min(0.85, a);
-        var big = hash2(q + s, 7) > 0.93;
-        c2.fillRect(u * w, v * h, big ? 1.8 : 1.15, big ? 1.8 : 1.15);
-      }
-      if (ci === 0 && (q * 7) % 149 === 0) { c2.fillStyle = sg; c2.globalAlpha = 0.85; c2.fillRect(u * w, cy * h, 2, 2); }
-    }
-  });
-  var au = 0.66, ax = au * w, ay = (line(au, 0, 1) - 0.16) * h;
-  c2.globalAlpha = 0.2; c2.fillStyle = sg; c2.beginPath(); c2.arc(ax, ay, 8, 0, 7); c2.fill();
-  c2.globalAlpha = 0.95; c2.fillRect(ax - 1.5, ay - 1.5, 3, 3);
-  c2.globalAlpha = 0.3;
-  for (var yy = ay + 7; yy < line(au, 0, 1) * h; yy += 5) c2.fillRect(ax - 0.5, yy, 1, 2);
-  c2.globalAlpha = 1;
-}
-function drawGlitchSphere(cv){
-  var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
-  ditherField(cv, sphereField, 3);
-  var c2 = cv.getContext("2d"); if (!c2) return;
-  var fg = cssVar("--fg"), sg = cssVar("--signal");
-  for (var i = 0; i < 3; i++) {
-    var sy = Math.round(h * (0.3 + 0.4 * hash2(i, 3)));
-    var dx = Math.round((hash2(i, 9) > 0.5 ? 1 : -1) * (6 + hash2(i, 9) * 8));
-    var band = c2.getImageData(0, sy, cv.width, 2);
-    c2.clearRect(0, sy, cv.width, 2);
-    c2.putImageData(band, dx, sy);
-  }
-  c2.strokeStyle = fg; c2.globalAlpha = 0.45; c2.lineWidth = 1;
-  c2.setLineDash([2, 4]);
-  c2.beginPath(); c2.ellipse(w / 2, h / 2, w * 0.60, h * 0.20, -0.35, 0, 7); c2.stroke();
-  c2.setLineDash([]);
-  c2.fillStyle = sg; c2.globalAlpha = 0.95;
-  c2.beginPath(); c2.arc(w / 2 + w * 0.5, h / 2 - h * 0.155, 2.4, 0, 7); c2.fill();
-  c2.globalAlpha = 1;
-}
-function drawAscent(cv){
-  var p = prepArt(cv); if (!p) return;
-  var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  var SEED = 8.13, ROWS = 88, COLSN = Math.max(150, Math.floor(w / 2.6));
+  var ROWS = 88, COLSN = Math.max(150, Math.floor(w / 2.6));
   var horizon = h * 0.16, spread = h * 0.76, maxHh = h * 0.95, stepX = w / COLSN;
   function env(u){ return Math.min(1, Math.exp(-Math.pow((u - 0.68) / 0.22, 2)) + 0.38 * Math.exp(-Math.pow((u - 0.3) / 0.13, 2))); }
   for (var r = 0; r < ROWS; r++) {
@@ -474,128 +424,176 @@ function drawAscent(cv){
   });
   c2.globalAlpha = 1;
 }
-function drawCurveFam(cv){
+function drawGhostChart(cv){ routeMassif(cv, 5.62); }
+/* Audit checkmark — hard-edged halftone stroke, oxblood point at the tip. */
+function segDist(u, v, x1, y1, x2, y2){
+  var dx = x2 - x1, dy = y2 - y1;
+  var t = Math.max(0, Math.min(1, ((u - x1) * dx + (v - y1) * dy) / (dx * dx + dy * dy)));
+  var px = u - (x1 + t * dx), py = v - (y1 + t * dy);
+  return Math.sqrt(px * px + py * py);
+}
+function checkField(u, v){
+  var d = Math.min(segDist(u, v, 0.06, 0.50, 0.36, 0.84), segDist(u, v, 0.36, 0.84, 0.90, 0.10));
+  if (d < 0.070) return 1;
+  return Math.exp(-Math.pow((d - 0.070) / 0.022, 2)) * 0.55;
+}
+function drawGlitchSphere(cv){
+  var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+  ditherField(cv, checkField, 2);
+  var c2 = cv.getContext("2d"); if (!c2) return;
+  var sg = cssVar("--signal");
+  for (var i = 0; i < 3; i++) {
+    var sy = Math.round(h * (0.35 + 0.35 * hash2(i, 3)));
+    var dx = Math.round((hash2(i, 9) > 0.5 ? 1 : -1) * (6 + hash2(i, 9) * 8));
+    var band = c2.getImageData(0, sy, cv.width, 2);
+    c2.clearRect(0, sy, cv.width, 2);
+    c2.putImageData(band, dx, sy);
+  }
+  c2.fillStyle = sg; c2.globalAlpha = 0.95;
+  c2.fillRect(w * 0.88 - 2.5, h * 0.20 - 2.5, 5, 5);
+  c2.globalAlpha = 1;
+}
+/* Dust chronometer — particle dial, ticks, dotted second hand three ticks
+   shy of 12 with an oxblood tip, dust sweep trailing behind. */
+function drawAscent(cv){
   var p = prepArt(cv); if (!p) return;
   var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  dottedVGrid(c2, w, h, w / 8, fg);
-  var SEED = 6.02, COLSN = Math.max(200, Math.floor(w / 1.6));
-  var fam = [{k:2.3,a:1},{k:1.7,a:0.5},{k:1.15,a:0.28}];
-  fam.forEach(function(cu, ci){
-    function f(u){ return 0.82 - (0.68 - ci * 0.06) * (Math.exp(u * cu.k) - 1) / (Math.exp(cu.k) - 1); }
-    for (var q = 0; q <= COLSN; q++) {
-      var u = q / COLSN, cy = f(u);
-      var thick = 0.014 + 0.055 * fbm(u * 4.2, ci * 2.7, SEED) + 0.03 * (1 - u);
-      for (var s = 0; s < 20; s++) {
-        var g = (hash2(q + ci * 733, s) + hash2(q + 29, s + ci * 41) - 1);
-        var v = cy + g * thick * 2.2;
-        var a = Math.max(0, 0.62 - Math.abs(g) * 0.85) * cu.a * (0.4 + 0.6 * hash2(q, s + 63));
-        if (a < 0.03) continue;
-        c2.fillStyle = fg; c2.globalAlpha = Math.min(0.85, a);
-        var big = hash2(q + s, 11) > 0.93;
-        c2.fillRect(u * w, v * h, big ? 1.8 : 1.15, big ? 1.8 : 1.15);
-      }
-      if (ci === 0 && (q * 11) % 163 === 0) { c2.fillStyle = sg; c2.globalAlpha = 0.85; c2.fillRect(u * w, cy * h, 2, 2); }
-    }
+  var SEED = 9.41, cxp = w / 2, cyp = h * 0.52, R = Math.min(w, h) * 0.40;
+  var HAND = -Math.PI / 2 - 0.32;
+  var N = Math.max(2600, Math.floor(R * 34)), i, a, g, band2, r, den, al, big;
+  for (i = 0; i < N; i++) {
+    a = hash2(i, 3) * Math.PI * 2;
+    g = (hash2(i, 7) + hash2(i, 11) - 1);
+    band2 = 0.055 + 0.10 * fbm(Math.cos(a) * 1.7 + 2, Math.sin(a) * 1.7 + 2, SEED);
+    r = R * (1 + g * band2);
+    den = 0.35 + 0.65 * fbm(a * 1.2, 0.5, SEED + 3);
+    al = Math.max(0, 0.72 - Math.abs(g) * 0.95) * den;
+    if (al < 0.04) continue;
+    c2.fillStyle = fg; c2.globalAlpha = Math.min(0.85, al);
+    big = hash2(i, 13) > 0.94;
+    c2.fillRect(cxp + Math.cos(a) * r, cyp + Math.sin(a) * r, big ? 1.8 : 1.2, big ? 1.8 : 1.2);
+  }
+  var M = Math.max(1400, Math.floor(R * 18));
+  for (i = 0; i < M; i++) {
+    var back = Math.pow(hash2(i, 17), 1.6) * 2.4;
+    a = HAND - back;
+    r = R * (0.16 + 0.78 * Math.sqrt(hash2(i, 19)));
+    al = 0.4 * Math.exp(-back * 1.6) * (0.3 + 0.7 * fbm(a * 2, r / R, SEED + 6)) * (0.4 + 0.6 * hash2(i, 23));
+    if (al < 0.04) continue;
+    c2.fillStyle = fg; c2.globalAlpha = Math.min(0.6, al);
+    c2.fillRect(cxp + Math.cos(a) * r, cyp + Math.sin(a) * r, 1.2, 1.2);
+  }
+  for (i = 0; i < 12; i++) {
+    a = -Math.PI / 2 + (i / 12) * Math.PI * 2;
+    var cardinal = i % 3 === 0;
+    c2.fillStyle = fg; c2.globalAlpha = cardinal ? 0.8 : 0.45;
+    var sz = cardinal ? 3 : 2;
+    c2.fillRect(cxp + Math.cos(a) * R * 1.14 - sz / 2, cyp + Math.sin(a) * R * 1.14 - sz / 2, sz, sz);
+  }
+  for (r = R * 0.10; r < R * 0.96; r += 5) {
+    c2.fillStyle = fg; c2.globalAlpha = 0.65;
+    c2.fillRect(cxp + Math.cos(HAND) * r - 0.8, cyp + Math.sin(HAND) * r - 0.8, 1.6, 1.6);
+  }
+  var tx = cxp + Math.cos(HAND) * R, ty = cyp + Math.sin(HAND) * R;
+  var grad = c2.createRadialGradient(tx, ty, 0, tx, ty, 14);
+  grad.addColorStop(0, sg); grad.addColorStop(1, "rgba(0,0,0,0)");
+  c2.globalAlpha = 0.5; c2.fillStyle = grad;
+  c2.beginPath(); c2.arc(tx, ty, 14, 0, 7); c2.fill();
+  c2.globalAlpha = 0.95; c2.fillStyle = sg; c2.fillRect(tx - 2.5, ty - 2.5, 5, 5);
+  c2.fillStyle = fg; c2.globalAlpha = 0.9; c2.fillRect(cxp - 2, cyp - 2, 4, 4);
+  c2.globalAlpha = 1;
+}
+/* Pricing — compounding halftone bar staircase with a dotted trend line. */
+var BARS = 14, BAR_GROW = 1.24, BASE_Y = 0.88;
+function barTop(i){ return BASE_Y - 0.66 * (Math.pow(BAR_GROW, i) / Math.pow(BAR_GROW, BARS - 1)); }
+function barsField(u, v){
+  var t = u * BARS, i = Math.min(BARS - 1, Math.floor(t));
+  if (t % 1 > 0.78) return 0;
+  var top = barTop(i);
+  if (v < top || v > BASE_Y) return 0;
+  return 0.20 + 0.55 * Math.exp(-(v - top) * 7);
+}
+function drawCurveFam(cv){
+  var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+  ditherField(cv, barsField, 3);
+  var c2 = cv.getContext("2d"); if (!c2) return;
+  var fg = cssVar("--fg"), sg = cssVar("--signal");
+  c2.fillStyle = fg; c2.globalAlpha = 0.4;
+  for (var u = 0.01; u <= 0.99; u += 0.011) c2.fillRect(u * w, BASE_Y * h + 3, 1.4, 1.4);
+  function cx(i){ return ((i + 0.39) / BARS) * w; }
+  c2.globalAlpha = 0.65;
+  for (u = 0.028; u <= 0.965; u += 0.007) {
+    var t = Math.min(BARS - 1.001, Math.max(0, u * BARS - 0.39));
+    var i = Math.floor(t), fr = t - i;
+    var y = (barTop(i) * (1 - fr) + barTop(Math.min(BARS - 1, i + 1)) * fr - 0.035) * h;
+    c2.fillRect(u * w, y, 1.5, 1.5);
+  }
+  [4, 9].forEach(function(i){
+    c2.fillStyle = fg; c2.globalAlpha = 0.9;
+    c2.fillRect(cx(i) - 2.5, (barTop(i) - 0.035) * h - 2.5, 5, 5);
   });
-  function f0(u){ return 0.82 - 0.68 * (Math.exp(u * 2.3) - 1) / (Math.exp(2.3) - 1); }
-  var ex = 0.95 * w, ey = f0(0.95) * h;
+  var ex = cx(BARS - 1), ey = (barTop(BARS - 1) - 0.035) * h;
   var grad = c2.createRadialGradient(ex, ey, 0, ex, ey, 16);
   grad.addColorStop(0, sg); grad.addColorStop(1, "rgba(0,0,0,0)");
   c2.globalAlpha = 0.55; c2.fillStyle = grad;
   c2.beginPath(); c2.arc(ex, ey, 16, 0, 7); c2.fill();
-  c2.globalAlpha = 1; c2.fillStyle = sg; c2.fillRect(ex - 1.5, ey - 1.5, 3, 3);
+  c2.globalAlpha = 0.95; c2.fillStyle = sg; c2.fillRect(ex - 2.5, ey - 2.5, 5, 5);
+  c2.globalAlpha = 1;
 }
+/* CTA — data sunset: sun-scale ring sinking behind a ragged dust sea. */
 function drawEclipse(cv){
   var p = prepArt(cv); if (!p) return;
   var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  var cxp = w / 2, cyp = h * 0.5, R = Math.min(w, h) * 0.16, SEED = 2.44;
+  var HORIZON = h * 0.62, SEED = 2.44;
+  var cxp = w / 2, cyp = HORIZON + h * 0.06, R = h * 0.42;
   function dot(x, y, a, i){
-    if (a < 0.03 || y < 0 || y > h) return;
-    c2.fillStyle = hash2(i, 73) > 0.995 ? sg : fg;
+    if (a < 0.03 || y < 0 || y > h || x < 0 || x > w) return;
+    c2.fillStyle = hash2(i, 73) > 0.994 ? sg : fg;
     c2.globalAlpha = Math.min(0.85, a);
     var big = hash2(i, 77) > 0.92;
     c2.fillRect(x, y, big ? 1.8 : 1.15, big ? 1.8 : 1.15);
   }
-  var ROWS = 46, COLSN = Math.max(200, Math.floor(w / 2.4)), stepX = w / COLSN;
+  function env(u){ return Math.min(1, 0.45 + Math.exp(-Math.pow(Math.abs(u - 0.5) / 0.3, 2))); }
+  function rise(u){ return h * (0.20 + 0.10 * Math.exp(-Math.pow(Math.abs(u - 0.5) / 0.22, 2))); }
+  function surf(u){ return HORIZON - Math.pow(fbm(u * 6.2, 0.32, SEED + 5), 1.15) * env(u) * rise(u) * 0.9; }
+  c2.save();
+  c2.beginPath();
+  c2.moveTo(0, 0); c2.lineTo(0, surf(0));
+  var STEPS = 160, si;
+  for (si = 1; si <= STEPS; si++) { var uu = si / STEPS; c2.lineTo(uu * w, surf(uu)); }
+  c2.lineTo(w, 0); c2.closePath(); c2.clip();
+  c2.strokeStyle = fg; c2.lineWidth = 2.5;
+  c2.shadowColor = fg; c2.shadowBlur = 20;
+  c2.beginPath(); c2.arc(cxp, cyp, R, 0, 7); c2.stroke();
+  c2.shadowBlur = 38; c2.globalAlpha = 0.5;
+  c2.beginPath(); c2.arc(cxp, cyp, R, 0, 7); c2.stroke();
+  c2.shadowBlur = 0; c2.globalAlpha = 1;
+  c2.restore();
+  var ROWS = 56, COLSN = Math.max(240, Math.floor(w / 2.2)), stepX = w / COLSN;
   for (var r = 0; r < ROWS; r++) {
     var d = r / (ROWS - 1);
     for (var q = 0; q <= COLSN; q++) {
-      var jx = (hash2(q, r) - 0.5) * stepX * 1.8;
+      var jx = (hash2(q + 401, r) - 0.5) * stepX * 1.8;
       var u = (q + jx / stepX) / COLSN;
-      var cx = Math.abs(u - 0.5);
-      var env = Math.min(1, Math.exp(-Math.pow(cx / 0.34, 2)) + 0.3);
-      var hh = Math.pow(fbm(u * 5.8, d * 3.6, SEED), 1.2) * env;
+      var hh = Math.pow(fbm(u * 6.2, 0.32 + d * 3.6, SEED + 5), 1.15) * env(u);
       if (hh < 0.02) continue;
-      var reach = h * (0.34 - 0.16 * Math.exp(-Math.pow(cx / 0.2, 2)));
-      var y = d * reach * (0.35 + 0.65 * hh) + (hash2(q + 57, r + 91) - 0.5) * 5;
-      dot(u * w, y, (0.05 + Math.pow(hh, 1.25) * 1.3) * (0.3 + 0.7 * d), q * 31 + r);
+      var base = HORIZON + d * (h - HORIZON) * 0.9;
+      var y = base - hh * rise(u) * (0.55 + 0.45 * d) + (hash2(q + 91, r + 17) - 0.5) * 5;
+      dot(u * w, y, (0.06 + Math.pow(hh, 1.2) * 1.6) * (0.35 + 0.65 * d), q * 17 + r * 3);
     }
   }
-  for (r = 0; r < ROWS + 14; r++) {
-    d = r / (ROWS + 13);
-    for (q = 0; q <= COLSN; q++) {
-      jx = (hash2(q + 401, r) - 0.5) * stepX * 1.8;
-      u = (q + jx / stepX) / COLSN;
-      cx = Math.abs(u - 0.5);
-      env = Math.min(1, 0.5 + Math.exp(-Math.pow(cx / 0.3, 2)));
-      hh = Math.pow(fbm(u * 6.2, d * 4.0, SEED + 5), 1.15) * env;
-      if (hh < 0.02) continue;
-      var base = h * (0.62 + d * 0.36);
-      var rise = h * (0.2 + 0.1 * Math.exp(-Math.pow(cx / 0.22, 2)));
-      y = base - hh * rise + (hash2(q + 91, r + 17) - 0.5) * 5;
-      if (Math.sqrt((u * w - cxp) * (u * w - cxp) + (y - cyp) * (y - cyp)) < R * 1.5) continue;
-      dot(u * w, y, (0.05 + Math.pow(hh, 1.25) * 1.5) * (0.3 + 0.7 * d), q * 17 + r * 3);
-    }
+  for (var i2 = 0; i2 < 300; i2++) {
+    var gy = Math.pow(hash2(i2, 15), 1.3);
+    var yy = HORIZON + gy * (h - HORIZON) * 0.85;
+    var spread = 0.02 + gy * 0.06;
+    var gx = (hash2(i2, 5) + hash2(i2, 9) - 1) * spread;
+    dot((0.5 + gx) * w, yy, 0.55 * Math.exp(-gy * 2.4) * (0.35 + 0.65 * hash2(i2, 21)), i2 * 3 + 1);
   }
-  for (var i = 0; i < 700; i++) {
-    var x = hash2(i, 61) * w, yv = hash2(i, 67) * h;
-    if (Math.sqrt((x - cxp) * (x - cxp) + (yv - cyp) * (yv - cyp)) < R * 1.6) continue;
-    dot(x, yv, 0.05 + 0.3 * Math.pow(hash2(i, 71), 3), i);
+  for (var i3 = 0; i3 < 420; i3++) {
+    var x3 = hash2(i3, 61) * w, y3 = hash2(i3, 67) * HORIZON;
+    if (Math.sqrt((x3 - cxp) * (x3 - cxp) + (y3 - cyp) * (y3 - cyp)) < R * 1.12) continue;
+    dot(x3, y3, (0.04 + 0.24 * Math.pow(hash2(i3, 71), 3)) * (0.35 + 0.65 * (y3 / HORIZON)), i3);
   }
-  c2.globalAlpha = 1; c2.strokeStyle = fg; c2.lineWidth = 2;
-  c2.shadowColor = fg; c2.shadowBlur = 16;
-  c2.beginPath(); c2.arc(cxp, cyp, R, 0, 7); c2.stroke();
-  c2.shadowBlur = 30; c2.globalAlpha = 0.5;
-  c2.beginPath(); c2.arc(cxp, cyp, R, 0, 7); c2.stroke();
-  c2.shadowBlur = 0; c2.globalAlpha = 1;
-}
-
-
-function drawStarfield(cv){
-  var p = prepArt(cv); if (!p) return;
-  var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  var SEED = 3.91, step = 3;
-  for (var y = 0; y < h; y += step) for (var x = 0; x < w; x += step) {
-    var u = x / w, v = y / h;
-    var n = Math.pow(fbm(u * 3.4, v * 3.4, SEED), 2.6);
-    var a = n * 0.55 * (0.4 + 0.6 * hash2(x, y));
-    if (a < 0.03) continue;
-    var jx = (hash2(x + 7, y) - 0.5) * step * 1.6;
-    var jy = (hash2(x, y + 7) - 0.5) * step * 1.6;
-    c2.fillStyle = fg; c2.globalAlpha = Math.min(0.6, a);
-    c2.fillRect(x + jx, y + jy, 1.2, 1.2);
-  }
-  for (var i = 0; i < 130; i++) {
-    var sx = hash2(i, 51) * w, sy = hash2(i, 53) * h;
-    var s = hash2(i, 57);
-    c2.fillStyle = s > 0.96 ? sg : fg;
-    c2.globalAlpha = 0.25 + 0.65 * s * s;
-    var sz = s > 0.88 ? 2.2 : 1.4;
-    c2.fillRect(sx, sy, sz, sz);
-    if (s > 0.93) {
-      c2.globalAlpha = 0.25;
-      c2.fillRect(sx - 3, sy + 0.5, 8, 1); c2.fillRect(sx + 0.5, sy - 3, 1, 8);
-    }
-  }
-  var cons = [[0.26,0.22],[0.42,0.3],[0.52,0.17],[0.68,0.26],[0.78,0.4]];
-  c2.strokeStyle = fg; c2.globalAlpha = 0.2; c2.lineWidth = 1;
-  c2.beginPath();
-  cons.forEach(function(uv, i){ if (i === 0) c2.moveTo(uv[0]*w, uv[1]*h); else c2.lineTo(uv[0]*w, uv[1]*h); });
-  c2.stroke();
-  cons.forEach(function(uv, i){
-    c2.globalAlpha = 0.75; c2.fillStyle = i === 2 ? sg : fg;
-    c2.fillRect(uv[0]*w - 1.2, uv[1]*h - 1.2, 2.4, 2.4);
-  });
   c2.globalAlpha = 1;
 }
 
@@ -608,7 +606,6 @@ function renderArts(){
     else if (kind === "ascent") drawAscent(cv);
     else if (kind === "curve") drawCurveFam(cv);
     else if (kind === "eclipse") drawEclipse(cv);
-    else if (kind === "starfield") drawStarfield(cv);
     else if (kind === "dome" || kind === "diamond") ditherField(cv, diamondField, 2);
     else if (kind === "massif") drawMassifStill(cv);
     else if (kind === "image") {
