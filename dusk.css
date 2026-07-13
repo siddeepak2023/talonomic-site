@@ -955,3 +955,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .rv.on .scm-acts--anim .ar:nth-child(2){animation-delay:.9s}
 @keyframes scmAct{0%{opacity:0;transform:translateY(7px)}9%,86%{opacity:1;transform:none}94%,100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.rv.on .scm-acts--anim .ar{animation:none;opacity:1}}
+
+/* Wordmark second segment — lighter weight so the compound name reads as two
+   words without adding a space (the brand stays one word). */
+.wm2{font-weight:400;opacity:.85}
