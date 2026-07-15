@@ -24,6 +24,14 @@
 .rec-mini .sv{color:var(--signal);font-weight:700}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will the AI Product Manager touch my store?", "acceptedAnswer": {"@type": "Answer", "text": "No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust."}}, {"@type": "Question", "name": "Is my store data safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your file is parsed and your numbers are computed in your browser. When you use AI insights or save a report, the data needed is sent over an encrypted connection and stored in your account until you delete it. Your data is never sold or used to train our models."}}, {"@type": "Question", "name": "What exports do you support?", "acceptedAnswer": {"@type": "Answer", "text": "Standard order exports from Shopify, WooCommerce, BigCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works."}}, {"@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — one click from your billing page. Your plan stays active until the end of the period you paid for, and your reports stay exportable."}}, {"@type": "Question", "name": "How is margin actually computed?", "acceptedAnswer": {"@type": "Answer", "text": "Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — executed as real pandas against your export. Click any figure and ProfitFalcon shows the code that produced it."}}]}</script>
+  <script>
+    /* Belt-and-suspenders with sw.js: drop any root-scoped worker from the old SPA-at-root setup so this page is not forwarded to /dashboard. */
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (rs) {
+        rs.forEach(function (r) { if (r.scope === location.origin + "/") r.unregister(); });
+      }).catch(function () {});
+    }
+  </script>
 </head>
 <body>
 
