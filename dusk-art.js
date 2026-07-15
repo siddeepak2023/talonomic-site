@@ -18,7 +18,7 @@ var root = document.documentElement;
 /* ---------- THEME ---------- */
 var stored = null;
 try { stored = localStorage.getItem("bf-theme"); } catch(e){}
-if (stored === "light" || (!stored && window.matchMedia("(prefers-color-scheme: light)").matches)) {
+if (stored !== "dark") {  // default light; toggle (stored) overrides
   root.setAttribute("data-theme","light");
 }
 var toggle = document.getElementById("themeToggle");
@@ -103,7 +103,7 @@ function docTopOf(el){
 }
 function measureDock(){
   if (!dockSec) return;
-  // +34: match company-site's dock position. Its dock heading is 2 lines
+  // +66: match company-site's dock position. Its dock heading is 2 lines
   // ("Three instruments. / One engine."); ours is 1, so without this the falcon
   // docks ~34px higher and its top wing crosses the hero/demo divider.
   var next = docTopOf(dockSec) + dockSec.offsetHeight + 66;
