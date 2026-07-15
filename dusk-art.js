@@ -106,7 +106,7 @@ function measureDock(){
   // +34: match company-site's dock position. Its dock heading is 2 lines
   // ("Three instruments. / One engine."); ours is 1, so without this the falcon
   // docks ~34px higher and its top wing crosses the hero/demo divider.
-  var next = docTopOf(dockSec) + dockSec.offsetHeight + 34;
+  var next = docTopOf(dockSec) + dockSec.offsetHeight + 66;
   if (dockSection) dockSecTop = docTopOf(dockSection);
   if (Math.abs(next - dockBotDoc) > 1) {
     dockBotDoc = next;
