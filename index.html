@@ -192,6 +192,104 @@
 </script>
 
 
+<!-- AGENT BENCH — the work, not the count. Every card: what it watches,
+     a SAMPLE exact-change rec, and where its ledger tally accrues. -->
+<section id="bench">
+  <div class="wrap">
+    <div class="sec-row">
+      <div class="sec-head rv">
+        <div class="eyebrow">The bench</div>
+        <h2>Every agent shows its work. Every move lands in the ledger.</h2>
+        <p>Each one watches a different way money leaks out of a store, proposes the exact change — and you approve every move. Nothing executes on its own. Sample recommendations below; your ledger fills from your first approval.</p>
+      </div>
+    </div>
+    <div class="bench-grid rv d1">
+      <div class="bn-card">
+        <div class="bn-name">Margin Sentinel</div>
+        <p class="bn-watch">Watches paid campaigns for spend that returns less than it costs — MER, CPA drift, contribution margin by campaign.</p>
+        <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
+          <span class="bn-move">Cut daily budget · Meta Ads Manager — Prospecting — Broad: <b>$200 → $176/day</b> · projected +$540/mo</span></div>
+        <div class="bn-ledger">Ledger · fills from your approvals</div>
+      </div>
+      <div class="bn-card">
+        <div class="bn-name">Discount Leak</div>
+        <p class="bn-watch">Watches every discount code for redemptions by customers who were already converting — returning buyers, organic traffic.</p>
+        <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
+          <span class="bn-move">Restrict <b>WELCOME10</b> to first-time customers — 57% of its redemptions went to returning buyers · est. +$340/mo</span></div>
+        <div class="bn-ledger">Ledger · fills from your approvals</div>
+      </div>
+      <div class="bn-card">
+        <div class="bn-name">Inventory &amp; Reorder</div>
+        <p class="bn-watch">Watches per-SKU sales velocity against what's on hand and works back from the resupply lead time to a reorder-by date.</p>
+        <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
+          <span class="bn-move">Reorder <b>Blue Hoodie</b> by Aug 2 — 6 days of stock left at current velocity · $2,800 of 30-day revenue at stake</span></div>
+        <div class="bn-ledger">Ledger · fills from your approvals</div>
+      </div>
+      <div class="bn-card">
+        <div class="bn-name">SKU Screener</div>
+        <p class="bn-watch">Ranks every product by revenue, margin, and return rate — and flags the ones quietly bleeding under a healthy top line.</p>
+        <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
+          <span class="bn-move">Review pricing on <b>Crew Socks</b> — 10.4% margin, below the 20% floor · est. +$210/mo at current volume</span></div>
+        <div class="bn-ledger">Ledger · fills from your approvals</div>
+      </div>
+      <div class="bn-card">
+        <div class="bn-name">LTV : CAC</div>
+        <p class="bn-watch">Watches the ratio between what a customer is worth and what you pay to get one — and flags when acquisition outruns lifetime value.</p>
+        <div class="bn-rec"><span class="bn-tag">Sample flag</span>
+          <span class="bn-move">LTV : CAC at <b>1.6</b>, under the 3.0 healthy band — flagged for review with the cohorts behind the number</span></div>
+        <div class="bn-ledger">Ledger · fills from your approvals</div>
+      </div>
+      <div class="bn-card">
+        <div class="bn-name">Returns &amp; Quality</div>
+        <p class="bn-watch">Watches return rates per SKU and flags spikes that eat margin after the sale is already counted.</p>
+        <div class="bn-rec"><span class="bn-tag">Sample flag</span>
+          <span class="bn-move">Return rate on <b>Linen Shirt</b> hit 18% — 3× the store average — flagged with the order rows behind it</span></div>
+        <div class="bn-ledger">Ledger · fills from your approvals</div>
+      </div>
+      <div class="bn-card">
+        <div class="bn-name">Executive Brief</div>
+        <p class="bn-watch">Opens your day with what changed, what the agents found, and which recommendations are waiting — with the ledger tally to date.</p>
+        <div class="bn-rec"><span class="bn-tag">Sample brief line</span>
+          <span class="bn-move">"Yesterday: margin ↓4%, Meta CPA ↑18%. <b>3 recommendations waiting</b> · potential upside +$1,090/mo."</span></div>
+        <div class="bn-ledger">Ledger · fills from your approvals</div>
+      </div>
+    </div>
+
+    <!-- Honest calculator: pure arithmetic on the visitor's own inputs, ESTIMATE-labeled. -->
+    <div class="calc rv d2" id="leakCalc">
+      <div>
+        <div class="calc-k">Discount-leak estimator</div>
+        <div class="calc-row"><label for="lcOrders">Orders per month</label><input id="lcOrders" type="number" min="0" step="50" value="800" inputmode="numeric"></div>
+        <div class="calc-row"><label for="lcAov">Average order value ($)</label><input id="lcAov" type="number" min="0" step="5" value="60" inputmode="decimal"></div>
+        <div class="calc-row"><label for="lcShare">Orders with a discount (%)</label><input id="lcShare" type="number" min="0" max="100" step="5" value="30" inputmode="numeric"></div>
+        <div class="calc-row"><label for="lcPct">Average discount (%)</label><input id="lcPct" type="number" min="0" max="100" step="5" value="15" inputmode="numeric"></div>
+      </div>
+      <div class="calc-out">
+        <div class="co-n" id="lcOut">$648–$1,296/mo</div>
+        <div class="co-l">ESTIMATE — your numbers × the share of discounted orders that typically go to already-converting customers (30–60%). Upload your export and ProfitFalcon computes the real figure per code.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var ids=["lcOrders","lcAov","lcShare","lcPct"],out=document.getElementById("lcOut");
+  if(!out) return;
+  function money(n){return "$"+Math.round(n).toLocaleString();}
+  function calc(){
+    var o=+document.getElementById("lcOrders").value||0,
+        a=+document.getElementById("lcAov").value||0,
+        s=Math.min(100,+document.getElementById("lcShare").value||0)/100,
+        p=Math.min(100,+document.getElementById("lcPct").value||0)/100;
+    var monthly=o*s*a*p; // total discount $ handed out per month
+    out.textContent=money(monthly*0.3)+"–"+money(monthly*0.6)+"/mo";
+  }
+  ids.forEach(function(id){var el=document.getElementById(id);el&&el.addEventListener("input",calc);});
+  calc();
+})();
+</script>
+
+
 <!-- DEMO VIDEO — auto-running feature showcase -->
 <section id="product">
   <div class="wrap">
