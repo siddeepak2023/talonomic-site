@@ -290,6 +290,64 @@
 </script>
 
 
+<!-- PRODUCT GALLERY — real screenshots from the live product on SAMPLE data -->
+<section id="gallery">
+  <div class="wrap">
+    <div class="sec-row">
+      <div class="sec-head rv">
+        <div class="eyebrow">Real screens</div>
+        <h2>This is the product, not a mockup.</h2>
+        <p>Captured from the live app running a SAMPLE Shopify export — every number on screen was computed, not designed. The sandbox below runs the same surfaces on the same data.</p>
+      </div>
+    </div>
+    <div class="rv d1">
+      <div class="demo-tabs" id="galTabs" role="tablist" aria-label="Product surfaces"></div>
+      <figure class="shot gal-shot" style="margin:0">
+        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span id="galCap">profitfalcon — sample data</span><span style="margin-left:auto">SAMPLE DATA · LIVE PRODUCT</span></div>
+        <img id="galImg" class="gal-img" src="./shots/dashboard.png" alt="" loading="lazy" decoding="async">
+        <div class="shot-foot"><span>CAPTURED FROM THE RUNNING APP</span><a href="/dashboard?demo=1">OPEN THIS SCREEN LIVE ▸</a></div>
+      </figure>
+      <div class="demo-prog" aria-hidden="true"><i id="galProg"></i></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var scenes=[
+    {t:"Profit dashboard",cap:"profitfalcon — morning brief + profit tiles",img:"./shots/dashboard.png",alt:"ProfitFalcon profit dashboard: morning brief, contribution tiles, and trend computed from a sample export"},
+    {t:"SKU screener",cap:"profitfalcon — per-SKU screener with archetypes",img:"./shots/screener.png",alt:"Per-SKU profit screener ranking products by revenue with Star, Sleeper, and Leak archetype labels and margin status"},
+    {t:"Free teardown",cap:"profitfalcon — export teardown",img:"./shots/teardown.png",alt:"Free teardown report computed from an uploaded order export"}
+  ];
+  var tabs=document.getElementById("galTabs"),img=document.getElementById("galImg"),
+      cap=document.getElementById("galCap"),prog=document.getElementById("galProg");
+  if(!tabs||!img) return;
+  var still=matchMedia("(prefers-reduced-motion:reduce)").matches,cur=0,timer=null,DUR=5200,hover=false;
+  scenes.forEach(function(s,i){
+    var b=document.createElement("button");
+    b.className="demo-tab";b.type="button";b.setAttribute("role","tab");b.textContent=s.t;
+    b.addEventListener("click",function(){clearTimeout(timer);show(i,false);loop();});
+    tabs.appendChild(b);
+  });
+  var btns=tabs.querySelectorAll(".demo-tab");
+  function show(i,auto){
+    cur=i;
+    btns.forEach(function(b,j){b.classList.toggle("on",j===i);b.setAttribute("aria-selected",j===i?"true":"false");});
+    img.src=scenes[i].img;img.alt=scenes[i].alt;cap.textContent=scenes[i].cap;
+    if(prog){prog.style.transitionDuration="0ms";prog.style.transitionProperty="width";prog.style.width="0";
+      if(auto&&!still){requestAnimationFrame(function(){requestAnimationFrame(function(){prog.style.transitionDuration=DUR+"ms";prog.style.transitionTimingFunction="linear";prog.style.width="100%";});});}}
+  }
+  function loop(){clearTimeout(timer);if(still)return;timer=setTimeout(function(){if(!hover){show((cur+1)%scenes.length,true);}loop();},DUR);}
+  var fig=document.querySelector(".gal-shot");
+  if(fig){fig.addEventListener("mouseenter",function(){hover=true;});fig.addEventListener("mouseleave",function(){hover=false;});}
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){if(e.isIntersecting){if(!timer){show(0,true);loop();}}else{clearTimeout(timer);timer=null;}});
+  },{threshold:.3});
+  io.observe(document.getElementById("gallery"));
+  show(0,false);
+})();
+</script>
+
+
 <!-- DEMO VIDEO — auto-running feature showcase -->
 <section id="product">
   <div class="wrap">
