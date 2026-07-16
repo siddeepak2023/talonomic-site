@@ -1022,3 +1022,21 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .calc-out{text-align:center}
 .calc-out .co-n{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;letter-spacing:-.02em;color:var(--signal)}
 .calc-out .co-l{font-size:12.5px;color:var(--mut);max-width:300px;margin:8px auto 0;line-height:1.5}
+
+/* ── integrations hub — exports in, product core, artifacts out ── */
+.hub{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:22px;align-items:center;margin-top:14px}
+@media(max-width:860px){.hub{grid-template-columns:1fr}}
+.hub-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.hub-k{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+.hub-chip{display:flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--fg);font:500 12.5px/1.2 "Instrument Sans",sans-serif;position:relative}
+.hub-chip svg{flex:0 0 auto;opacity:.85}
+.hub-src .hub-chip::after,.hub-out .hub-chip::before{content:"";position:absolute;top:50%;width:14px;height:1px;background:var(--line)}
+.hub-src .hub-chip::after{right:-15px}
+.hub-out .hub-chip::before{left:-15px}
+@media(max-width:860px){.hub-src .hub-chip::after,.hub-out .hub-chip::before{display:none}}
+.hub-core{border:1px solid color-mix(in srgb,var(--signal) 45%,var(--line));background:var(--card);border-radius:14px;padding:22px 20px;box-shadow:0 0 0 4px color-mix(in srgb,var(--signal) 6%,transparent)}
+.hub-core .hc-name{display:flex;align-items:center;gap:9px;justify-content:center;font-family:"Inter Tight",sans-serif;font-weight:800;font-size:17px;letter-spacing:-.01em;color:var(--fg);margin-bottom:4px}
+.hub-core .hc-sub{text-align:center;font-size:12px;color:var(--mut);margin-bottom:14px}
+.hub-core ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.hub-core li{display:flex;align-items:center;gap:10px;border:1px solid var(--line-soft);background:var(--bg2);border-radius:7px;padding:8px 11px;font-size:12.5px;color:var(--fg)}
+.hub-core li .hn{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--signal);flex:0 0 auto}
