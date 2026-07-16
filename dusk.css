@@ -959,3 +959,30 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 /* Wordmark second segment — lighter weight so the compound name reads as two
    words without adding a space (the brand stays one word). */
 .wm2{font-weight:400;opacity:.85}
+
+/* ── Ledger anatomy — the decision→outcome lifecycle (talonomic-first; port to talonmark after) ── */
+.ledger-sec .sec-head p{max-width:560px}
+.lg-frame{border:1px solid var(--line);background:var(--card);border-radius:12px;overflow:hidden}
+.lg-rail{display:flex;border-bottom:1px solid var(--line-soft)}
+.lg-node{flex:1;min-width:0;padding:13px 8px 11px;text-align:center;cursor:pointer;background:none;border:0;border-right:1px solid var(--line-soft);position:relative;transition:background .3s}
+.lg-node:last-child{border-right:0}
+.lg-node .ln-dot{display:block;width:8px;height:8px;border-radius:50%;border:1.5px solid var(--mut);margin:0 auto 7px;transition:background .3s,border-color .3s,box-shadow .3s}
+.lg-node .ln-t{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);display:block;transition:color .3s}
+.lg-node.on{background:var(--bg2)}
+.lg-node.on .ln-dot{background:var(--signal);border-color:var(--signal);box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 18%,transparent)}
+.lg-node.on .ln-t{color:var(--fg)}
+.lg-node.done .ln-dot{background:var(--fg);border-color:var(--fg)}
+.lg-stage{padding:22px 24px 20px;min-height:118px}
+.lg-line{display:flex;gap:10px;align-items:flex-start;opacity:0;transform:translateY(6px);transition:opacity .45s ease,transform .45s ease}
+.lg-line.show{opacity:1;transform:none}
+.lg-k{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--signal);white-space:nowrap;padding-top:3px}
+.lg-v{font-size:14.5px;line-height:1.55;color:var(--fg)}
+.lg-v b{font-weight:700}
+.lg-v .lgm{font-family:"JetBrains Mono",monospace;font-size:12.5px;background:var(--bg2);border:1px solid var(--line-soft);padding:2px 7px;border-radius:6px;white-space:nowrap}
+.lg-foot{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line-soft);padding:10px 24px;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
+.lg-foot .lg-tally{margin-left:auto;color:var(--fg)}
+.lg-prog{height:2px;background:var(--line-soft);position:relative;overflow:hidden}
+.lg-prog i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:var(--signal)}
+.lg-prog i.run{transition:transform linear;transform:scaleX(1)}
+@media(max-width:700px){.lg-node .ln-t{font-size:8px}.lg-stage{padding:18px 14px;min-height:150px}.lg-foot{padding:10px 14px;flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.lg-line{opacity:1;transform:none;transition:none}.lg-prog{display:none}}

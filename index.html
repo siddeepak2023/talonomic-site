@@ -126,6 +126,71 @@
 </section>
 
 
+<!-- LEDGER ANATOMY — the decision→outcome lifecycle (the differentiator) -->
+<section id="ledger" class="ledger-sec">
+  <div class="wrap">
+    <div class="sec-row">
+      <div class="sec-head rv">
+        <div class="eyebrow">The ledger</div>
+        <h2>Every recommendation is scored against what actually happened.</h2>
+        <p>Not a chat log — a ledger. Each move ProfitFalcon proposes carries a projected impact, waits for your approval, and gets measured against reality. The agents learn from the outcome.</p>
+      </div>
+    </div>
+    <div class="lg-frame rv d1" id="lgFrame">
+      <div class="lg-rail" role="tablist" aria-label="Recommendation lifecycle">
+        <button class="lg-node" role="tab" data-lg="0"><span class="ln-dot"></span><span class="ln-t">Detected</span></button>
+        <button class="lg-node" role="tab" data-lg="1"><span class="ln-dot"></span><span class="ln-t">Exact change</span></button>
+        <button class="lg-node" role="tab" data-lg="2"><span class="ln-dot"></span><span class="ln-t">Projected</span></button>
+        <button class="lg-node" role="tab" data-lg="3"><span class="ln-dot"></span><span class="ln-t">Approved</span></button>
+        <button class="lg-node" role="tab" data-lg="4"><span class="ln-dot"></span><span class="ln-t">Measured</span></button>
+        <button class="lg-node" role="tab" data-lg="5"><span class="ln-dot"></span><span class="ln-t">Realized</span></button>
+      </div>
+      <div class="lg-stage">
+        <div class="lg-line" id="lgLine"><span class="lg-k" id="lgK"></span><span class="lg-v" id="lgV"></span></div>
+      </div>
+      <div class="lg-prog" aria-hidden="true"><i id="lgProg"></i></div>
+      <div class="lg-foot"><span>SAMPLE RECOMMENDATION · MARGIN SENTINEL</span><span class="lg-tally">LEDGER: PROJECTED +$540 · REALIZED +$498 · 92%</span></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var stages=[
+    ["Detected","Margin Sentinel flagged Meta campaign <b>Prospecting — Broad</b>: CPA up 18% week-over-week, contribution margin negative on 9 of the last 14 days."],
+    ["Exact change","<span class=\"lgm\">Cut daily budget · Meta Ads Manager — Prospecting — Broad: $200 → $176/day (−12%)</span>"],
+    ["Projected","<b>+$540/mo</b> contribution margin · confidence 78% · the formula behind the number is attached to the card."],
+    ["Approved","You approved it. The change is yours to apply — one click copies the exact move. Nothing executes without you."],
+    ["Measured","The agent keeps watching after the change: CPA, spend, and margin tracked daily against the projection."],
+    ["Realized","<b>+$498/mo</b> measured over 30 days — 92% of projection. The outcome is stored; the next recommendation starts smarter."]
+  ];
+  var frame=document.getElementById("lgFrame"); if(!frame) return;
+  var nodes=frame.querySelectorAll(".lg-node"),k=document.getElementById("lgK"),v=document.getElementById("lgV"),
+      line=document.getElementById("lgLine"),prog=document.getElementById("lgProg"),
+      cur=-1,timer=null,DUR=3400,
+      still=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  function show(i,auto){
+    cur=i;
+    nodes.forEach(function(n,j){n.classList.toggle("on",j===i);n.classList.toggle("done",j<i);n.setAttribute("aria-selected",j===i?"true":"false");});
+    line.classList.remove("show");k.textContent=stages[i][0];v.innerHTML=stages[i][1];
+    requestAnimationFrame(function(){requestAnimationFrame(function(){line.classList.add("show");});});
+    if(prog){prog.classList.remove("run");prog.style.transitionDuration="0ms";prog.style.transform="scaleX(0)";
+      if(auto&&!still){requestAnimationFrame(function(){requestAnimationFrame(function(){prog.style.transitionDuration=DUR+"ms";prog.classList.add("run");});});}}
+  }
+  function loop(){clearTimeout(timer);if(still)return;timer=setTimeout(function(){show((cur+1)%stages.length,true);loop();},DUR);}
+  nodes.forEach(function(n){n.addEventListener("click",function(){clearTimeout(timer);show(+n.dataset.lg,false);loop();});});
+  var inView=false;
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){inView=e.isIntersecting;if(inView){if(cur<0){show(0,true);}loop();}else{clearTimeout(timer);}});
+  },{threshold:.35});
+  io.observe(frame);
+  document.addEventListener("visibilitychange",function(){
+    if(document.hidden){clearTimeout(timer);}else if(inView&&cur>=0){show(cur,true);loop();}
+  });
+  if(still){show(0,false);}
+})();
+</script>
+
+
 <!-- DEMO VIDEO — auto-running feature showcase -->
 <section id="product">
   <div class="wrap">
