@@ -1031,7 +1031,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .calc-out .co-l{font-size:12.5px;color:var(--mut);max-width:300px;margin:8px auto 0;line-height:1.5}
 
 /* ── integrations hub — exports in, product core, artifacts out ── */
-.hub{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:22px;align-items:center;margin-top:14px}
+.hub{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:52px;align-items:center;margin-top:14px}
 @media(max-width:860px){.hub{grid-template-columns:1fr}}
 .hub-col{display:flex;flex-direction:column;gap:8px;min-width:0}
 .hub-k{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
@@ -1051,3 +1051,12 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 /* ── product gallery (real screenshots, SAMPLE data) ── */
 .gal-img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line-soft);background:var(--card)}
 .gal-shot .shot-foot a{color:var(--signal)}
+
+/* animated hub flow — exports → engine → outputs (JS draws paths at layout time) */
+.hub{position:relative}
+.hub-flow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:0}
+.hub-flow .fl-base{fill:none;stroke:var(--line);stroke-width:1}
+.hub-flow .fl-pulse{fill:none;stroke:var(--signal);stroke-width:1.5;stroke-linecap:round;stroke-dasharray:10 140;stroke-dashoffset:150;animation:hubflow 3.6s linear infinite;opacity:.85}
+@keyframes hubflow{to{stroke-dashoffset:0}}
+.hub--flow .hub-src .hub-chip::after,.hub--flow .hub-out .hub-chip::before{display:none}
+@media(prefers-reduced-motion:reduce){.hub-flow .fl-pulse{display:none}}

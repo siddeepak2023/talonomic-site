@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260718">
+<link rel="stylesheet" href="./dusk.css?v=20260719">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -54,9 +54,10 @@
       ProfitFalcon <span class="sub">/ BizFalcon AI</span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#demo">Preview</a>
-      <a href="#benefits">Features</a>
-      <a href="#how">How it works</a>
+      <a href="#demo">Demo</a>
+      <a href="#ledger">Ledger</a>
+      <a href="#bench">Agents</a>
+      <a href="#gallery">Screens</a>
       <a href="#pricing">Pricing</a>
       <a href="./blog/">Blog</a>
       <a href="#faq">FAQ</a>
@@ -625,8 +626,46 @@
       </div>
     </div>
 
+<script>
+(function(){
+  var hub=document.querySelector(".hub"); if(!hub) return;
+  var NS="http://www.w3.org/2000/svg";
+  function draw(){
+    var old=hub.querySelector(".hub-flow"); if(old) old.remove();
+    if(matchMedia("(max-width:860px)").matches){hub.classList.remove("hub--flow");return;}
+    var hr=hub.getBoundingClientRect(); if(!hr.width) return;
+    var core=hub.querySelector(".hub-core"); if(!core) return;
+    var cr=core.getBoundingClientRect();
+    var svg=document.createElementNS(NS,"svg");
+    svg.setAttribute("class","hub-flow");
+    svg.setAttribute("viewBox","0 0 "+hr.width+" "+hr.height);
+    svg.setAttribute("preserveAspectRatio","none");
+    var i=0;
+    function add(x1,y1,x2,y2){
+      var mx=(x1+x2)/2;
+      var d="M"+x1+" "+y1+" C "+mx+" "+y1+", "+mx+" "+y2+", "+x2+" "+y2;
+      var b=document.createElementNS(NS,"path"); b.setAttribute("d",d); b.setAttribute("class","fl-base"); svg.appendChild(b);
+      var p=document.createElementNS(NS,"path"); p.setAttribute("d",d); p.setAttribute("class","fl-pulse"); p.style.animationDelay=(-(i++)*0.45)+"s"; svg.appendChild(p);
+    }
+    hub.querySelectorAll(".hub-src .hub-chip").forEach(function(ch){
+      var r=ch.getBoundingClientRect();
+      add(r.right-hr.left, r.top+r.height/2-hr.top, cr.left-hr.left, cr.top+cr.height/2-hr.top);
+    });
+    hub.querySelectorAll(".hub-out .hub-chip").forEach(function(ch){
+      var r=ch.getBoundingClientRect();
+      add(cr.right-hr.left, cr.top+cr.height/2-hr.top, r.left-hr.left, r.top+r.height/2-hr.top);
+    });
+    hub.classList.add("hub--flow");
+    hub.insertBefore(svg,hub.firstChild);
+  }
+  function settle(){draw();setTimeout(draw,700);}
+  if(document.readyState==="complete"){settle();}else{addEventListener("load",settle);}
+  var t; addEventListener("resize",function(){clearTimeout(t);t=setTimeout(draw,150);});
+})();
+</script>
+
     <style>
-.intg{overflow:hidden;position:relative;padding:6px 0 2px}
+.intg{overflow:hidden;position:relative;padding:6px 0 2px;margin-top:38px}
 .intg::before,.intg::after{content:"";position:absolute;top:0;bottom:0;width:90px;z-index:2;pointer-events:none}
 .intg::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
 .intg::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
@@ -645,7 +684,7 @@
 </section>
 
 <!-- MODEL CREDIBILITY -->
-<section id="engine" style="padding:44px 0 4px">
+<section id="engine" style="padding:44px 0 52px">
   <div class="wrap">
     <div class="sec-head rv" style="margin:0 auto;max-width:none;text-align:center">
       <div class="eyebrow" style="justify-content:center">The engine</div>
