@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /billing
