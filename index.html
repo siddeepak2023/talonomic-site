@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260719">
+<link rel="stylesheet" href="./dusk.css?v=20260720">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -54,10 +54,17 @@
       ProfitFalcon <span class="sub">/ BizFalcon AI</span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#demo">Demo</a>
-      <a href="#ledger">Ledger</a>
-      <a href="#bench">Agents</a>
-      <a href="#gallery">Screens</a>
+      <div class="nav-dd" id="navDD">
+        <button class="nav-dd-btn" type="button" aria-haspopup="true" aria-expanded="false">Product <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>
+        <div class="nav-dd-menu" role="menu">
+          <a href="#demo" role="menuitem">Live demo</a>
+          <a href="#gallery" role="menuitem">Screens</a>
+          <a href="#bench" role="menuitem">Agent bench</a>
+          <a href="#ledger" role="menuitem">The ledger</a>
+          <a href="#engine" role="menuitem">Engine</a>
+        </div>
+      </div>
+      <a href="#integrations">Integrations</a>
       <a href="#pricing">Pricing</a>
       <a href="./blog/">Blog</a>
       <a href="#faq">FAQ</a>
@@ -1006,6 +1013,17 @@ window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();evt
   if(new URLSearchParams(location.search).get("install")==="1"){evt.prompt();evt=null;}});
 document.addEventListener("click",function(e){var t=e.target.closest&&e.target.closest("[data-install-app]");
   if(t&&evt){e.preventDefault();evt.prompt();evt=null;}});
+})();
+</script>
+
+<script>
+(function(){
+  var dd=document.getElementById("navDD"); if(!dd) return;
+  var btn=dd.querySelector(".nav-dd-btn");
+  btn.addEventListener("click",function(e){e.stopPropagation();var open=dd.classList.toggle("open");btn.setAttribute("aria-expanded",open?"true":"false");});
+  document.addEventListener("click",function(){dd.classList.remove("open");btn.setAttribute("aria-expanded","false");});
+  dd.querySelectorAll(".nav-dd-menu a").forEach(function(a){a.addEventListener("click",function(){dd.classList.remove("open");});});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){dd.classList.remove("open");btn.setAttribute("aria-expanded","false");}});
 })();
 </script>
 </body>
