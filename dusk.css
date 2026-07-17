@@ -797,7 +797,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
       mini gradient stage with an accurate in-app fragment. ───────── */
 .scm{
   position:relative;margin-top:18px;border:1px solid var(--line);border-radius:10px;
-  overflow:hidden;padding:14px 15px 13px;
+  overflow:hidden;padding:30px 15px 13px;
   background:
     radial-gradient(130% 170% at 90% 125%, rgba(176,69,59,.15), transparent 60%),
     linear-gradient(155deg, var(--bg2), var(--bg) 70%);
@@ -1005,6 +1005,8 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 
 /* ── agent bench — one card per shipped agent; the work, not the count ── */
 .bench-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bench-grid .calc{grid-column:span 2;margin-top:0}
+@media(max-width:960px){.bench-grid .calc{grid-column:1/-1}}
 @media(max-width:960px){.bench-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.bench-grid{grid-template-columns:1fr}}
 .bn-card{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px;min-width:0}
