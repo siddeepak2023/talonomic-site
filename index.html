@@ -10,6 +10,9 @@
 <link rel="icon" href="favicon.ico?v=11">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=11">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=11">
+<link rel="manifest" href="/talonomic-app.webmanifest">
+<meta name="apple-mobile-web-app-title" content="ProfitFalcon">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
@@ -944,6 +947,14 @@ window.DUSK.demoRunner({
   if (!box) return;
   var v = box.querySelector("video");
   v.addEventListener("loadedmetadata", function () { box.style.display = "block"; });
+})();
+</script>
+<script>
+(function(){var evt=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();evt=e;
+  if(new URLSearchParams(location.search).get("install")==="1"){evt.prompt();evt=null;}});
+document.addEventListener("click",function(e){var t=e.target.closest&&e.target.closest("[data-install-app]");
+  if(t&&evt){e.preventDefault();evt.prompt();evt=null;}});
 })();
 </script>
 </body>
