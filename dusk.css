@@ -437,7 +437,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .footer{border-top:1px solid var(--line-soft);padding:64px 0 36px}
 .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:48px}
 @media(max-width:920px){.foot-grid{grid-template-columns:1fr 1fr;gap:28px}}
-.foot-brand .foot-logo{display:flex;align-items:center;gap:9px;font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.14em;color:var(--fg)}
+.foot-brand .foot-logo{display:flex;align-items:center;gap:9px;font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em;color:var(--fg)}
 .foot-brand .foot-logo span{color:var(--mut);font-size:10.5px}
 .foot-brand p{margin-top:14px;max-width:30ch;font-size:13.5px;line-height:1.6;color:var(--mut)}
 .foot-col{display:flex;flex-direction:column;gap:10px}
