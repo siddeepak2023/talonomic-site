@@ -376,6 +376,14 @@ function loadArtImage(src){
 }
 
 /* ---------- DATA OBSERVATORY KIT (ported from Talon landing) ---------- */
+function scopedVar(cv, name){
+  var el = cv.__styleFrom || cv;
+  if (el && el.nodeType === 1) {
+    var v = getComputedStyle(el).getPropertyValue(name).trim();
+    if (v) return v;
+  }
+  return cssVar(name);
+}
 function prepArt(cv){
   var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return null;
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -383,7 +391,7 @@ function prepArt(cv){
   var c2 = cv.getContext("2d"); if (!c2) return null;
   c2.setTransform(dpr, 0, 0, dpr, 0, 0);
   c2.clearRect(0, 0, w, h);
-  return { c2: c2, w: w, h: h, fg: cssVar("--fg"), sg: cssVar("--signal") };
+  return { c2: c2, w: w, h: h, fg: scopedVar(cv, "--fg"), sg: scopedVar(cv, "--signal") };
 }
 function dottedVGrid(c2, w, h, step, fg){
   c2.fillStyle = fg;
@@ -600,10 +608,256 @@ function drawEclipse(cv){
   c2.globalAlpha = 1;
 }
 
+
+/* ---------- PARTICLE-FORM ENGINE ----------
+   Any static art can "form" like the hero: render the final frame to an
+   offscreen canvas, sample its lit pixels into particles, fly them in once
+   when the canvas scrolls into view, then blit the crisp final frame.
+   Reduced-motion (or a re-render after forming) draws the final instantly. */
+function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+function formArt(cv, finalDraw, opts){
+  opts = opts || {};
+  var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+  if (reduceMotion || cv.dataset.formed === "1") { finalDraw(cv); cv.dataset.formed = "1"; return; }
+  var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  var off = document.createElement("canvas");
+  off.width = cv.width = w * dpr; off.height = cv.height = h * dpr;
+  /* trick finalDraw into rendering on the offscreen at the same CSS size */
+  var offWrap = { clientWidth: w, clientHeight: h, width: off.width, height: off.height,
+    __styleFrom: cv,
+    getContext: function(){ return off.getContext("2d"); },
+    getAttribute: function(a){ return cv.getAttribute(a); } };
+  finalDraw(offWrap);
+  var d = off.getContext("2d").getImageData(0, 0, off.width, off.height).data;
+  var pts = [], stride = Math.max(2, Math.round(2 * dpr));
+  for (var y = 0; y < off.height; y += stride) {
+    for (var xx = 0; xx < off.width; xx += stride) {
+      var k = (y * off.width + xx) * 4, a = d[k + 3] / 255;
+      if (a < 0.06) continue;
+      var red = d[k] > 110 && d[k] > d[k + 1] * 1.5;
+      pts.push({ x: xx / dpr, y: y / dpr, a: a, r: red });
+    }
+  }
+  if (pts.length > 3200) {
+    var keep = 3200 / pts.length, culled = [];
+    for (var i = 0; i < pts.length; i++) if (hash2(i, 5) < keep) culled.push(pts[i]);
+    pts = culled;
+  }
+  var fromRight = opts.from === "right";
+  for (i = 0; i < pts.length; i++) {
+    var pt = pts[i];
+    if (fromRight) { pt.sx = w + 30 + hash2(i, 7) * w * 0.5; pt.sy = pt.y + (hash2(i, 11) - 0.5) * 26; }
+    else { pt.sx = pt.x + (hash2(i, 7) - 0.5) * w * 0.85; pt.sy = pt.y + (hash2(i, 11) - 0.5) * h * 0.85; }
+    pt.dl = hash2(i, 13) * 0.35;
+  }
+  var c2 = cv.getContext("2d");
+  c2.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var fg = scopedVar(cv, "--fg"), sg = scopedVar(cv, "--signal");
+  var t0 = null, DUR = opts.duration || 950;
+  function frame(ts){
+    if (!t0) t0 = ts;
+    var t = Math.min(1, (ts - t0) / DUR);
+    c2.clearRect(0, 0, w, h);
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      var lt = Math.max(0, Math.min(1, (t - p.dl) / (1 - p.dl)));
+      if (lt <= 0) continue;
+      var e = easeOutCubic(lt);
+      c2.fillStyle = p.r ? sg : fg;
+      c2.globalAlpha = Math.min(0.9, p.a) * e;
+      c2.fillRect(p.sx + (p.x - p.sx) * e, p.sy + (p.y - p.sy) * e, 1.4, 1.4);
+    }
+    c2.globalAlpha = 1;
+    if (t < 1) requestAnimationFrame(frame);
+    else {
+      c2.setTransform(1, 0, 0, 1, 0, 0);
+      c2.clearRect(0, 0, cv.width, cv.height);
+      c2.drawImage(off, 0, 0);
+      cv.dataset.formed = "1";
+      if (opts.onFormed) opts.onFormed();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------- BUST (A) — streaming-data profile, forms from the right ----------
+   Head-and-shoulders profile built from an analytic silhouette; horizontal
+   data-streaks trail off the leading edge like the reference art. */
+function bustPath(c2, w, h){
+  /* profile facing left, drawn in normalized coords scaled to canvas */
+  function P(u, v){ return [u * w, v * h]; }
+  c2.beginPath();
+  c2.moveTo.apply(c2, P(0.52, 0.06));                     /* crown */
+  c2.bezierCurveTo.apply(c2, P(0.36, 0.05).concat(P(0.26, 0.16), P(0.26, 0.28))); /* forehead */
+  c2.bezierCurveTo.apply(c2, P(0.26, 0.33).concat(P(0.24, 0.36), P(0.235, 0.40))); /* brow→nose bridge */
+  c2.bezierCurveTo.apply(c2, P(0.215, 0.455).concat(P(0.255, 0.465), P(0.26, 0.49))); /* nose */
+  c2.bezierCurveTo.apply(c2, P(0.255, 0.525).concat(P(0.27, 0.545), P(0.275, 0.565))); /* lips */
+  c2.bezierCurveTo.apply(c2, P(0.27, 0.60).concat(P(0.30, 0.63), P(0.315, 0.645))); /* chin */
+  c2.bezierCurveTo.apply(c2, P(0.34, 0.68).concat(P(0.38, 0.72), P(0.40, 0.78)));  /* jaw→neck */
+  c2.bezierCurveTo.apply(c2, P(0.34, 0.84).concat(P(0.22, 0.90), P(0.14, 1.0)));   /* chest */
+  c2.lineTo.apply(c2, P(0.98, 1.0));
+  c2.bezierCurveTo.apply(c2, P(0.90, 0.72).concat(P(0.86, 0.38), P(0.80, 0.20)));  /* back of head */
+  c2.bezierCurveTo.apply(c2, P(0.74, 0.08).concat(P(0.62, 0.05), P(0.52, 0.06)));
+  c2.closePath();
+}
+function drawBust(cv){
+  var p = prepArt(cv); if (!p) return;
+  var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
+  /* silhouette mask on a small offscreen for fast inside-tests */
+  var mw = 96, mh = Math.round(mw * h / w);
+  var m = document.createElement("canvas"); m.width = mw; m.height = mh;
+  var mc = m.getContext("2d"); bustPath(mc, mw, mh); mc.fillStyle = "#fff"; mc.fill();
+  var md = mc.getImageData(0, 0, mw, mh).data;
+  function inside(u, v){
+    var xi = Math.min(mw - 1, Math.max(0, (u * mw) | 0)), yi = Math.min(mh - 1, Math.max(0, (v * mh) | 0));
+    return md[(yi * mw + xi) * 4 + 3] > 40;
+  }
+  /* body dust — denser toward the leading (left) edge, fading toward the back */
+  var N = Math.max(3400, Math.floor(w * h / 110)), i, u, v;
+  for (i = 0; i < N; i++) {
+    u = hash2(i, 3); v = hash2(i, 7);
+    if (!inside(u, v)) continue;
+    var edge = 0;
+    for (var s = 1; s <= 3; s++) if (!inside(u - s * 0.02, v)) { edge = 1 - (s - 1) / 3; break; }
+    var al = 0.10 + 0.5 * Math.pow(fbm(u * 5, v * 5, 7.3), 1.2) + edge * 0.45;
+    c2.fillStyle = hash2(i, 31) > 0.992 ? sg : fg;
+    c2.globalAlpha = Math.min(0.9, al);
+    var big = hash2(i, 13) > 0.95;
+    c2.fillRect(u * w, v * h, big ? 1.8 : 1.2, big ? 1.8 : 1.2);
+  }
+  /* data streaks — horizontal dashes streaming off the leading edge */
+  for (i = 0; i < 220; i++) {
+    v = 0.06 + hash2(i, 17) * 0.88;
+    /* find silhouette leading edge at this row */
+    var ue = -1;
+    for (u = 0.02; u < 0.9; u += 0.01) if (inside(u, v)) { ue = u; break; }
+    if (ue < 0) continue;
+    var len = 0.04 + Math.pow(hash2(i, 19), 2) * 0.22;
+    var seg = 2 + (hash2(i, 23) * 4 | 0);
+    for (var g = 0; g < seg; g++) {
+      var gu = ue - len * (g + hash2(i * 7 + g, 29) * 0.6) / seg;
+      if (gu < 0.01) break;
+      c2.fillStyle = hash2(i + g, 37) > 0.985 ? sg : fg;
+      c2.globalAlpha = 0.5 * (1 - g / seg) * (0.4 + 0.6 * hash2(i, 41));
+      c2.fillRect(gu * w, v * h, 2 + hash2(g, i) * 5, 1.1);
+    }
+  }
+  c2.globalAlpha = 1;
+}
+
+/* ---------- OORT (ledger) — point-cloud sphere with scattered halo ---------- */
+function oortPoints(R){
+  var pts = [], N = 2100, i, GA = Math.PI * (3 - Math.sqrt(5));
+  for (i = 0; i < N; i++) {
+    var yy = 1 - (i / (N - 1)) * 2, rad = Math.sqrt(1 - yy * yy), th = GA * i;
+    var shell = 1 + (fbm(Math.cos(th) * 2 + 2, yy * 2 + 2, 4.2) - 0.5) * 0.24;
+    pts.push({ x: Math.cos(th) * rad * R * shell, y: yy * R * shell, z: Math.sin(th) * rad * R * shell, halo: 0 });
+  }
+  for (i = 0; i < 520; i++) {
+    var a = hash2(i, 3) * Math.PI * 2, b = Math.acos(2 * hash2(i, 7) - 1);
+    var rr = R * (1.12 + Math.pow(hash2(i, 11), 1.6) * 0.55);
+    pts.push({ x: Math.sin(b) * Math.cos(a) * rr, y: Math.cos(b) * rr, z: Math.sin(b) * Math.sin(a) * rr, halo: 1 });
+  }
+  return pts;
+}
+function drawOortFrame(cv, rot){
+  var p = prepArt(cv); if (!p) return;
+  var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
+  var R = Math.min(w, h) * 0.34, cx = w / 2, cy = h * 0.5;
+  if (!cv.__oort) cv.__oort = oortPoints(R);
+  var pts = cv.__oort, tilt = 0.42, ct = Math.cos(tilt), st = Math.sin(tilt);
+  for (var i = 0; i < pts.length; i++) {
+    var q = pts[i];
+    var xr = q.x * Math.cos(rot) + q.z * Math.sin(rot);
+    var zr = -q.x * Math.sin(rot) + q.z * Math.cos(rot);
+    var yr = q.y * ct - zr * st, zz = q.y * st + zr * ct;
+    var depth = (zz / R + 1.7) / 2.7;
+    var al = q.halo ? 0.10 + 0.25 * depth : 0.10 + 0.62 * Math.pow(depth, 1.6);
+    c2.fillStyle = (i % 149 === 0) ? sg : fg;
+    c2.globalAlpha = Math.min(0.85, al);
+    var sz = q.halo ? 1.1 : (depth > 0.72 ? 1.7 : 1.2);
+    c2.fillRect(cx + xr, cy + yr, sz, sz);
+  }
+  c2.globalAlpha = 1;
+}
+function drawOort(cv){ drawOortFrame(cv, cv.__rot || 0.6); }
+function startOortIdle(cv){
+  if (reduceMotion) return;
+  cv.__rot = cv.__rot || 0.6;
+  var visible = false, running = false;
+  function spin(){
+    if (!visible) { running = false; return; }
+    cv.__rot += 0.0028;
+    drawOortFrame(cv, cv.__rot);
+    running = true;
+    setTimeout(function(){ requestAnimationFrame(spin); }, 50); /* ~20fps is plenty */
+  }
+  new IntersectionObserver(function(en){
+    visible = en[0].isIntersecting;
+    if (visible && !running && cv.dataset.formed === "1") requestAnimationFrame(spin);
+  }, { threshold: 0.1 }).observe(cv);
+}
+
+/* ---------- STEPS (replaces the chronometer on "Export. Drop. Act.") ----------
+   Ascending dotted route with three waypoint platforms — 01 export, 02 drop,
+   03 act — final node in oxblood. */
+function drawAscent(cv){
+  var p = prepArt(cv); if (!p) return;
+  var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
+  var nodes = [[0.16, 0.78], [0.5, 0.52], [0.84, 0.24]];
+  function py(u){ /* smooth rising path through the nodes */
+    if (u <= 0.5) { var t1 = (u - 0.16) / 0.34; return 0.78 + (0.52 - 0.78) * (t1 < 0 ? 0 : t1 * t1 * (3 - 2 * t1)); }
+    var t2 = (u - 0.5) / 0.34; t2 = Math.max(0, Math.min(1, t2));
+    return 0.52 + (0.24 - 0.52) * (t2 * t2 * (3 - 2 * t2));
+  }
+  /* dust field under the path — a ridge the route climbs */
+  var N = Math.max(2200, Math.floor(w * h / 140));
+  for (var i = 0; i < N; i++) {
+    var u = hash2(i, 3), v = hash2(i, 7);
+    var yy = py(u);
+    if (v < yy || v > yy + 0.45) continue;
+    var fall = (v - yy) / 0.45;
+    var al = (0.05 + 0.45 * Math.pow(fbm(u * 6, v * 6, 3.7), 1.3)) * (1 - fall * 0.8);
+    if (al < 0.04) continue;
+    c2.fillStyle = fg; c2.globalAlpha = Math.min(0.7, al);
+    c2.fillRect(u * w, v * h, 1.2, 1.2);
+  }
+  /* dotted route */
+  for (var uu = 0.10; uu <= 0.90; uu += 0.006) {
+    c2.fillStyle = fg; c2.globalAlpha = 0.65;
+    c2.fillRect(uu * w, py(uu) * h, 1.6, 1.6);
+  }
+  /* waypoints — dot-burst platforms, last one oxblood */
+  nodes.forEach(function(nd, ix){
+    var nx = nd[0] * w, ny = nd[1] * h, last = ix === nodes.length - 1;
+    for (var k = 0; k < 90; k++) {
+      var a = hash2(k, ix + 5) * Math.PI * 2, r = Math.pow(hash2(k, ix + 9), 1.6) * 20;
+      c2.fillStyle = fg; c2.globalAlpha = 0.4 * (1 - r / 20);
+      c2.fillRect(nx + Math.cos(a) * r, ny + Math.sin(a) * r * 0.5, 1.2, 1.2);
+    }
+    if (last) {
+      var grad = c2.createRadialGradient(nx, ny, 0, nx, ny, 16);
+      grad.addColorStop(0, sg); grad.addColorStop(1, "rgba(0,0,0,0)");
+      c2.globalAlpha = 0.5; c2.fillStyle = grad;
+      c2.beginPath(); c2.arc(nx, ny, 16, 0, 7); c2.fill();
+    }
+    c2.fillStyle = last ? sg : fg; c2.globalAlpha = 0.95;
+    c2.fillRect(nx - 3, ny - 3, 6, 6);
+    c2.globalAlpha = 0.35; c2.fillStyle = fg;
+    c2.fillRect(nx - 0.5, ny + 8, 1, 10);
+  });
+  c2.globalAlpha = 1;
+}
+
 function renderArts(){
   document.querySelectorAll("[data-art]").forEach(function(cv){
     var kind = cv.getAttribute("data-art");
-    if (kind === "sphere") ditherField(cv, sphereField, 3);
+    /* forming arts stay blank until their observer fires; after forming,
+       re-renders (theme change / resize) draw the final frame instantly */
+    if (cv.hasAttribute("data-form") && cv.dataset.formed !== "1" && !reduceMotion) return;
+    if (kind === "bust") drawBust(cv);
+    else if (kind === "oort") drawOort(cv);
+    else if (kind === "sphere") ditherField(cv, sphereField, 3);
     else if (kind === "glitchsphere") drawGlitchSphere(cv);
     else if (kind === "ghostchart") drawGhostChart(cv);
     else if (kind === "ascent") drawAscent(cv);
@@ -644,6 +898,56 @@ var io = new IntersectionObserver(function(entries){
   });
 }, { threshold: 0.15 });
 document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
+
+/* ---------- FORM-ON-REVEAL for data-form arts ---------- */
+function finalDrawFor(cv){
+  var kind = cv.getAttribute("data-art");
+  if (kind === "bust") return drawBust;
+  if (kind === "oort") return drawOort;
+  if (kind === "glitchsphere") return drawGlitchSphere;
+  if (kind === "ghostchart") return drawGhostChart;
+  if (kind === "ascent") return drawAscent;
+  if (kind === "eclipse") return drawEclipse;
+  return null;
+}
+var formIO = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if (!en.isIntersecting) return;
+    var cv = en.target, fn = finalDrawFor(cv);
+    formIO.unobserve(cv);
+    if (!fn) return;
+    formArt(cv, fn, {
+      from: cv.getAttribute("data-art") === "bust" ? "right" : "scatter",
+      onFormed: cv.getAttribute("data-art") === "oort" ? function(){ startOortIdle(cv); } : null
+    });
+    if (cv.getAttribute("data-art") === "oort" && reduceMotion) cv.dataset.formed = "1";
+  });
+}, { threshold: 0.25 });
+document.querySelectorAll("[data-art][data-form]").forEach(function(cv){
+  if (reduceMotion) { var fn = finalDrawFor(cv); if (fn) { fn(cv); cv.dataset.formed = "1"; } return; }
+  formIO.observe(cv);
+});
+
+/* ---------- EYEBROW SCRAMBLE — mono labels decode on reveal ---------- */
+var GLY = "▪▫◦·:∙+×/\\|—01";
+document.querySelectorAll(".sec-head .eyebrow").forEach(function(el){
+  if (reduceMotion) return;
+  var txt = el.textContent;
+  var sio = new IntersectionObserver(function(en){
+    if (!en[0].isIntersecting) return;
+    sio.disconnect();
+    var t0 = null, DUR = 420;
+    function tick(ts){
+      if (!t0) t0 = ts;
+      var t = Math.min(1, (ts - t0) / DUR), n = Math.floor(txt.length * t), out = txt.slice(0, n);
+      for (var i = n; i < txt.length; i++) out += txt[i] === " " ? " " : GLY[(Math.random() * GLY.length) | 0];
+      el.textContent = out;
+      if (t < 1) requestAnimationFrame(tick); else el.textContent = txt;
+    }
+    requestAnimationFrame(tick);
+  }, { threshold: 0.6 });
+  sio.observe(el);
+});
 
 /* ---------- DEMO HELPERS (typing + count-up), exported ---------- */
 window.DUSK = {

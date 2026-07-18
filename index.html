@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260721">
+<link rel="stylesheet" href="./dusk.css?v=20260722">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -145,8 +145,9 @@
       <div class="sec-head rv">
         <div class="eyebrow">The ledger</div>
         <h2>Every recommendation is scored against what actually happened.</h2>
-        <p>Not a chat log — a ledger. Each move ProfitFalcon proposes carries a projected impact, waits for your approval, and gets measured against reality. The agents learn from the outcome.</p>
+        <p>Not a chat log — a ledger. Each move ProfitFalcon proposes carries a projected impact, waits for your approval, and gets measured against reality — every outcome stored next to its projection.</p>
       </div>
+      <canvas class="art art--oort rv d1" data-art="oort" data-form aria-hidden="true"></canvas>
     </div>
     <div class="lg-frame rv d1" id="lgFrame">
       <div class="lg-rail" role="tablist" aria-label="Recommendation lifecycle">
@@ -205,7 +206,7 @@
 
 <!-- AGENT BENCH — the work, not the count. Every card: what it watches,
      a SAMPLE exact-change rec, and where its ledger tally accrues. -->
-<section id="bench">
+<section id="bench" class="interlude">
   <div class="wrap">
     <div class="sec-row">
       <div class="sec-head rv">
@@ -215,7 +216,8 @@
       </div>
     </div>
     
-    <div class="rec-mock rv d1" aria-label="Sample recommendation card as it appears in the product">
+    <div class="feed-duo rv d1">
+    <div class="rec-mock" aria-label="Sample recommendation card as it appears in the product">
       <div class="rm-bar"><span>agent feed — one card</span><span>SAMPLE DATA · LIVE PRODUCT UI</span></div>
       <div class="rm-body">
         <div class="rm-head"><span>MARGIN SENTINEL</span><span>CONFIDENCE 78%</span></div>
@@ -224,6 +226,8 @@
         <div class="rm-proj">Projected <b>+$540/mo</b> contribution margin <span>· the formula is attached to the card</span></div>
         <div class="rm-actions"><span class="rm-btn rm-btn--approve">Approve</span><span class="rm-btn">Dismiss</span><span class="rm-note">Nothing executes without you</span></div>
       </div>
+    </div>
+      <canvas class="art art--bust" data-art="bust" data-form aria-hidden="true"></canvas>
     </div>
     <div class="bench-grid rv d1">
       <div class="bn-card">
@@ -381,7 +385,7 @@
         <h2>What your upload becomes.</h2>
         <p>Drop an order export — margins, LTV, and per-SKU profit are computed in about a minute. Audit any figure — every number carries the formula that produced it. Sample-store numbers below; the structure is the real report.</p>
       </div>
-      <canvas class="art art--inline rv d1" data-art="ghostchart" aria-hidden="true"></canvas>
+      <canvas class="art art--inline rv d1" data-art="ghostchart" data-form aria-hidden="true"></canvas>
     </div>
     <!-- Built mockup fragments (no screenshots) — mirrors the app's metric pack -->
     <div class="sc-panel rv d1" aria-label="The ProfitFalcon metric pack (illustrative)">
@@ -470,7 +474,7 @@
         <h2>Unit economics, computed.</h2>
         <p>Blended ROAS hides losers. ProfitFalcon computes profit per SKU, per cohort, per order — from your actual exports, not estimates.</p>
       </div>
-      <canvas class="art art--sphere rv d1" data-art="glitchsphere" aria-hidden="true"></canvas>
+      <canvas class="art art--sphere rv d1" data-art="glitchsphere" data-form aria-hidden="true"></canvas>
     </div>
     <div class="bento">
       <article class="cell wide rv">
@@ -562,7 +566,7 @@
         <div class="eyebrow">How it works</div>
         <h2>Export. Drop. Act.</h2>
       </div>
-      <canvas class="art art--inline rv d1" data-art="ascent" aria-hidden="true"></canvas>
+      <canvas class="art art--inline rv d1" data-art="ascent" data-form aria-hidden="true"></canvas>
     </div>
     <div class="steps">
       <div class="step rv">
@@ -703,8 +707,10 @@
 </section>
 
 <!-- MODEL CREDIBILITY -->
-<section id="engine" style="padding:44px 0 52px">
+<section id="engine" class="interlude interlude--engine">
   <div class="wrap">
+    <div class="eng-stream" style="top:18%" aria-hidden="true"></div>
+    <div class="eng-stream" style="bottom:14%;animation-duration:22s;animation-direction:reverse" aria-hidden="true"></div>
     <div class="sec-head rv" style="margin:0 auto;max-width:none;text-align:center">
       <div class="eyebrow" style="justify-content:center">The engine</div>
       <h2 style="font-size:clamp(1.3rem,2.6vw,1.9rem)">Runs on frontier models from Anthropic, OpenAI &amp; Google.</h2>
@@ -748,7 +754,6 @@
         <h2>Cheaper than one bad SKU.</h2>
         <p>Flat pricing — no per-order surcharges, no metering as your store grows. Founding pricing, locked for early accounts: there's no sales team or ad budget baked in — the analysis runs in your browser and the company is one person. Annual plans save ~2 months. Cancel anytime.</p>
       </div>
-      <canvas class="art art--inline rv d1" data-art="curve" aria-hidden="true"></canvas>
     </div>
     <div class="plans">
       <div class="plan rv">
@@ -874,7 +879,7 @@
     <h2>Find the SKUs draining your cash.</h2>
     <p>Drop in one export. See per-SKU profit, computed.</p>
     <a class="btn btn--primary" href="/auth?mode=signup">Start free</a>
-    <canvas class="art art--dome art--eclipse" data-art="eclipse" aria-hidden="true" style="max-width:760px;margin:60px auto 0"></canvas>
+    <canvas class="art art--dome art--eclipse" data-art="eclipse" data-form aria-hidden="true" style="max-width:760px;margin:60px auto 0"></canvas>
   </div>
 </section>
 
@@ -919,7 +924,7 @@
   </div>
 </footer>
 
-<script src="./dusk-art.js"></script>
+<script src="./dusk-art.js?v=20260722"></script>
 <script>
 (function(){
 "use strict";
