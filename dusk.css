@@ -1094,15 +1094,18 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .nav-dd-menu a{display:block;padding:9px 12px;font-family:"Instrument Sans","Hanken Grotesk",sans-serif;font-size:13px;font-weight:500;letter-spacing:.01em;text-transform:none;color:var(--mut);transition:color .15s ease,background .15s ease}
 .nav-dd-menu a:hover{color:var(--signal);background:var(--bg2)}
 
-/* ---------- INTERLUDE BANDS — theme-flipped full-bleed surfaces ---------- */
+/* ---------- INTERLUDE BANDS — theme-flipped full-bleed surfaces.
+   Same halftone atmosphere as the page body, opposite tile: bone dots on the
+   ink band (light mode), ink dots on the paper band (dark mode). `fixed`
+   keeps the tile aligned with the page atmosphere through the flip. ---------- */
 .interlude{
-  background:#0A0A0B;padding:76px 0;
+  background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,#0A0A0B;padding:76px 0;
   --bg:#0A0A0B;--bg2:#111110;--card:#141413;--fg:#EDECE8;
   --mut:rgba(237,236,232,.55);--line:rgba(237,236,232,.16);--line-soft:rgba(237,236,232,.09);--dot:rgba(237,236,232,.10);
   color:var(--fg);
 }
 [data-theme="dark"] .interlude{
-  background:#F8F7F3;
+  background:url(textures/halftone-ink.png) repeat fixed 0 0/720px 720px,#F8F7F3;
   --bg:#F8F7F3;--bg2:#FFFFFF;--card:#FFFFFF;--fg:#111110;
   --mut:rgba(17,17,16,.55);--line:rgba(17,17,16,.16);--line-soft:rgba(17,17,16,.09);--dot:rgba(17,17,16,.10);
 }

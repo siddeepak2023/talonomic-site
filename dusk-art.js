@@ -680,103 +680,147 @@ function formArt(cv, finalDraw, opts){
   requestAnimationFrame(frame);
 }
 
-/* ---------- BUST (A) — streaming-data profile, forms from the right ----------
-   Head-and-shoulders profile built from an analytic silhouette; horizontal
-   data-streaks trail off the leading edge like the reference art. */
-function bustPath(c2, w, h){
-  /* profile facing left, drawn in normalized coords scaled to canvas */
-  function P(u, v){ return [u * w, v * h]; }
-  c2.beginPath();
-  c2.moveTo.apply(c2, P(0.52, 0.06));                     /* crown */
-  c2.bezierCurveTo.apply(c2, P(0.36, 0.05).concat(P(0.26, 0.16), P(0.26, 0.28))); /* forehead */
-  c2.bezierCurveTo.apply(c2, P(0.26, 0.33).concat(P(0.24, 0.36), P(0.235, 0.40))); /* brow→nose bridge */
-  c2.bezierCurveTo.apply(c2, P(0.215, 0.455).concat(P(0.255, 0.465), P(0.26, 0.49))); /* nose */
-  c2.bezierCurveTo.apply(c2, P(0.255, 0.525).concat(P(0.27, 0.545), P(0.275, 0.565))); /* lips */
-  c2.bezierCurveTo.apply(c2, P(0.27, 0.60).concat(P(0.30, 0.63), P(0.315, 0.645))); /* chin */
-  c2.bezierCurveTo.apply(c2, P(0.34, 0.68).concat(P(0.38, 0.72), P(0.40, 0.78)));  /* jaw→neck */
-  c2.bezierCurveTo.apply(c2, P(0.34, 0.84).concat(P(0.22, 0.90), P(0.14, 1.0)));   /* chest */
-  c2.lineTo.apply(c2, P(0.98, 1.0));
-  c2.bezierCurveTo.apply(c2, P(0.90, 0.72).concat(P(0.86, 0.38), P(0.80, 0.20)));  /* back of head */
-  c2.bezierCurveTo.apply(c2, P(0.74, 0.08).concat(P(0.62, 0.05), P(0.52, 0.06)));
-  c2.closePath();
+/* ---------- BUST — front-facing figure, volumetric particle field ----------
+   Matches the hero terrain language: jittered grid samples, fbm-clumped
+   alpha, sparse oxblood sparks. No outlines and no facial features — the
+   form reads from density alone: rim-lit silhouette, dark face, glowing
+   chest/neck/crown, particle wisps streaming off the contour, ambient dust. */
+function bustHW(v){ /* half-width of the figure at height v, in h-units */
+  var head = 0;
+  if (v > 0.055 && v < 0.502) {
+    var e = 1 - Math.pow((v - 0.275) / 0.225, 2);
+    head = e > 0 ? 0.152 * Math.sqrt(e) : 0;
+    head += 0.012 * Math.exp(-Math.pow((v - 0.305) / 0.04, 2)); /* ears */
+  }
+  var neck = 0.068, t, s;
+  if (v <= 0.44) return head;
+  if (v < 0.545) { t = (v - 0.44) / 0.105; s = t * t * (3 - 2 * t); return head * (1 - s) + neck * s; }
+  if (v < 0.585) return neck;
+  t = Math.min(1, (v - 0.585) / 0.20); s = t * t * (3 - 2 * t);
+  return neck + (0.45 - neck) * s + Math.max(0, v - 0.80) * 0.18;
 }
 function drawBust(cv){
   var p = prepArt(cv); if (!p) return;
   var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  /* silhouette mask on a small offscreen for fast inside-tests */
-  var mw = 96, mh = Math.round(mw * h / w);
-  var m = document.createElement("canvas"); m.width = mw; m.height = mh;
-  var mc = m.getContext("2d"); bustPath(mc, mw, mh); mc.fillStyle = "#fff"; mc.fill();
-  var md = mc.getImageData(0, 0, mw, mh).data;
-  function inside(u, v){
-    var xi = Math.min(mw - 1, Math.max(0, (u * mw) | 0)), yi = Math.min(mh - 1, Math.max(0, (v * mh) | 0));
-    return md[(yi * mw + xi) * 4 + 3] > 40;
-  }
-  /* body dust — denser toward the leading (left) edge, fading toward the back */
-  var N = Math.max(3400, Math.floor(w * h / 110)), i, u, v;
-  for (i = 0; i < N; i++) {
-    u = hash2(i, 3); v = hash2(i, 7);
-    if (!inside(u, v)) continue;
-    var edge = 0;
-    for (var s = 1; s <= 3; s++) if (!inside(u - s * 0.02, v)) { edge = 1 - (s - 1) / 3; break; }
-    var al = 0.10 + 0.5 * Math.pow(fbm(u * 5, v * 5, 7.3), 1.2) + edge * 0.45;
-    c2.fillStyle = hash2(i, 31) > 0.992 ? sg : fg;
-    c2.globalAlpha = Math.min(0.9, al);
-    var big = hash2(i, 13) > 0.95;
-    c2.fillRect(u * w, v * h, big ? 1.8 : 1.2, big ? 1.8 : 1.2);
-  }
-  /* data streaks — horizontal dashes streaming off the leading edge */
-  for (i = 0; i < 220; i++) {
-    v = 0.06 + hash2(i, 17) * 0.88;
-    /* find silhouette leading edge at this row */
-    var ue = -1;
-    for (u = 0.02; u < 0.9; u += 0.01) if (inside(u, v)) { ue = u; break; }
-    if (ue < 0) continue;
-    var len = 0.04 + Math.pow(hash2(i, 19), 2) * 0.22;
-    var seg = 2 + (hash2(i, 23) * 4 | 0);
-    for (var g = 0; g < seg; g++) {
-      var gu = ue - len * (g + hash2(i * 7 + g, 29) * 0.6) / seg;
-      if (gu < 0.01) break;
-      c2.fillStyle = hash2(i + g, 37) > 0.985 ? sg : fg;
-      c2.globalAlpha = 0.5 * (1 - g / seg) * (0.4 + 0.6 * hash2(i, 41));
-      c2.fillRect(gu * w, v * h, 2 + hash2(g, i) * 5, 1.1);
+  var AR = w / h;
+  var COLS = Math.min(320, Math.floor(w / 2.4)), ROWS = Math.floor(h / 2.4);
+  for (var r = 0; r < ROWS; r++) {
+    var v = r / (ROWS - 1);
+    for (var c = 0; c <= COLS; c++) {
+      var u = c / COLS + (hash2(c, r) - 0.5) * (1.6 / COLS);
+      var vj = v + (hash2(c + 57, r + 91) - 0.5) * (1.4 / ROWS);
+      var x = (u - 0.5) * AR, ax = Math.abs(x);
+      var hw = bustHW(vj);
+      if (hw <= 0 || ax > hw) continue;
+      var depth = 1 - ax / hw; /* 0 at silhouette edge -> 1 at center line */
+      var rim = Math.exp(-Math.pow(depth / 0.15, 2));
+      var chest = Math.exp(-(Math.pow((vj - 0.88) / 0.17, 2) + Math.pow(x / 0.26, 2)));
+      var neckG = Math.exp(-(Math.pow((vj - 0.565) / 0.075, 2) + Math.pow(x / 0.11, 2)));
+      var crown = Math.exp(-(Math.pow((vj - 0.10) / 0.075, 2) + Math.pow(x / 0.12, 2)));
+      var faceHole = Math.exp(-(Math.pow((vj - 0.30) / 0.115, 2) + Math.pow(x / 0.088, 2)));
+      var clump = Math.pow(fbm(u * 6.5, vj * 6.5, 11.3), 1.15);
+      var al = (0.04 + 1.35 * clump * (0.20 + 0.95 * rim + 0.95 * chest + 0.8 * neckG + 0.5 * crown)) * (1 - 0.88 * faceHole);
+      if (vj > 0.93) al *= 1 - ((vj - 0.93) / 0.07) * 0.55; /* dissolve at the band edge */
+      if (al < 0.045) continue;
+      var spark = clump > 0.5 && ((c * 7 + r * 13) % 127) === 0;
+      c2.fillStyle = spark ? sg : fg;
+      c2.globalAlpha = spark ? 0.9 : Math.min(0.95, al);
+      var sz = al > 0.7 ? 1.8 : 1.4;
+      c2.fillRect(u * w, vj * h, sz, sz);
     }
+  }
+  /* wisps — particle hairs streaming off the contour (up off the crown,
+     outward off shoulders and arms) */
+  for (var i = 0; i < 320; i++) {
+    var vv = 0.06 + hash2(i, 3) * 0.92;
+    var hw2 = bustHW(vv); if (hw2 <= 0) continue;
+    var side = hash2(i, 5) > 0.5 ? 1 : -1;
+    var dirx = side * (0.5 + hash2(i, 7)), diry = (hash2(i, 9) - 0.5) * 0.9;
+    if (vv < 0.14) { dirx = (hash2(i, 9) - 0.5) * 1.4; diry = -1.1; } /* crown spikes rise */
+    var L = 0.018 + Math.pow(hash2(i, 11), 2) * 0.11;
+    var steps = 3 + (hash2(i, 13) * 5 | 0);
+    for (var g = 0; g < steps; g++) {
+      var tt = g / steps + hash2(i * 3 + g, 17) * 0.12;
+      var xh = side * hw2 + dirx * L * tt, vh = vv + diry * L * tt * 0.8;
+      var uu = 0.5 + xh / AR;
+      if (uu < 0 || uu > 1 || vh < 0) break;
+      c2.fillStyle = hash2(i + g, 23) > 0.99 ? sg : fg;
+      c2.globalAlpha = 0.5 * (1 - tt) * (0.3 + 0.7 * hash2(i, 19));
+      c2.fillRect(uu * w, vh * h, 1.5, 1.2);
+    }
+  }
+  /* ambient dust — the figure floats in particles, refs never have it clean */
+  for (i = 0; i < 620; i++) {
+    c2.fillStyle = fg;
+    c2.globalAlpha = 0.03 + 0.10 * Math.pow(hash2(i, 41), 2.2);
+    c2.fillRect(hash2(i, 31) * w, hash2(i, 37) * h, 1.1, 1.1);
   }
   c2.globalAlpha = 1;
 }
 
-/* ---------- OORT (ledger) — point-cloud sphere with scattered halo ---------- */
+/* ---------- OORT (ledger) — dense volumetric particle sphere ----------
+   Not a lattice: a mottled, clumped swarm. Dense jittered surface shell +
+   inner shell for thickness + interior fill + bright polar caps + a tight
+   dust skin. Clump value is baked per point (object space) so rotation keeps
+   the mottling stable. */
 function oortPoints(R){
-  var pts = [], N = 2100, i, GA = Math.PI * (3 - Math.sqrt(5));
-  for (i = 0; i < N; i++) {
-    var yy = 1 - (i / (N - 1)) * 2, rad = Math.sqrt(1 - yy * yy), th = GA * i;
-    var shell = 1 + (fbm(Math.cos(th) * 2 + 2, yy * 2 + 2, 4.2) - 0.5) * 0.24;
-    pts.push({ x: Math.cos(th) * rad * R * shell, y: yy * R * shell, z: Math.sin(th) * rad * R * shell, halo: 0 });
+  var pts = [], i, GA = Math.PI * (3 - Math.sqrt(5));
+  function push(x, y, z, k){
+    pts.push({ x: x, y: y, z: z, k: k, c: fbm((x / R + 1) * 2.2, (y / R + 1) * 2.2, 3.3 + z / R) });
   }
-  for (i = 0; i < 520; i++) {
-    var a = hash2(i, 3) * Math.PI * 2, b = Math.acos(2 * hash2(i, 7) - 1);
-    var rr = R * (1.12 + Math.pow(hash2(i, 11), 1.6) * 0.55);
-    pts.push({ x: Math.sin(b) * Math.cos(a) * rr, y: Math.cos(b) * rr, z: Math.sin(b) * Math.sin(a) * rr, halo: 1 });
+  var NS = 4600;
+  for (i = 0; i < NS; i++) { /* main shell */
+    var yy = 1 - (i / (NS - 1)) * 2, rad = Math.sqrt(1 - yy * yy);
+    var th = GA * i + (hash2(i, 21) - 0.5) * 0.5;
+    var rr = R * (1 + (hash2(i, 3) - 0.5) * 0.06);
+    push(Math.cos(th) * rad * rr, yy * rr, Math.sin(th) * rad * rr, 0);
+  }
+  for (i = 0; i < 1300; i++) { /* inner shell — thickness */
+    var a = hash2(i, 5) * Math.PI * 2, b = Math.acos(2 * hash2(i, 7) - 1);
+    var r2 = R * (0.86 + hash2(i, 9) * 0.12);
+    push(Math.sin(b) * Math.cos(a) * r2, Math.cos(b) * r2, Math.sin(b) * Math.sin(a) * r2, 1);
+  }
+  for (i = 0; i < 850; i++) { /* interior swarm */
+    var a3 = hash2(i, 25) * Math.PI * 2, b3 = Math.acos(2 * hash2(i, 27) - 1);
+    var r3 = R * 0.84 * Math.cbrt(hash2(i, 29));
+    push(Math.sin(b3) * Math.cos(a3) * r3, Math.cos(b3) * r3, Math.sin(b3) * Math.sin(a3) * r3, 1);
+  }
+  for (i = 0; i < 700; i++) { /* polar caps — the refs' bright crowns */
+    var sgn = i % 2 ? 1 : -1;
+    var yy2 = sgn * (0.72 + 0.27 * hash2(i, 11)), rad2 = Math.sqrt(Math.max(0, 1 - yy2 * yy2));
+    var th2 = hash2(i, 13) * Math.PI * 2;
+    var rr2 = R * (1 + (hash2(i, 15) - 0.5) * 0.05);
+    push(Math.cos(th2) * rad2 * rr2, yy2 * rr2, Math.sin(th2) * rad2 * rr2, 3);
+  }
+  for (i = 0; i < 240; i++) { /* tight dust skin */
+    var a2 = hash2(i, 31) * Math.PI * 2, b2 = Math.acos(2 * hash2(i, 33) - 1);
+    var r4 = R * (1.04 + Math.pow(hash2(i, 17), 2.4) * 0.18);
+    push(Math.sin(b2) * Math.cos(a2) * r4, Math.cos(b2) * r4, Math.sin(b2) * Math.sin(a2) * r4, 2);
   }
   return pts;
 }
 function drawOortFrame(cv, rot){
   var p = prepArt(cv); if (!p) return;
   var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  var R = Math.min(w, h) * 0.34, cx = w / 2, cy = h * 0.5;
-  if (!cv.__oort) cv.__oort = oortPoints(R);
-  var pts = cv.__oort, tilt = 0.42, ct = Math.cos(tilt), st = Math.sin(tilt);
+  var R = Math.min(w, h) * 0.40, cx = w / 2, cy = h * 0.5;
+  if (!cv.__oort || cv.__oortR !== R) { cv.__oort = oortPoints(R); cv.__oortR = R; }
+  var pts = cv.__oort, tilt = 0.35, ct = Math.cos(tilt), st = Math.sin(tilt);
+  var cr = Math.cos(rot), sr = Math.sin(rot);
   for (var i = 0; i < pts.length; i++) {
     var q = pts[i];
-    var xr = q.x * Math.cos(rot) + q.z * Math.sin(rot);
-    var zr = -q.x * Math.sin(rot) + q.z * Math.cos(rot);
+    var xr = q.x * cr + q.z * sr;
+    var zr = -q.x * sr + q.z * cr;
     var yr = q.y * ct - zr * st, zz = q.y * st + zr * ct;
-    var depth = (zz / R + 1.7) / 2.7;
-    var al = q.halo ? 0.10 + 0.25 * depth : 0.10 + 0.62 * Math.pow(depth, 1.6);
-    c2.fillStyle = (i % 149 === 0) ? sg : fg;
-    c2.globalAlpha = Math.min(0.85, al);
-    var sz = q.halo ? 1.1 : (depth > 0.72 ? 1.7 : 1.2);
-    c2.fillRect(cx + xr, cy + yr, sz, sz);
+    var depth = Math.max(0, Math.min(1, (zz / R + 1) / 2)); /* 0 back -> 1 front */
+    var clump = 0.35 + 1.15 * q.c;
+    var al, sz;
+    if (q.k === 2) { al = 0.05 + 0.13 * depth; sz = 1; }
+    else if (q.k === 3) { al = (0.22 + 0.68 * depth) * clump; sz = depth > 0.6 ? 2 : 1.5; }
+    else if (q.k === 1) { al = (0.05 + 0.38 * Math.pow(depth, 1.7)) * clump; sz = 1.2; }
+    else { al = (0.09 + 0.62 * Math.pow(depth, 1.6)) * clump; sz = depth > 0.75 ? 1.8 : 1.3; }
+    c2.fillStyle = (i % 137 === 0) ? sg : fg;
+    c2.globalAlpha = Math.max(0.02, Math.min(0.95, al));
+    c2.fillRect(cx + xr - sz / 2, cy + yr - sz / 2, sz, sz);
   }
   c2.globalAlpha = 1;
 }
@@ -784,10 +828,20 @@ function drawOort(cv){ drawOortFrame(cv, cv.__rot || 0.6); }
 function startOortIdle(cv){
   if (reduceMotion) return;
   cv.__rot = cv.__rot || 0.6;
-  var visible = false, running = false;
+  cv.__vel = 0.0026;
+  var visible = false, running = false, lastX = null;
+  cv.style.touchAction = "pan-y";
+  cv.style.cursor = "grab";
+  cv.addEventListener("pointermove", function(e){
+    if (lastX !== null && e.buttons) cv.__rot += (e.clientX - lastX) * 0.006; /* drag spins */
+    lastX = e.clientX;
+    cv.__vel = 0.006; /* hover quickens the drift */
+  });
+  cv.addEventListener("pointerleave", function(){ lastX = null; });
   function spin(){
     if (!visible) { running = false; return; }
-    cv.__rot += 0.0028;
+    cv.__vel += (0.0026 - cv.__vel) * 0.03;
+    cv.__rot += cv.__vel;
     drawOortFrame(cv, cv.__rot);
     running = true;
     setTimeout(function(){ requestAnimationFrame(spin); }, 50); /* ~20fps is plenty */
@@ -917,7 +971,7 @@ var formIO = new IntersectionObserver(function(entries){
     formIO.unobserve(cv);
     if (!fn) return;
     formArt(cv, fn, {
-      from: cv.getAttribute("data-art") === "bust" ? "right" : "scatter",
+      from: "scatter", /* volumetric figures assemble from dust, not a side */
       onFormed: cv.getAttribute("data-art") === "oort" ? function(){ startOortIdle(cv); } : null
     });
     if (cv.getAttribute("data-art") === "oort" && reduceMotion) cv.dataset.formed = "1";
