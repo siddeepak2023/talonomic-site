@@ -177,6 +177,7 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .bento .cell{
   border:1px solid var(--line);background:var(--card);padding:28px;
   transition:border-color .25s ease;
+  min-width:0; /* grid items default min-width:auto — nowrap p-tabs content forced 375px pages to 407px */
 }
 .bento .cell:hover{border-color:var(--fg)}
 .bento .cell.wide{grid-column:span 2}
