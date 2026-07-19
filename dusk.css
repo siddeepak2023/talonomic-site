@@ -168,8 +168,10 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .sec-head h2{font-size:clamp(2rem,4.4vw,3.1rem);margin-bottom:18px}
 .sec-head p{color:var(--mut)}
 .sec-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+#benefits .sec-row{justify-content:flex-start;gap:64}
+#benefits .sec-row .sec-head{flex:none;max-width:600px}
 .art{display:block}
-.art--sphere{width:300px;height:300px;flex:none;margin-bottom:40px}
+.art--sphere{width:350px;height:350px;flex:none;margin-bottom:8px}
 @media(max-width:920px){.art--sphere{display:none}}
 
 /* ============ BENTO ============ */
@@ -1105,7 +1107,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
   --mut:rgba(237,236,232,.55);--line:rgba(237,236,232,.16);--line-soft:rgba(237,236,232,.09);--dot:rgba(237,236,232,.10);
   color:var(--fg);
 }
-[data-theme="dark"] .interlude{
+:root:not([data-theme="light"]) .interlude{
   background:url(textures/halftone-ink.png) repeat fixed 0 0/720px 720px,#F8F7F3;
   --bg:#F8F7F3;--bg2:#FFFFFF;--card:#FFFFFF;--fg:#111110;
   --mut:rgba(17,17,16,.55);--line:rgba(17,17,16,.16);--line-soft:rgba(17,17,16,.09);--dot:rgba(17,17,16,.10);

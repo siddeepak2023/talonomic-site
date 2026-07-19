@@ -880,19 +880,28 @@ function drawOort(cv){ drawOortFrame(cv, cv.__rot || 0.6); }
 function startOortIdle(cv){
   if (reduceMotion) return;
   cv.__rot = cv.__rot || 0.6;
+  cv.__dir = 1;               /* orbit direction, flips every 3s */
+  cv.__flipAt = 0;            /* set on first frame */
   cv.__vel = 0.0026;
-  var visible = false, running = false, lastX = null;
+  var BASE = 0.0026, PERIOD = 3000;
+  var visible = false, running = false, lastX = null, hoverUntil = 0;
   cv.style.touchAction = "pan-y";
   cv.style.cursor = "grab";
   cv.addEventListener("pointermove", function(e){
     if (lastX !== null && e.buttons) cv.__rot += (e.clientX - lastX) * 0.006; /* drag spins */
     lastX = e.clientX;
-    cv.__vel = 0.006; /* hover quickens the drift */
+    hoverUntil = performance.now() + 260; /* hover quickens the drift briefly */
   });
   cv.addEventListener("pointerleave", function(){ lastX = null; });
   function spin(){
     if (!visible) { running = false; return; }
-    cv.__vel += (0.0026 - cv.__vel) * 0.03;
+    var now = performance.now();
+    if (!cv.__flipAt) cv.__flipAt = now + PERIOD;
+    if (now >= cv.__flipAt) { cv.__dir = -cv.__dir; cv.__flipAt = now + PERIOD; }
+    /* target velocity in the current direction; ease toward it so the reversal
+       glides smoothly through zero instead of snapping */
+    var target = cv.__dir * (now < hoverUntil ? 0.006 : BASE);
+    cv.__vel += (target - cv.__vel) * 0.03;
     cv.__rot += cv.__vel;
     drawOortFrame(cv, cv.__rot);
     running = true;
