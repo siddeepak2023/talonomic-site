@@ -1146,3 +1146,10 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .sec-head .eyebrow::before{transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.22,.8,.24,1) .15s}
 .sec-head.rv.on .eyebrow::before{transform:scaleX(1)}
 @media (prefers-reduced-motion: reduce){.sec-head .eyebrow::before{transform:none;transition:none}}
+
+/* Perf: let the browser skip layout/paint for offscreen lower sections.
+   Only sections BELOW the falcon dock (#bench) — keeps dock scroll math intact.
+   contain-intrinsic-size remembers real height after first render (no jump). */
+#gallery,#integrations,#engine,#pricing,#faq{
+  content-visibility:auto;contain-intrinsic-size:auto 720px;
+}

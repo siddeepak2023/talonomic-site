@@ -977,13 +977,8 @@ document.querySelectorAll("[data-art][data-form]").forEach(function(cv){
   if (reduceMotion) { var fn = finalDrawFor(cv); if (fn) { fn(cv); cv.dataset.formed = "1"; } return; }
   formIO.observe(cv);
 });
-/* Oort: no load-in fly-in. Render directly, then gentle idle drift. */
-(function(){
-  var o = document.querySelector('[data-art="oort"]');
-  if (!o) return;
-  drawOort(o); o.dataset.formed = "1";
-  startOortIdle(o);
-});
+/* Oort: static. Rendered once by renderArts() (no data-form, no idle spin) —
+   zero ongoing main-thread work. */
 
 /* ---------- EYEBROW SCRAMBLE — mono labels decode on reveal ---------- */
 var GLY = "▪▫◦·:∙+×/\\|—01";
