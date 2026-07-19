@@ -71,12 +71,8 @@ if (follow && dockSection) {
   dcv.style.cssText = "position:absolute;z-index:-1;pointer-events:none;opacity:0";
   dockSection.appendChild(dcv);
 }
-window.addEventListener("pointermove", function(e){
-  if (!canvas) return;
-  var r = canvas.getBoundingClientRect();
-  gmx = e.clientX - r.left; gmy = e.clientY - r.top;
-}, { passive: true });
-document.addEventListener("pointerleave", function(){ gmx = -1e4; gmy = -1e4; });
+/* mouse-follow ripple removed: negligible delight, and its per-move
+   getBoundingClientRect (forced reflow) + per-frame ripple cost hurt scroll. */
 (function loadBird(){
   if (!follow) return;
   var img = new Image();
@@ -260,13 +256,22 @@ function resizeTerrain(){
   if (dockShown) drawDockFalcon(); // resize invalidates the docked bird's geometry
   drawFrame(last / 1000);
 }
+var heroFrozen = false, probeN = 0, probeStart = 0;
 function loop(ts){
+  if (heroFrozen) return; /* weak device: hero left as a static frame */
   requestAnimationFrame(loop);
   if (document.hidden) return;
   if (!heroVisible && !dockShown && mE < 0.01) return; /* resting + offscreen: skip redraw */
-  if (mE < 0.01 && ts - last < 33) return;
+  if (ts - last < 33) return; /* 30fps cap always — halves scroll-morph draw cost, no visible change */
   last = ts;
   drawFrame(ts / 1000);
+  /* adaptive: if the first ~40 drawn frames can't sustain ~24fps, this GPU
+     can't run the wave smoothly — freeze to a clean static hero and stop. */
+  if (probeStart === 0) probeStart = ts;
+  if (++probeN === 40) {
+    var fps = 40000 / Math.max(1, ts - probeStart);
+    if (fps < 24) { window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true; }
+  }
 }
 if (follow) window.addEventListener("scroll", heroScroll, { passive: true });
 
