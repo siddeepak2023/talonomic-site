@@ -880,21 +880,13 @@ function drawOort(cv){ drawOortFrame(cv, cv.__rot || 0.6); }
 function startOortIdle(cv){
   if (reduceMotion) return;
   cv.__rot = cv.__rot || 0.6;
-  cv.__dir = 1;               /* orbit direction, flips every PERIOD */
-  cv.__flipAt = 0;
-  cv.__vel = 0;
-  /* Gentle, non-interactive drift. Slow speed + ~12fps redraw keeps CPU low on
-     any device; no pointer handlers so it never gets heavy. */
-  var BASE = 0.011, PERIOD = 6000, FRAME = 83;
+  /* Constant slow one-direction drift, non-interactive, ~12fps redraw — light
+     on any device and steadier to look at than the reversing orbit. */
+  var SPEED = 0.010, FRAME = 83;
   var visible = false, running = false;
   function spin(){
     if (!visible) { running = false; return; }
-    var now = performance.now();
-    if (!cv.__flipAt) cv.__flipAt = now + PERIOD;
-    if (now >= cv.__flipAt) { cv.__dir = -cv.__dir; cv.__flipAt = now + PERIOD; }
-    /* ease toward the slow target so the reversal glides through zero */
-    cv.__vel += (cv.__dir * BASE - cv.__vel) * 0.1;
-    cv.__rot += cv.__vel;
+    cv.__rot += SPEED;
     drawOortFrame(cv, cv.__rot);
     running = true;
     setTimeout(function(){ requestAnimationFrame(spin); }, FRAME);
