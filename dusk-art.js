@@ -880,32 +880,24 @@ function drawOort(cv){ drawOortFrame(cv, cv.__rot || 0.6); }
 function startOortIdle(cv){
   if (reduceMotion) return;
   cv.__rot = cv.__rot || 0.6;
-  cv.__dir = 1;               /* orbit direction, flips every 3s */
-  cv.__flipAt = 0;            /* set on first frame */
-  cv.__vel = 0.0026;
-  var BASE = 0.03, PERIOD = 5000; /* gentle: ~half rotation per 5s phase at 20fps */
-  var visible = false, running = false, lastX = null, hoverUntil = 0;
-  cv.style.touchAction = "pan-y";
-  cv.style.cursor = "grab";
-  cv.addEventListener("pointermove", function(e){
-    if (lastX !== null && e.buttons) cv.__rot += (e.clientX - lastX) * 0.006; /* drag spins */
-    lastX = e.clientX;
-    hoverUntil = performance.now() + 260; /* hover quickens the drift briefly */
-  });
-  cv.addEventListener("pointerleave", function(){ lastX = null; });
+  cv.__dir = 1;               /* orbit direction, flips every PERIOD */
+  cv.__flipAt = 0;
+  cv.__vel = 0;
+  /* Gentle, non-interactive drift. Slow speed + ~12fps redraw keeps CPU low on
+     any device; no pointer handlers so it never gets heavy. */
+  var BASE = 0.011, PERIOD = 6000, FRAME = 83;
+  var visible = false, running = false;
   function spin(){
     if (!visible) { running = false; return; }
     var now = performance.now();
     if (!cv.__flipAt) cv.__flipAt = now + PERIOD;
     if (now >= cv.__flipAt) { cv.__dir = -cv.__dir; cv.__flipAt = now + PERIOD; }
-    /* target velocity in the current direction; ease toward it so the reversal
-       glides smoothly through zero instead of snapping */
-    var target = cv.__dir * (now < hoverUntil ? BASE * 1.6 : BASE);
-    cv.__vel += (target - cv.__vel) * 0.12; /* quick ramp to the gentle target, eased flip */
+    /* ease toward the slow target so the reversal glides through zero */
+    cv.__vel += (cv.__dir * BASE - cv.__vel) * 0.1;
     cv.__rot += cv.__vel;
     drawOortFrame(cv, cv.__rot);
     running = true;
-    setTimeout(function(){ requestAnimationFrame(spin); }, 50); /* ~20fps is plenty */
+    setTimeout(function(){ requestAnimationFrame(spin); }, FRAME);
   }
   new IntersectionObserver(function(en){
     visible = en[0].isIntersecting;
