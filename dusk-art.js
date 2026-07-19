@@ -972,7 +972,9 @@ var formIO = new IntersectionObserver(function(entries){
     formIO.unobserve(cv);
     if (!fn) return;
     formArt(cv, fn, {
-      from: "scatter", /* volumetric figures assemble from dust, not a side */
+      /* oort flies in from the right edge — scatter made it look like it
+         assembled from behind the ledger card */
+      from: cv.getAttribute("data-art") === "oort" ? "right" : "scatter",
       onFormed: cv.getAttribute("data-art") === "oort" ? function(){ startOortIdle(cv); } : null
     });
     if (cv.getAttribute("data-art") === "oort" && reduceMotion) cv.dataset.formed = "1";
