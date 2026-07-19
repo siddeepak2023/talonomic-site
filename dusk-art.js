@@ -883,7 +883,7 @@ function startOortIdle(cv){
   cv.__dir = 1;               /* orbit direction, flips every 3s */
   cv.__flipAt = 0;            /* set on first frame */
   cv.__vel = 0.0026;
-  var BASE = 0.0026, PERIOD = 3000;
+  var BASE = 0.03, PERIOD = 5000; /* gentle: ~half rotation per 5s phase at 20fps */
   var visible = false, running = false, lastX = null, hoverUntil = 0;
   cv.style.touchAction = "pan-y";
   cv.style.cursor = "grab";
@@ -900,8 +900,8 @@ function startOortIdle(cv){
     if (now >= cv.__flipAt) { cv.__dir = -cv.__dir; cv.__flipAt = now + PERIOD; }
     /* target velocity in the current direction; ease toward it so the reversal
        glides smoothly through zero instead of snapping */
-    var target = cv.__dir * (now < hoverUntil ? 0.006 : BASE);
-    cv.__vel += (target - cv.__vel) * 0.03;
+    var target = cv.__dir * (now < hoverUntil ? BASE * 1.6 : BASE);
+    cv.__vel += (target - cv.__vel) * 0.12; /* quick ramp to the gentle target, eased flip */
     cv.__rot += cv.__vel;
     drawOortFrame(cv, cv.__rot);
     running = true;
