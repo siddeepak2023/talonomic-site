@@ -904,57 +904,6 @@ function startOortIdle(cv){
   }, { threshold: 0.1 }).observe(cv);
 }
 
-/* ---------- STEPS (replaces the chronometer on "Export. Drop. Act.") ----------
-   Ascending dotted route with three waypoint platforms — 01 export, 02 drop,
-   03 act — final node in oxblood. */
-function drawAscent(cv){
-  var p = prepArt(cv); if (!p) return;
-  var c2 = p.c2, w = p.w, h = p.h, fg = p.fg, sg = p.sg;
-  var nodes = [[0.16, 0.78], [0.5, 0.52], [0.84, 0.24]];
-  function py(u){ /* smooth rising path through the nodes */
-    if (u <= 0.5) { var t1 = (u - 0.16) / 0.34; return 0.78 + (0.52 - 0.78) * (t1 < 0 ? 0 : t1 * t1 * (3 - 2 * t1)); }
-    var t2 = (u - 0.5) / 0.34; t2 = Math.max(0, Math.min(1, t2));
-    return 0.52 + (0.24 - 0.52) * (t2 * t2 * (3 - 2 * t2));
-  }
-  /* dust field under the path — a ridge the route climbs */
-  var N = Math.max(2200, Math.floor(w * h / 140));
-  for (var i = 0; i < N; i++) {
-    var u = hash2(i, 3), v = hash2(i, 7);
-    var yy = py(u);
-    if (v < yy || v > yy + 0.45) continue;
-    var fall = (v - yy) / 0.45;
-    var al = (0.05 + 0.45 * Math.pow(fbm(u * 6, v * 6, 3.7), 1.3)) * (1 - fall * 0.8);
-    if (al < 0.04) continue;
-    c2.fillStyle = fg; c2.globalAlpha = Math.min(0.7, al);
-    c2.fillRect(u * w, v * h, 1.2, 1.2);
-  }
-  /* dotted route */
-  for (var uu = 0.10; uu <= 0.90; uu += 0.006) {
-    c2.fillStyle = fg; c2.globalAlpha = 0.65;
-    c2.fillRect(uu * w, py(uu) * h, 1.6, 1.6);
-  }
-  /* waypoints — dot-burst platforms, last one oxblood */
-  nodes.forEach(function(nd, ix){
-    var nx = nd[0] * w, ny = nd[1] * h, last = ix === nodes.length - 1;
-    for (var k = 0; k < 90; k++) {
-      var a = hash2(k, ix + 5) * Math.PI * 2, r = Math.pow(hash2(k, ix + 9), 1.6) * 20;
-      c2.fillStyle = fg; c2.globalAlpha = 0.4 * (1 - r / 20);
-      c2.fillRect(nx + Math.cos(a) * r, ny + Math.sin(a) * r * 0.5, 1.2, 1.2);
-    }
-    if (last) {
-      var grad = c2.createRadialGradient(nx, ny, 0, nx, ny, 16);
-      grad.addColorStop(0, sg); grad.addColorStop(1, "rgba(0,0,0,0)");
-      c2.globalAlpha = 0.5; c2.fillStyle = grad;
-      c2.beginPath(); c2.arc(nx, ny, 16, 0, 7); c2.fill();
-    }
-    c2.fillStyle = last ? sg : fg; c2.globalAlpha = 0.95;
-    c2.fillRect(nx - 3, ny - 3, 6, 6);
-    c2.globalAlpha = 0.35; c2.fillStyle = fg;
-    c2.fillRect(nx - 0.5, ny + 8, 1, 10);
-  });
-  c2.globalAlpha = 1;
-}
-
 function renderArts(){
   document.querySelectorAll("[data-art]").forEach(function(cv){
     var kind = cv.getAttribute("data-art");
