@@ -263,7 +263,7 @@ function resizeTerrain(){
 function loop(ts){
   requestAnimationFrame(loop);
   if (document.hidden) return;
-  if (!heroVisible && !dockShown && mE < 0.01) { /* resting + offscreen */ }
+  if (!heroVisible && !dockShown && mE < 0.01) return; /* resting + offscreen: skip redraw */
   if (mE < 0.01 && ts - last < 33) return;
   last = ts;
   drawFrame(ts / 1000);
@@ -984,6 +984,13 @@ var formIO = new IntersectionObserver(function(entries){
 document.querySelectorAll("[data-art][data-form]").forEach(function(cv){
   if (reduceMotion) { var fn = finalDrawFor(cv); if (fn) { fn(cv); cv.dataset.formed = "1"; } return; }
   formIO.observe(cv);
+});
+/* Oort: no load-in fly-in. Render directly, then gentle idle drift. */
+(function(){
+  var o = document.querySelector('[data-art="oort"]');
+  if (!o) return;
+  drawOort(o); o.dataset.formed = "1";
+  startOortIdle(o);
 });
 
 /* ---------- EYEBROW SCRAMBLE — mono labels decode on reveal ---------- */

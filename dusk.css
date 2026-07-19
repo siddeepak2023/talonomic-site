@@ -170,6 +170,7 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .sec-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
 .art{display:block}
 .art--sphere{width:190px;height:190px;flex:none;margin-bottom:64px}
+#benefits .art--sphere{margin-right:105px} /* nudge checkmark left to the timer column (transform conflicts with .rv reveal) */
 @media(max-width:920px){.art--sphere{display:none}}
 
 /* ============ BENTO ============ */
