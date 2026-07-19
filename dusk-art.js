@@ -796,7 +796,7 @@ function drawBust(cv){
     if (fd <= 0.02 && hash2(i, 23) > fd + 0.15) continue;
     var spark = hash2(i, 31) > 0.9986;
     c2.fillStyle = spark ? sg : fg;
-    c2.globalAlpha = (spark ? 0.9 : Math.min(0.95, 0.24 + 0.66*Lv) * (0.6 + 0.4*hash2(i,13))) * (0.25 + 0.75*fd);
+    c2.globalAlpha = (spark ? 0.95 : Math.min(1, 0.42 + 0.6*Lv) * (0.75 + 0.25*hash2(i,13))) * (0.3 + 0.7*fd);
     var szb = Lv > 0.85 && hash2(i, 17) > 0.965 ? 1.7 : 1.05;
     c2.fillRect(ux*w, uy*h, szb, szb);
   }

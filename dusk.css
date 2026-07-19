@@ -791,7 +791,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 
 /* onboarding walkthrough video frame (shown only when the mp4 exists) */
 /* narrower than full bleed: keeps the docked falcon's claw clear of the frame */
-.onb-video{border:1px solid var(--line);background:var(--bg);margin-bottom:26px;max-width:820px}
+.onb-video{border:1px solid var(--line);background:var(--bg);margin:0 auto 26px;max-width:820px}
 .onb-video video{display:block;width:100%;height:auto}
 
 /* ── scm v2 minis (ported from talon showcase.css) ── */
@@ -1125,10 +1125,10 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
    CSS-scaled 1.4 as one bitmap — same picture, not re-rendered. Absolutely placed
    so the card sizes on its own; anchored bottom-right, scales up-left, right edge
    pushed past the content edge, bottom at the card line. Neck cut kept (no mask). */
-.art--bust{position:absolute;right:-48px;bottom:0;width:430px;height:340px;
+.art--bust{position:absolute;right:-64px;bottom:20px;width:430px;height:340px;
   transform:scale(1.12) !important;transform-origin:100% 100%;image-rendering:auto;pointer-events:none}
 @media(max-width:1120px){.art--bust{transform:scale(1.05) !important;right:-24px}}
-.art--oort{width:320px;height:320px;display:block;justify-self:end;align-self:center}
+.art--oort{width:320px;height:320px;display:block;justify-self:end;align-self:center;transform:translateY(-20px)}
 @media(max-width:860px){
   .feed-duo{position:static}
   .art--bust{position:static;transform:scale(1) !important;width:min(360px,84%);height:auto;aspect-ratio:430/340;margin:8px auto 0}
