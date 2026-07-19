@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260723">
+<link rel="stylesheet" href="./dusk.css?v=20260724">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -65,6 +65,7 @@
           <a href="#engine" role="menuitem">Engine</a>
         </div>
       </div>
+      <a href="#bench">Agents</a>
       <a href="#integrations">Integrations</a>
       <a href="#pricing">Pricing</a>
       <a href="./blog/">Blog</a>
@@ -110,7 +111,7 @@
       <div class="sec-head rv" data-dock>
         <div class="eyebrow">See it in action</div>
         <h2>Watch it find the money.</h2>
-        <p>Four features on a sample Shopify export — the flow and report structure are the real product. Click a scene or let it roll.</p>
+        <p>Five features on a sample Shopify export — the flow and report structure are the real product. Click a scene or let it roll.</p>
       </div>
     </div>
     <!-- onboarding walkthrough video — real capture of the live sample-store dashboard -->
@@ -924,7 +925,7 @@
   </div>
 </footer>
 
-<script src="./dusk-art.js?v=20260722"></script>
+<script src="./dusk-art.js?v=20260724"></script>
 <script>
 (function(){
 "use strict";
@@ -981,6 +982,17 @@ window.DUSK.demoRunner({
         { static: "QUEUED", label: "Rec → your approval" }
       ],
       ins: "<b>A +8% test flips Trail Mini profitable</b> in simulation — margin goes −$1.82 to +$0.71 per unit. Queued for your approval."
+    },
+    {
+      label: "LEDGER", cap: "THE LEDGER — EVERY APPROVED MOVE, MEASURED AGAINST ITS PROJECTION",
+      q: "did last month's approvals actually pay off?",
+      code: 'moves = ledger.approved(days=30)\nfor m in moves:\n    m.actual = margin_delta(m.sku, m.date)\nledger.compare(projected, actual)',
+      tiles: [
+        { v: 7, label: "Moves approved" },
+        { static: "+$1,240", label: "Projected / mo" },
+        { static: "+$1,095", label: "Measured so far" }
+      ],
+      ins: "<b>Every approval is a row with a receipt</b> — projection next to measured result. The ledger is the audit trail your P&amp;L never gives you."
     }
   ]
 });
