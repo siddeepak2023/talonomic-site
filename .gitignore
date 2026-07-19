@@ -3,3 +3,10 @@ ecommerce-product-spec.md
 .firebase/
 .claude/
 app/
+# head-art scratch artifacts (local only)
+_head-test.html
+_headmesh.js
+_render-head.html
+head.png
+head_v*.png
+test-art.html

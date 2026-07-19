@@ -115,9 +115,9 @@
     </div>
     <!-- onboarding walkthrough video — real capture of the live sample-store dashboard -->
     <div class="onb-video rv" id="onbVideo">
-      <div class="shot-bar"><span>profitfalcon — real product session</span><span style="margin-left:auto">SAMPLE DATA · REAL SESSION · 43 SEC</span></div>
-      <video src="./media/onboarding.mp4" poster="./media/onboarding-poster.jpg" controls muted playsinline preload="metadata"
-             aria-label="ProfitFalcon walkthrough on sample data: morning brief, product screener with Star, Sleeper and Leak tags, and computed store metrics"></video>
+      <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>profitfalcon — live product session</span><span style="margin-left:auto">SAMPLE DATA · REAL SESSION · 53 SEC</span></div>
+      <video src="./media/walkthrough-pf.mp4" poster="./media/walkthrough-pf-poster.jpg" autoplay muted loop playsinline preload="metadata"
+             aria-label="ProfitFalcon walkthrough on sample data: morning brief, product screener with Star, Sleeper and Leak tags, store metrics, costs, autopilot, alerts, and the free profit teardown computing live"></video>
     </div>
     <div class="rv d1">
       <div class="demo-tabs" id="demoTabs" role="tablist" aria-label="Demo scenes"></div>
@@ -1009,12 +1009,18 @@ window.DUSK.demoRunner({
 })();
 </script>
 <script>
-// Reveal the onboarding video frame only when the file actually exists.
+// Reveal the walkthrough frame when the file exists; run it like a live screen:
+// autoplay muted loop, playing only while on screen, no controls, poster under reduced motion.
 (function () {
   var box = document.getElementById("onbVideo");
   if (!box) return;
   var v = box.querySelector("video");
+  var rm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   v.addEventListener("loadedmetadata", function () { box.style.display = "block"; });
+  if (rm) { v.removeAttribute("autoplay"); v.pause(); return; }
+  new IntersectionObserver(function (en) {
+    en[0].isIntersecting ? v.play().catch(function(){}) : v.pause();
+  }, { threshold: 0.25 }).observe(box);
 })();
 </script>
 <script>
