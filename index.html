@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260732">
+<link rel="stylesheet" href="./dusk.css?v=20260733">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -59,7 +59,6 @@
         <button class="nav-dd-btn" type="button" aria-haspopup="true" aria-expanded="false">Product <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>
         <div class="nav-dd-menu" role="menu">
           <a href="#demo" role="menuitem">Live demo</a>
-          <a href="#gallery" role="menuitem">Screens</a>
           <a href="#bench" role="menuitem">Agent bench</a>
           <a href="#ledger" role="menuitem">The ledger</a>
           <a href="#engine" role="menuitem">Engine</a>
@@ -111,29 +110,19 @@
       <div class="sec-head rv" data-dock>
         <div class="eyebrow">See it in action</div>
         <h2>Watch it find the money.</h2>
-        <p>Five features on a sample Shopify export — the flow and report structure are the real product. Click a scene or let it roll.</p>
+        <p>Five scenes on a sample Shopify export — the numbers are sample, the structure is the real product. Click a scene or let it roll.</p>
       </div>
-    </div>
-    <!-- onboarding walkthrough video — real capture of the live sample-store dashboard -->
-    <div class="onb-video rv" id="onbVideo">
-      <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>profitfalcon — live product session</span><span style="margin-left:auto">SAMPLE DATA · REAL SESSION · 53 SEC</span></div>
-      <video src="./media/walkthrough-pf.mp4" poster="./media/walkthrough-pf-poster.jpg" autoplay muted loop playsinline preload="metadata"
-             aria-label="ProfitFalcon walkthrough on sample data: morning brief, product screener with Star, Sleeper and Leak tags, store metrics, costs, autopilot, alerts, and the free profit teardown computing live"></video>
     </div>
     <div class="rv d1">
       <div class="demo-tabs" id="demoTabs" role="tablist" aria-label="Demo scenes"></div>
       <div class="shot" id="demoRoot">
-        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>profitfalcon — sample session</span></div>
-        <div class="shot-body">
-          <div class="demo-q" id="demoQ"></div>
-          <div class="demo-code" id="demoCode"></div>
-          <div class="demo-tiles" id="demoTiles"></div>
-          <div class="demo-ins" id="demoIns" aria-live="polite"></div>
-        </div>
-        <div class="shot-foot"><span>COMPUTED FROM YOUR EXPORT</span><a href="/auth?mode=signup">RUN IT ON YOUR STORE ▸</a></div>
+        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>profitfalcon — sample session</span><span style="margin-left:auto">SAMPLE DATA</span></div>
+        <div class="clip-stage" id="clipStage"></div>
+        <div class="shot-foot"><span id="clipFootLeft">COMPUTED FROM YOUR EXPORT</span><a id="clipFootCta" href="/auth?mode=signup">RUN IT ON YOUR STORE ▸</a></div>
       </div>
       <div class="demo-prog" id="demoProg" aria-hidden="true"><i></i></div>
       <div class="demo-cap" id="demoCap" aria-live="polite"></div>
+      <div class="demo-ins" id="demoIns" aria-live="polite"></div>
     </div>
   </div>
 </section>
@@ -318,63 +307,7 @@
 </script>
 
 
-<!-- PRODUCT GALLERY — real screenshots from the live product on SAMPLE data -->
-<section id="gallery">
-  <div class="wrap">
-    <div class="sec-row">
-      <div class="sec-head rv">
-        <div class="eyebrow">Real screens</div>
-        <h2>Every screen below is live software.</h2>
-        <p>Captured from the live app running a SAMPLE Shopify export — every number on screen was computed, not designed. The sandbox below runs the same surfaces on the same data.</p>
-      </div>
-    </div>
-    <div class="rv d1">
-      <div class="demo-tabs" id="galTabs" role="tablist" aria-label="Product surfaces"></div>
-      <figure class="shot gal-shot" style="margin:0">
-        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span id="galCap">profitfalcon — sample data</span><span style="margin-left:auto">SAMPLE DATA · LIVE PRODUCT</span></div>
-        <img id="galImg" class="gal-img" src="./shots/dashboard.png" alt="" loading="lazy" decoding="async">
-        <div class="shot-foot"><span>CAPTURED FROM THE RUNNING APP</span><a href="/dashboard?demo=1">OPEN THIS SCREEN LIVE ▸</a></div>
-      </figure>
-      <div class="demo-prog" aria-hidden="true"><i id="galProg"></i></div>
-    </div>
-  </div>
-</section>
-<script>
-(function(){
-  var scenes=[
-    {t:"Profit dashboard",cap:"profitfalcon — morning brief + profit tiles",img:"./shots/dashboard.png",alt:"ProfitFalcon profit dashboard: morning brief, contribution tiles, and trend computed from a sample export"},
-    {t:"SKU screener",cap:"profitfalcon — per-SKU screener with archetypes",img:"./shots/screener.png",alt:"Per-SKU profit screener ranking products by revenue with Star, Sleeper, and Leak archetype labels and margin status"},
-    {t:"Agent feed",cap:"profitfalcon — autopilot recommendations, you approve",img:"./shots/agent-feed.png",alt:"Autopilot agent feed recommending exact price reviews with projected monthly impact, risk tier, reasoning, and approve/dismiss controls"},
-    {t:"Free teardown",cap:"profitfalcon — export teardown",img:"./shots/teardown.png",alt:"Free teardown report computed from an uploaded order export"}
-  ];
-  var tabs=document.getElementById("galTabs"),img=document.getElementById("galImg"),
-      cap=document.getElementById("galCap"),prog=document.getElementById("galProg");
-  if(!tabs||!img) return;
-  var still=matchMedia("(prefers-reduced-motion:reduce)").matches,cur=0,timer=null,DUR=5200,hover=false;
-  scenes.forEach(function(s,i){
-    var b=document.createElement("button");
-    b.className="demo-tab";b.type="button";b.setAttribute("role","tab");b.textContent=s.t;
-    b.addEventListener("click",function(){clearTimeout(timer);show(i,false);loop();});
-    tabs.appendChild(b);
-  });
-  var btns=tabs.querySelectorAll(".demo-tab");
-  function show(i,auto){
-    cur=i;
-    btns.forEach(function(b,j){b.classList.toggle("on",j===i);b.setAttribute("aria-selected",j===i?"true":"false");});
-    img.src=scenes[i].img;img.alt=scenes[i].alt;cap.textContent=scenes[i].cap;
-    if(prog){prog.style.transitionDuration="0ms";prog.style.transitionProperty="width";prog.style.width="0";
-      if(auto&&!still){requestAnimationFrame(function(){requestAnimationFrame(function(){prog.style.transitionDuration=DUR+"ms";prog.style.transitionTimingFunction="linear";prog.style.width="100%";});});}}
-  }
-  function loop(){clearTimeout(timer);if(still)return;timer=setTimeout(function(){if(!hover){show((cur+1)%scenes.length,true);}loop();},DUR);}
-  var fig=document.querySelector(".gal-shot");
-  if(fig){fig.addEventListener("mouseenter",function(){hover=true;});fig.addEventListener("mouseleave",function(){hover=false;});}
-  var io=new IntersectionObserver(function(en){
-    en.forEach(function(e){if(e.isIntersecting){if(!timer){show(0,true);loop();}}else{clearTimeout(timer);timer=null;}});
-  },{threshold:.3});
-  io.observe(document.getElementById("gallery"));
-  show(0,false);
-})();
-</script>
+
 
 
 <!-- DEMO VIDEO — auto-running feature showcase -->
@@ -944,74 +877,92 @@
   </div>
 </footer>
 
-<script src="./dusk-art.js?v=20260731"></script>
+<script src="./dusk-art.js?v=20260733"></script>
 <script>
 (function(){
 "use strict";
-window.DUSK.demoRunner({
+window.DUSK.clipPlayer({
   root: document.getElementById("demoRoot"),
+  stageEl: document.getElementById("clipStage"),
   tabsEl: document.getElementById("demoTabs"),
-  qEl: document.getElementById("demoQ"),
-  codeEl: document.getElementById("demoCode"),
-  tilesEl: document.getElementById("demoTiles"),
   capEl: document.getElementById("demoCap"),
   progEl: document.getElementById("demoProg"),
   insEl: document.getElementById("demoIns"),
-  scenarios: [
+  footLeftEl: document.getElementById("clipFootLeft"),
+  footCtaEl: document.getElementById("clipFootCta"),
+  clips: [
     {
-      label: "MARGIN", cap: "PER-SKU PROFIT SCREENER — LOSERS SURFACE FIRST",
-      q: "which SKUs are below water?",
-      code: 'margin = (rev - cogs - fees - ads)\nper_sku = margin.groupby(df.sku).sum()\nunder = per_sku[per_sku < 0]',
-      tiles: [
-        { v: 2, label: "SKUs below water" },
-        { static: "−$1.82", label: "Worst margin / unit", neg: true },
-        { v: 214, label: "SKUs screened" }
-      ],
+      label: "SCREENER", cap: "PER-SKU PROFIT SCREENER — LEAKS SURFACE FIRST",
+      foot: { left: "SAMPLE DATA · REAL STRUCTURE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
+      body: '<div class="sc-panel" aria-label="Per-SKU profit screener (sample data)">' +
+        '<span class="sc-tag">SKU SCREENER · SAMPLE STORE</span>' +
+        '<div class="sc-kpis">' +
+          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">SKUs below water</div><div class="k-val"><b data-count="2">0</b> of <b data-count="214">0</b></div><div class="k-formula"><b>=</b> margin(rev − cogs − fees − ads) &lt; 0</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Worst margin / unit <span class="sc-delta down neg">LEAK</span></div><div class="k-val">−$1.82</div><div class="k-formula"><b>=</b> TRAIL-MINI · every ad dollar loses</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Monthly leak, both SKUs</div><div class="k-val">−$<b data-count="496">0</b></div><div class="k-formula"><b>=</b> Σ negative-margin units × velocity</div></div>' +
+        '</div>' +
+        '<table class="sc-table"><thead><tr><th>SKU</th><th>Tag</th><th class="num">Rev</th><th class="num">Margin</th><th class="num">P&amp;L / mo</th></tr></thead><tbody>' +
+        '<tr><td>TRAIL-MINI</td><td class="sig">LEAK</td><td class="num">$12.4K</td><td class="num sig">−4%</td><td class="num sig">−$496</td></tr>' +
+        '<tr><td>HDL-201</td><td>STAR</td><td class="num">$48.2K</td><td class="num">41%</td><td class="num">$19.8K</td></tr>' +
+        '<tr><td>CANDLE-8OZ</td><td>SLEEPER</td><td class="num">$9.1K</td><td class="num">33%</td><td class="num">$3.0K</td></tr>' +
+        '</tbody></table></div>',
       ins: "<b>“Trail Mini” is below water</b> — every ad dollar spent on it loses money. Pause spend or reprice; the math is attached."
     },
     {
-      label: "LTV", cap: "RETENTION COHORTS — WHO PAYS FOR YOUR GROWTH",
-      q: "what's my 90-day LTV by cohort?",
-      code: 'cohort = df.groupby(\n    [first_order.dt.to_period("M"), "customer"]\n).rev.sum().unstack()',
-      tiles: [
-        { v: 48, prefix: "$", suffix: ".10", label: "90-day LTV" },
-        { v: 31, suffix: "%", label: "Repeat rate" },
-        { v: 2841, label: "Customers in cohorts" }
-      ],
-      ins: "<b>Repeat buyers carry this store</b> — the top cohort generates most of the margin. Retention beats acquisition here."
+      label: "METRIC PACK", cap: "EVERY NUMBER CARRIES ITS FORMULA — AUDIT ANY FIGURE",
+      foot: { left: "SAMPLE DATA · REAL STRUCTURE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
+      body: '<div class="sc-panel" aria-label="Metric pack with verified formulas (sample data)">' +
+        '<span class="sc-tag">METRIC PACK · SAMPLE STORE</span>' +
+        '<div class="sc-kpis">' +
+          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">Net revenue · June <span class="sc-delta up">12.4%</span></div><div class="k-val">$<b data-count="306612">0</b></div><div class="k-formula"><b>=</b> Σ gross_amount − refunds · 1,616 orders</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Contribution margin <span class="sc-delta up">2.1pt</span></div><div class="k-val"><b data-count="31" data-suffix=".8%">0</b></div><div class="k-formula"><b>=</b> (rev − cogs − ads) / rev</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Net profit</div><div class="k-val">$<b data-count="41208">0</b></div><div class="k-formula"><b>=</b> rev − cogs − fees − ads − ship</div></div>' +
+        '</div>' +
+        '<div class="sc-bench">' +
+          '<div class="b-label"><span>Contribution margin — <b>you 31.8%</b></span><span>peer median 27%</span></div>' +
+          '<div class="b-track"><span class="b-you" data-grow="72%"></span><span class="b-med" style="left:61%"></span></div>' +
+          '<div class="b-label"><span>Refund rate — <b>you 3.2%</b></span><span>peer median 4.1%</span></div>' +
+          '<div class="b-track"><span class="b-you" data-grow="44%"></span><span class="b-med" style="left:56%"></span></div>' +
+        '</div>' +
+        '<div class="sc-formula sc-verified" style="margin-top:12px">verified — formulas ship with every figure</div></div>',
+      ins: "<b>Peer bars are computed, not vibes</b> — your margin vs the category median, every input auditable."
     },
     {
-      label: "REORDER", cap: "AI PRODUCT MANAGER — REORDER BEFORE YOU STOCK OUT",
-      q: "should I reorder BF-204?",
-      code: 'velocity = sales_28d / 28\ndays_left = on_hand / velocity\nrec = playbook("INV-REORDER-01")',
-      tiles: [
-        { v: 12, label: "Days of stock left" },
-        { v: 18, label: "Supplier lead time, days", neg: true },
-        { static: "QUEUED", label: "Rec → your approval" }
-      ],
-      ins: "<b>Stock-out lands before the reorder does</b> — 12 days left vs an 18-day lead time. Recommendation queued; nothing executes without you."
+      label: "OPERATOR", cap: "RECOMMEND → YOU APPROVE — NOTHING EXECUTES WITHOUT YOU",
+      foot: { left: "SAMPLE DATA · L1: RECOMMENDS, YOU APPROVE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
+      body: '<div class="sc-panel" aria-label="Operator recommendations awaiting approval (sample data)">' +
+        '<span class="sc-tag">OPERATOR QUEUE · SAMPLE STORE</span>' +
+        '<div class="sc-act"><span class="a-pri">P1</span><p><b>Cut supplier B freight</b> — 7 SKUs ship at a loss</p><span class="a-imp">+$<b data-count="3412">0</b>/mo</span></div>' +
+        '<div class="sc-act"><span class="a-pri">P2</span><p><b>Raise AOV floor</b> — free shipping at $45, not $35</p><span class="a-imp">+$<b data-count="1890">0</b>/mo</span></div>' +
+        '<div class="sc-act"><span class="a-pri">P3</span><p><b>+8% price test on Trail Mini</b> — flips −$1.82 to +$0.71/unit in simulation</p><span class="a-imp">+$<b data-count="612">0</b>/mo</span></div>' +
+        '<div class="sc-formula" style="margin-top:14px">QUEUED → YOUR APPROVAL · projected impact attached to every move</div></div>',
+      ins: "<b>Three moves queued, ~$5,914/mo projected</b> — each carries its reasoning. You approve; the ledger keeps score."
     },
     {
-      label: "PRICE", cap: "PRICE TESTS — RECOMMENDED ONLY WHEN THE MATH SAYS SO",
-      q: "can Trail Mini carry a price increase?",
-      code: 'elast = est_elasticity(sku="TRAIL-MINI")\nsim = simulate(price=price * 1.08)\nrec = playbook("MARGIN-02")',
-      tiles: [
-        { v: 8, prefix: "+", suffix: "%", label: "Suggested price test" },
-        { static: "−$1.82 → +$0.71", label: "Margin / unit, simulated" },
-        { static: "QUEUED", label: "Rec → your approval" }
-      ],
-      ins: "<b>A +8% test flips Trail Mini profitable</b> in simulation — margin goes −$1.82 to +$0.71 per unit. Queued for your approval."
+      label: "LEDGER", cap: "EVERY APPROVED MOVE, MEASURED AGAINST ITS PROJECTION",
+      hold: 5200,
+      foot: { left: "SAMPLE RECOMMENDATION · MARGIN SENTINEL", cta: { label: "SEE THE LEDGER ▸", href: "#ledger" } },
+      body: '<div class="clip-lg" aria-label="Recommendation lifecycle ledger (sample data)">' +
+        '<div class="lgc-rail">' +
+          '<span class="lgc-node done"><i></i><s>Detected</s></span>' +
+          '<span class="lgc-node done"><i></i><s>Exact change</s></span>' +
+          '<span class="lgc-node done"><i></i><s>Projected</s></span>' +
+          '<span class="lgc-node done"><i></i><s>Approved</s></span>' +
+          '<span class="lgc-node done"><i></i><s>Measured</s></span>' +
+          '<span class="lgc-node on"><i></i><s>Realized</s></span>' +
+        '</div>' +
+        '<div class="lgc-body">Freight change shipped on 7 SKUs. Thirty days later the ledger compares the projection to what the margin actually did — <span class="lgm">projected +$540/mo</span> vs <span class="lgm">realized +$498/mo</span>.</div>' +
+        '<div class="lgc-tally"><span>LEDGER: PROJECTED +$<b data-count="540">0</b></span><span>REALIZED +$<b data-count="498">0</b></span><span>ACCURACY <b data-count="92" data-suffix="%">0</b></span></div>' +
+        '</div>',
+      ins: "<b>No competitor grades its own advice</b> — every projection is scored against reality, and the score is yours to audit."
     },
     {
-      label: "LEDGER", cap: "THE LEDGER — EVERY APPROVED MOVE, MEASURED AGAINST ITS PROJECTION",
-      q: "did last month's approvals actually pay off?",
-      code: 'moves = ledger.approved(days=30)\nfor m in moves:\n    m.actual = margin_delta(m.sku, m.date)\nledger.compare(projected, actual)',
-      tiles: [
-        { v: 7, label: "Moves approved" },
-        { static: "+$1,240", label: "Projected / mo" },
-        { static: "+$1,095", label: "Measured so far" }
-      ],
-      ins: "<b>Every approval is a row with a receipt</b> — projection next to measured result. The ledger is the audit trail your P&amp;L never gives you."
+      label: "LIVE RUN", cap: "REAL SESSION — THE TEARDOWN COMPUTING ON A SAMPLE EXPORT",
+      hold: 11000,
+      foot: { left: "SAMPLE DATA · REAL SESSION", cta: { label: "RUN THE FREE TEARDOWN ▸", href: "/teardown" } },
+      video: { src: "./media/teardown-pf.mp4", poster: "./media/teardown-pf-poster.jpg",
+               alt: "Real ProfitFalcon session: the free teardown computing per-SKU profit and monthly leak from a sample order export" },
+      ins: "<b>This actually ran</b> — a real session on the sample export, captured unedited. Your store takes about a minute."
     }
   ]
 });
@@ -1039,21 +990,7 @@ window.DUSK.demoRunner({
   }
 })();
 </script>
-<script>
-// Reveal the walkthrough frame when the file exists; run it like a live screen:
-// autoplay muted loop, playing only while on screen, no controls, poster under reduced motion.
-(function () {
-  var box = document.getElementById("onbVideo");
-  if (!box) return;
-  var v = box.querySelector("video");
-  var rm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  v.addEventListener("loadedmetadata", function () { box.style.display = "block"; });
-  if (rm) { v.removeAttribute("autoplay"); v.pause(); return; }
-  new IntersectionObserver(function (en) {
-    en[0].isIntersecting ? v.play().catch(function(){}) : v.pause();
-  }, { threshold: 0.25 }).observe(box);
-})();
-</script>
+
 <script>
 (function(){var evt=null;
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();evt=e;

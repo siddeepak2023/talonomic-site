@@ -1138,6 +1138,167 @@ window.DUSK = {
       else { runRef.v++; clearTimeout(runRef.t); setProg(0); }
     }, { threshold: 0.3 }).observe(cfg.root);
     return { play: play };
+  },
+
+  /* Coded clip player — selectable sc-* dashboard scenes inside the .shot
+     frame (replaces the walkthrough videos). Staged-but-calm reveal: fade the
+     composition in, count the numbers up, run ONE hero motion, then hold.
+     Animations are declared by each clip's own markup via data-attributes:
+       b[data-count]        — number counts up (uses D.countUp)
+       [data-grow]          — width animates 0 → data-grow (e.g. "72%")
+       [data-draw]          — SVG stroke-dashoffset animates data-len → data-draw
+     cfg: { root, stageEl, tabsEl, capEl, progEl, insEl, footLeftEl, footCtaEl, clips }
+     clip: { label, cap, body:"<sc-* markup>" | video:{src,poster}, ins,
+             foot:{left, cta:{label,href}}, hold } */
+  clipPlayer: function(cfg){
+    var D = window.DUSK;
+    var runRef = { v: 0, t: null };
+    var active = 0, HOLD = 4200, paused = false;
+    var clips = cfg.clips;
+    clips.forEach(function(c, i){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "demo-tab";
+      b.textContent = "0" + (i + 1) + " " + c.label;
+      b.addEventListener("click", function(){ play(i); });
+      cfg.tabsEl.appendChild(b);
+    });
+    var tabs = cfg.tabsEl.querySelectorAll(".demo-tab");
+    function setProg(ms){
+      if (!cfg.progEl) return;
+      var bar = cfg.progEl.firstElementChild;
+      bar.classList.remove("run");
+      bar.style.transitionDuration = "0ms";
+      bar.offsetWidth; /* reflow — restart the bar */
+      if (ms) { bar.style.transitionDuration = ms + "ms"; bar.classList.add("run"); }
+    }
+    function setIns(c, show){
+      if (!cfg.insEl) return;
+      cfg.insEl.innerHTML = c.ins ? "<span>" + c.ins + "</span>" : "";
+      cfg.insEl.classList.toggle("show", !!show && !!c.ins);
+    }
+    function setFoot(c){
+      if (!c.foot) return;
+      if (cfg.footLeftEl) cfg.footLeftEl.textContent = c.foot.left || "";
+      if (cfg.footCtaEl && c.foot.cta) {
+        cfg.footCtaEl.textContent = c.foot.cta.label;
+        cfg.footCtaEl.setAttribute("href", c.foot.cta.href);
+      }
+    }
+    function zero(scope){
+      scope.querySelectorAll("b[data-count]").forEach(function(b){
+        b.textContent = (b.getAttribute("data-prefix") || "") + "0" + (b.getAttribute("data-suffix") || "");
+      });
+      scope.querySelectorAll("[data-grow]").forEach(function(el){
+        el.style.transition = "none"; el.style.width = "0%";
+      });
+      scope.querySelectorAll("[data-draw]").forEach(function(el){
+        el.style.transition = "none";
+        el.style.strokeDasharray = el.getAttribute("data-len") || "100";
+        el.style.strokeDashoffset = el.getAttribute("data-len") || "100";
+      });
+    }
+    function hero(scope){
+      requestAnimationFrame(function(){
+        scope.querySelectorAll("[data-grow]").forEach(function(el){
+          el.style.transition = "width .9s cubic-bezier(.22,.61,.36,1)";
+          el.style.width = el.getAttribute("data-grow");
+        });
+        scope.querySelectorAll("[data-draw]").forEach(function(el){
+          el.style.transition = "stroke-dashoffset 1s cubic-bezier(.22,.61,.36,1)";
+          el.style.strokeDashoffset = el.getAttribute("data-draw");
+        });
+      });
+    }
+    function snap(scope){
+      scope.querySelectorAll("b[data-count]").forEach(function(b){
+        b.textContent = (b.getAttribute("data-prefix") || "")
+          + parseInt(b.getAttribute("data-count"), 10).toLocaleString()
+          + (b.getAttribute("data-suffix") || "");
+      });
+      scope.querySelectorAll("[data-grow]").forEach(function(el){
+        el.style.transition = "none"; el.style.width = el.getAttribute("data-grow");
+      });
+      scope.querySelectorAll("[data-draw]").forEach(function(el){
+        el.style.transition = "none";
+        el.style.strokeDasharray = el.getAttribute("data-len") || "100";
+        el.style.strokeDashoffset = el.getAttribute("data-draw");
+      });
+    }
+    function mount(c){
+      if (c.video) {
+        cfg.stageEl.innerHTML =
+          '<video class="clip-video" muted loop playsinline preload="metadata"'
+          + (c.video.poster ? ' poster="' + c.video.poster + '"' : "")
+          + ' aria-label="' + (c.video.alt || "") + '">'
+          + '<source src="' + c.video.src + '" type="video/mp4"></video>';
+      } else {
+        cfg.stageEl.innerHTML = c.body;
+      }
+    }
+    function advance(){
+      if (paused) { runRef.t = setTimeout(advance, 600); return; }
+      play((active + 1) % clips.length);
+    }
+    function play(i){
+      runRef.v++;
+      clearTimeout(runRef.t);
+      active = i;
+      var c = clips[i];
+      tabs.forEach(function(tb, j){ tb.classList.toggle("on", j === i); });
+      if (cfg.capEl) cfg.capEl.innerHTML = "SCENE 0" + (i + 1) + " — <b>" + c.cap + "</b>";
+      setFoot(c);
+      setIns(c, false);
+      mount(c);
+      var hold = c.hold || HOLD;
+      if (c.video) {
+        var vid = cfg.stageEl.querySelector("video");
+        cfg.stageEl.classList.add("show");
+        setIns(c, true);
+        if (D.reduceMotion) { setProg(0); return; } /* poster only, no autoplay */
+        if (vid) { var p = vid.play(); if (p && p.catch) p.catch(function(){}); }
+        var vHold = c.hold || 10000;
+        setProg(vHold);
+        runRef.t = setTimeout(advance, vHold);
+        return;
+      }
+      if (D.reduceMotion) {
+        snap(cfg.stageEl);
+        cfg.stageEl.classList.add("show");
+        setIns(c, true);
+        setProg(0);
+        return; /* no auto-cycle under reduced motion */
+      }
+      cfg.stageEl.classList.remove("show");
+      zero(cfg.stageEl);
+      setProg(260 + 1400 + hold);
+      requestAnimationFrame(function(){ cfg.stageEl.classList.add("show"); });
+      runRef.t = setTimeout(function(){
+        D.countUp(cfg.stageEl, runRef);
+        hero(cfg.stageEl);
+        (function(){ var v = runRef.v; setTimeout(function(){ if (v === runRef.v) setIns(c, true); }, 1400); })();
+        runRef.t = setTimeout(advance, 1400 + hold);
+      }, 260);
+    }
+    /* static first frame — the player never renders blank (hidden tabs,
+       no IntersectionObserver support, reduced motion) */
+    (function prime(){
+      var c = clips[0];
+      tabs[0].classList.add("on");
+      if (cfg.capEl) cfg.capEl.innerHTML = "SCENE 01 — <b>" + c.cap + "</b>";
+      setFoot(c);
+      mount(c);
+      if (!c.video) snap(cfg.stageEl);
+      cfg.stageEl.classList.add("show");
+      setIns(c, true);
+    })();
+    cfg.root.addEventListener("mouseenter", function(){ paused = true; });
+    cfg.root.addEventListener("mouseleave", function(){ paused = false; });
+    new IntersectionObserver(function(en){
+      if (en[0].isIntersecting) { if (!D.reduceMotion) play(active); }
+      else { runRef.v++; clearTimeout(runRef.t); setProg(0); }
+    }, { threshold: 0.3 }).observe(cfg.root);
+    return { play: play };
   }
 };
 })();

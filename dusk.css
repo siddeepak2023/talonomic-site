@@ -1153,3 +1153,32 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 #gallery,#integrations,#engine,#pricing,#faq{
   content-visibility:auto;contain-intrinsic-size:auto 720px;
 }
+
+/* ── clip player — coded dashboard scenes in the .shot frame ─────────────── */
+.clip-stage{opacity:0;transform:translateY(6px);transition:opacity .5s ease,transform .5s ease;
+  padding:clamp(14px,2vw,22px);min-height:430px;display:flex;flex-direction:column;justify-content:center}
+.clip-stage.show{opacity:1;transform:none}
+.clip-stage .sc-panel{padding:clamp(16px,2.2vw,26px)}
+.clip-stage .sc-kpis{margin-bottom:12px}
+.clip-video{width:100%;display:block;border-radius:10px;border:1px solid var(--line-soft);background:#000}
+/* compact ledger rail for the clip scene (mirrors .lg-frame, non-interactive) */
+.clip-lg{border:1px solid var(--line);background:var(--card);border-radius:12px;overflow:hidden}
+.clip-lg .lgc-rail{display:flex;border-bottom:1px solid var(--line-soft)}
+.clip-lg .lgc-node{flex:1;min-width:0;padding:11px 6px 9px;text-align:center;position:relative}
+.clip-lg .lgc-node+.lgc-node{border-left:1px solid var(--line-soft)}
+.clip-lg .lgc-node i{display:block;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--mut);margin:0 auto 6px}
+.clip-lg .lgc-node.done i{background:var(--fg);border-color:var(--fg)}
+.clip-lg .lgc-node.on i{background:var(--signal);border-color:var(--signal);box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 18%,transparent)}
+.clip-lg .lgc-node s{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);display:block;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clip-lg .lgc-node.on s{color:var(--fg)}
+.clip-lg .lgc-body{padding:16px 20px;font-size:13.5px;line-height:1.6;color:var(--fg)}
+.clip-lg .lgc-body .lgm{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--bg2);border:1px solid var(--line-soft);padding:2px 7px;border-radius:6px;white-space:nowrap}
+.clip-lg .lgc-tally{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line-soft);padding:11px 20px;
+  font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.clip-lg .lgc-tally b{color:var(--fg);font-weight:600}
+@media(max-width:700px){
+  .clip-stage{min-height:360px;padding:10px}
+  .clip-lg .lgc-node s{font-size:8px}
+  .clip-lg .lgc-rail .lgc-node:nth-child(n+5){display:none} /* keep 4 lifecycle steps on tiny screens */
+}
+@media(prefers-reduced-motion:reduce){.clip-stage{transition:none}}
