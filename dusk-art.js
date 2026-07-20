@@ -257,20 +257,28 @@ function resizeTerrain(){
   drawFrame(last / 1000);
 }
 var heroFrozen = false, probeN = 0, probeStart = 0;
+/* Reset the fps probe when the tab returns to foreground — background frames
+   throttle to ~1fps and would otherwise trip a false freeze. */
+document.addEventListener("visibilitychange", function(){
+  if (!document.hidden) { probeN = 0; probeStart = 0; }
+});
 function loop(ts){
   if (heroFrozen) return; /* weak device: hero left as a static frame */
   requestAnimationFrame(loop);
-  if (document.hidden) return;
+  if (document.hidden) { probeN = 0; probeStart = 0; return; } /* don't probe while hidden */
   if (!heroVisible && !dockShown && mE < 0.01) return; /* resting + offscreen: skip redraw */
   if (ts - last < 33) return; /* 30fps cap always — halves scroll-morph draw cost, no visible change */
   last = ts;
   drawFrame(ts / 1000);
-  /* adaptive: if the first ~40 drawn frames can't sustain ~24fps, this GPU
-     can't run the wave smoothly — freeze to a clean static hero and stop. */
-  if (probeStart === 0) probeStart = ts;
-  if (++probeN === 40) {
-    var fps = 40000 / Math.max(1, ts - probeStart);
-    if (fps < 24) { window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true; }
+  /* adaptive freeze — only after a warmup (skip initial load jank), measured
+     over a clean sustained window, and only for a genuinely weak GPU (<18fps).
+     A single early stall no longer pins the hero static forever. */
+  if (++probeN <= 40) return;              /* warmup: ignore first 40 drawn frames */
+  if (probeStart === 0) { probeStart = ts; return; }
+  if (probeN - 40 >= 90) {                 /* sustained 90-frame window (~3s) */
+    var fps = 90000 / Math.max(1, ts - probeStart);
+    if (fps < 18) { window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true; }
+    probeN = 41; probeStart = ts;          /* re-arm; freeze only on a truly weak GPU */
   }
 }
 if (follow) window.addEventListener("scroll", heroScroll, { passive: true });
