@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260737">
+<link rel="stylesheet" href="./dusk.css?v=20260738">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -108,21 +108,17 @@
     <!-- sec-row gives the falcon an open right column to dock into (company-site parity) -->
     <div class="sec-row">
       <div class="sec-head rv" data-dock>
-        <div class="eyebrow">See it in action</div>
+        <div class="eyebrow">See it run — live</div>
         <h2>Watch it find the money.</h2>
-        <p>Five scenes on a sample Shopify export — the numbers are sample, the structure is the real product. Click a scene or let it roll.</p>
+        <p>This is the real product below, running in your browser — not a screenshot. Click <b>“Watch it on sample data,”</b> or drop your own order export. Nothing uploads; every number is computed on the spot.</p>
       </div>
     </div>
     <div class="rv d1">
-      <div class="demo-tabs" id="demoTabs" role="tablist" aria-label="Demo scenes"></div>
-      <div class="shot" id="demoRoot">
-        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>profitfalcon — sample session</span><span style="margin-left:auto">SAMPLE DATA</span></div>
-        <div class="clip-stage" id="clipStage"></div>
-        <div class="shot-foot"><span id="clipFootLeft">COMPUTED FROM YOUR EXPORT</span><a id="clipFootCta" href="/auth?mode=signup">RUN IT ON YOUR STORE ▸</a></div>
+      <div class="shot live-shot" id="demoRoot">
+        <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>profitfalcon — live teardown</span><span style="margin-left:auto">LIVE · RUNNING IN YOUR BROWSER</span></div>
+        <iframe class="live-frame" src="/teardown" title="ProfitFalcon live teardown — running on sample data" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <div class="shot-foot"><span>COMPUTED IN YOUR BROWSER · NOTHING UPLOADED</span><a href="/teardown">OPEN FULL-SCREEN ▸</a></div>
       </div>
-      <div class="demo-prog" id="demoProg" aria-hidden="true"><i></i></div>
-      <div class="demo-cap" id="demoCap" aria-live="polite"></div>
-      <div class="demo-ins" id="demoIns" aria-live="polite"></div>
     </div>
   </div>
 </section>
@@ -830,96 +826,6 @@
 </footer>
 
 <script src="./dusk-art.js?v=20260736"></script>
-<script>
-(function(){
-"use strict";
-window.DUSK.clipPlayer({
-  root: document.getElementById("demoRoot"),
-  stageEl: document.getElementById("clipStage"),
-  tabsEl: document.getElementById("demoTabs"),
-  capEl: document.getElementById("demoCap"),
-  progEl: document.getElementById("demoProg"),
-  insEl: document.getElementById("demoIns"),
-  footLeftEl: document.getElementById("clipFootLeft"),
-  footCtaEl: document.getElementById("clipFootCta"),
-  clips: [
-    {
-      label: "SCREENER", cap: "PER-SKU PROFIT SCREENER — WEAK MARGINS SURFACE FIRST",
-      foot: { left: "SAMPLE DATA · REAL STRUCTURE", cta: { label: "RUN IT ON YOUR STORE \u25B8", href: "/auth?mode=signup" } },
-      body: '<div class="sc-panel" aria-label="Per-SKU profit screener (sample data)">' +
-        '<span class="sc-tag">SKU SCREENER · SAMPLE STORE</span>' +
-        '<div class="sc-kpis">' +
-          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">SKUs below a healthy margin</div><div class="k-val"><b data-count="2">0</b> of <b data-count="14">0</b></div><div class="k-formula"><b>=</b> contribution margin &lt; 20% target</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Worst margin <span class="sc-delta loss">below 20%</span></div><div class="k-val"><b data-count="16" data-suffix=".1%">0</b></div><div class="k-formula"><b>=</b> Overstock Graphic Tee · 163 orders</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Top SKU margin <span class="sc-delta gain">healthy</span></div><div class="k-val"><b data-count="40" data-suffix=".1%">0</b></div><div class="k-formula"><b>=</b> $47.9K revenue · 107 orders</div></div>' +
-        '</div>' +
-        '<table class="sc-table"><thead><tr><th>SKU</th><th>Tag</th><th class="num">Rev</th><th class="num">Orders</th><th class="num">Margin</th></tr></thead><tbody>' +
-        '<tr><td>Overstock Graphic Tee</td><td class="sig">LEAK</td><td class="num">$6.6K</td><td class="num">163</td><td class="num sig">16.1%</td></tr>' +
-        '<tr><td>Last-Season Travel Mug</td><td class="sig">LEAK</td><td class="num">$5.1K</td><td class="num">132</td><td class="num sig">16.2%</td></tr>' +
-        '<tr><td>USB-C Hub Pro</td><td>STAR</td><td class="num">$47.9K</td><td class="num">107</td><td class="num">40.1%</td></tr>' +
-        '<tr><td>SPF 50 Daily Fluid</td><td>STAR</td><td class="num">$7.8K</td><td class="num">111</td><td class="num">65.1%</td></tr>' +
-        '</tbody></table>' +
-        '<div class="sc-formula" style="margin-top:10px">14 SKUs screened · 12 healthy (40\u201365%) · 2 below the 20% target</div></div>',
-      ins: "<b>Two Clearance SKUs sell below a healthy margin</b> \u2014 Overstock Graphic Tee at 16.1%, Last-Season Travel Mug at 16.2%. Reprice or cut; the math is attached."
-    },
-    {
-      label: "METRIC PACK", cap: "EVERY NUMBER CARRIES ITS FORMULA — AUDIT ANY FIGURE",
-      foot: { left: "SAMPLE DATA · REAL STRUCTURE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
-      body: '<div class="sc-panel" aria-label="Metric pack with a revenue trend and verified formulas (sample data)">' +
-        '<span class="sc-tag">METRIC PACK · SAMPLE STORE</span>' +
-        '<div class="sc-kpis">' +
-          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">Total revenue · 13-week trend</div><div class="k-val">$<b data-count="254">0</b>.8K</div>' +
-            '<svg class="sc-spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">' +
-              '<path class="sp-line" d="M0,31 L17,29 L33,28 L50,24 L67,38 L83,21 L100,34 L117,29 L133,21 L150,19 L167,6 L183,25 L200,22" data-draw="0" data-len="260" style="stroke-dasharray:260;stroke-dashoffset:260"></path>' +
-              '<circle class="sp-dot" cx="200" cy="22" r="3"></circle>' +
-            '</svg>' +
-            '<div class="k-formula"><b>=</b> Σ gross_amount · 1,588 orders</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Contribution margin <span class="sc-delta gain">healthy</span></div><div class="k-val"><b data-count="41" data-suffix=".3%">0</b></div><div class="k-formula"><b>=</b> (rev − cogs − discounts) / rev</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Avg order value</div><div class="k-val">$<b data-count="160" data-suffix=".48">0</b></div><div class="k-formula"><b>=</b> revenue / 1,588 orders</div></div>' +
-        '</div>' +
-        '<div class="sc-formula sc-verified" style="margin-top:12px">verified — every figure ships with its formula · gross margin 46.3% · repeat rate 38.6%</div></div>',
-      ins: "<b>Every number carries its math</b> — $254.8K total revenue over 1,588 orders at 41.3% contribution margin, each input auditable against the export."
-    },
-    {
-      label: "OPERATOR", cap: "RECOMMEND → YOU APPROVE — NOTHING EXECUTES WITHOUT YOU",
-      foot: { left: "SAMPLE DATA · L1: RECOMMENDS, YOU APPROVE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
-      body: '<div class="sc-panel" aria-label="Operator recommendations awaiting approval (sample data)">' +
-        '<span class="sc-tag">OPERATOR QUEUE · SAMPLE STORE</span>' +
-        '<div class="sc-act"><span class="a-pri">P1</span><p><b>Fence or kill the deep codes</b> — FLASH35 ran 27% off on 173 orders; $14,339 given away across 559 discounted orders (5.3% of gross)</p><span class="a-imp">~$<b data-count="4904">0</b>/mo</span></div>' +
-        '<div class="sc-act"><span class="a-pri">P2</span><p><b>Reprice the two sub-20% SKUs</b> — Overstock Graphic Tee (16.1%) &amp; Last-Season Travel Mug (16.2%); target ≥40% contribution margin</p><span class="a-imp">below 20%</span></div>' +
-        '<div class="sc-formula" style="margin-top:14px">QUEUED → YOUR APPROVAL · ~$3,206/mo recoverable · nothing executes without you</div></div>',
-      ins: "<b>Recommends; you approve</b> — the deepest leak is discount depth (FLASH35), ~$3,206/mo recoverable. Every move carries its reasoning; the ledger keeps score after."
-    },
-    {
-      label: "LEDGER", cap: "EVERY APPROVED MOVE, MEASURED AGAINST ITS PROJECTION",
-      hold: 5200,
-      foot: { left: "ILLUSTRATIVE — YOUR LEDGER FILLS FROM YOUR FIRST APPROVAL", cta: { label: "SEE THE LEDGER ▸", href: "#ledger" } },
-      body: '<div class="clip-lg" aria-label="Recommendation lifecycle ledger (illustrative example)">' +
-        '<div class="lgc-rail">' +
-          '<span class="lgc-node done"><i></i><s>Detected</s></span>' +
-          '<span class="lgc-node done"><i></i><s>Exact change</s></span>' +
-          '<span class="lgc-node done"><i></i><s>Projected</s></span>' +
-          '<span class="lgc-node done"><i></i><s>Approved</s></span>' +
-          '<span class="lgc-node done"><i></i><s>Measured</s></span>' +
-          '<span class="lgc-node on"><i></i><s>Realized</s></span>' +
-        '</div>' +
-        '<div class="lgc-body">How a completed entry reads (illustrative — a first upload has no history yet): after you approve a move, 30 days later the ledger sets what actually happened next to what was projected — e.g. <span class="lgm">projected +$540/mo</span> vs <span class="lgm">realized +$498/mo</span>.</div>' +
-        '<div class="lgc-tally"><span>EXAMPLE ENTRY: PROJECTED +$<b data-count="540">0</b></span><span>REALIZED +$<b data-count="498">0</b></span><span>ACCURACY <b data-count="92" data-suffix="%">0</b></span></div>' +
-        '</div>',
-      ins: "<b>No competitor grades its own advice</b> — every projection is scored against reality, and the score is yours to audit."
-    },
-    {
-      label: "LIVE RUN", cap: "REAL SESSION — THE TEARDOWN COMPUTING ON A SAMPLE EXPORT",
-      hold: 11000,
-      foot: { left: "SAMPLE DATA · REAL SESSION", cta: { label: "RUN THE FREE TEARDOWN ▸", href: "/teardown" } },
-      video: { src: "./media/teardown-pf.webm", poster: "./media/teardown-pf-poster.jpg",
-               alt: "Real ProfitFalcon session: the free teardown computing per-SKU profit and monthly leak from a sample order export" },
-      ins: "<b>This actually ran</b> — a real session on the sample export, captured unedited. Your store takes about a minute."
-    }
-  ]
-});
-})();
-</script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.

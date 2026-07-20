@@ -1190,6 +1190,10 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
   padding:clamp(14px,2vw,22px);min-height:430px;display:flex;flex-direction:column;justify-content:center}
 .clip-stage.show{opacity:1;transform:none}
 .clip-stage .sc-panel{padding:clamp(16px,2.2vw,26px);padding-top:38px}
+/* live product embed (real /teardown running in an iframe) */
+.live-shot{overflow:hidden}
+.live-frame{display:block;width:100%;height:min(72vh,640px);border:0;background:var(--bg)}
+@media(max-width:700px){.live-frame{height:78vh}}
 .clip-stage .sc-kpis{margin-bottom:12px}
 .clip-video{width:100%;display:block;border-radius:10px;border:1px solid var(--line-soft);background:#000}
 /* compact ledger rail for the clip scene (mirrors .lg-frame, non-interactive) */
