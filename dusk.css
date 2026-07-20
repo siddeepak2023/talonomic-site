@@ -596,6 +596,15 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .sc-spark .sp-fill{opacity:.10}
 .sc-spark .sp-dot{fill:var(--gain)}
 .sc-spark .sp-dot.loss{fill:var(--loss)}
+/* lively scene: sparkline draws in + terminal dot pulses once the panel reveals */
+[data-countup] .sc-spark .sp-line{stroke-dasharray:260;stroke-dashoffset:260}
+[data-countup].live .sc-spark .sp-line{stroke-dashoffset:0;transition:stroke-dashoffset 1.15s cubic-bezier(.22,.8,.24,1) .15s}
+[data-countup] .sc-spark .sp-dot{opacity:0}
+[data-countup].live .sc-spark .sp-dot{opacity:1;transition:opacity .3s ease 1.15s}
+@media(prefers-reduced-motion:reduce){
+  [data-countup] .sc-spark .sp-line{stroke-dashoffset:0;transition:none}
+  [data-countup] .sc-spark .sp-dot{opacity:1}
+}
 /* anatomy still — one dissected KPI + labeled notes (distinct from #demo player) */
 .sc-panel.anat .anat-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(16px,2.4vw,32px);align-items:center}
 .anat-hero{align-self:center}

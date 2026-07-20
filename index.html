@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260738">
+<link rel="stylesheet" href="./dusk.css?v=20260739">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -318,26 +318,26 @@
       <canvas class="art art--inline rv d1" data-art="ghostchart" aria-hidden="true"></canvas>
     </div>
     <!-- Metric pack — the computed KPI cluster (real sample numbers) -->
-    <div class="sc-panel rv d1" aria-label="The ProfitFalcon metric pack (sample store)">
+    <div class="sc-panel rv d1" data-countup aria-label="The ProfitFalcon metric pack (sample store)">
       <span class="sc-tag">METRIC PACK · SAMPLE STORE</span>
       <div class="sc-kpis">
         <div class="sc-card sc-kpi sc-kpi--hero sc-float">
           <div class="k-label">Total revenue · 13-week trend</div>
-          <div class="k-val">$254.8K</div>
+          <div class="k-val"><b data-count="254.8" data-prefix="$" data-suffix="K" data-decimals="1">$254.8K</b></div>
           <svg class="sc-spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">
-            <path class="sp-line" d="M0,31 L17,29 L33,28 L50,24 L67,38 L83,21 L100,34 L117,29 L133,21 L150,19 L167,6 L183,25 L200,22" style="stroke-dasharray:260;stroke-dashoffset:0"></path>
+            <path class="sp-line" d="M0,31 L17,29 L33,28 L50,24 L67,38 L83,21 L100,34 L117,29 L133,21 L150,19 L167,6 L183,25 L200,22"></path>
             <circle class="sp-dot" cx="200" cy="22" r="3"></circle>
           </svg>
           <div class="k-formula"><b>=</b> Σ gross_amount · 1,588 orders</div>
         </div>
         <div class="sc-card sc-kpi sc-float f2">
           <div class="k-label">Contribution margin <span class="sc-delta gain">healthy</span></div>
-          <div class="k-val">41.3%</div>
+          <div class="k-val"><b data-count="41.3" data-suffix="%" data-decimals="1">41.3%</b></div>
           <div class="k-formula"><b>=</b> (rev − cogs − discounts) / rev</div>
         </div>
         <div class="sc-card sc-kpi sc-float f3">
           <div class="k-label">Avg order value</div>
-          <div class="k-val">$160.48</div>
+          <div class="k-val"><b data-count="160.48" data-prefix="$" data-decimals="2">$160.48</b></div>
           <div class="k-formula"><b>=</b> revenue / 1,588 orders</div>
         </div>
       </div>
@@ -825,7 +825,7 @@
   </div>
 </footer>
 
-<script src="./dusk-art.js?v=20260736"></script>
+<script src="./dusk-art.js?v=20260739"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.

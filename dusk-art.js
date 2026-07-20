@@ -1036,16 +1036,18 @@ window.DUSK = {
   countUp: function(container, runRef){
     container.classList.add("show");
     container.querySelectorAll("b[data-count]").forEach(function(b){
-      var target = parseInt(b.getAttribute("data-count"), 10);
+      var target = parseFloat(b.getAttribute("data-count"));
+      var dec = parseInt(b.getAttribute("data-decimals") || "0", 10);
       var prefix = b.getAttribute("data-prefix") || "";
       var suffix = b.getAttribute("data-suffix") || "";
-      if (reduceMotion) { b.textContent = prefix + target.toLocaleString() + suffix; return; }
+      var fmt = function(n){ return prefix + n.toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suffix; };
+      if (reduceMotion) { b.textContent = fmt(target); return; }
       var t0 = performance.now(), run = runRef.v;
       (function step(now){
         if (run !== runRef.v) return;
         var p = Math.min(1, (now - t0) / 900);
         var eased = 1 - Math.pow(1 - p, 3);
-        b.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+        b.textContent = fmt(target * eased);
         if (p < 1) requestAnimationFrame(step);
       })(t0);
     });
@@ -1309,4 +1311,26 @@ window.DUSK = {
     return { play: play };
   }
 };
+
+/* ---------- LIVELY SCENE COUNT-UP ON REVEAL ----------
+   Marketing scene panels marked [data-countup] fire the count-up engine (and a
+   .live class for CSS-driven sparkline draw-in + staged reveal) once when they
+   scroll into view. Numbers are real; motion is the only added liveliness. */
+(function(){
+  var cuRef = { v: 0 };
+  var els = document.querySelectorAll("[data-countup]");
+  if (!els.length || !("IntersectionObserver" in window)) {
+    els.forEach(function(el){ el.classList.add("live"); window.DUSK.countUp(el, cuRef); });
+    return;
+  }
+  var cuIO = new IntersectionObserver(function(ens){
+    ens.forEach(function(en){
+      if (!en.isIntersecting) return;
+      en.target.classList.add("live");
+      window.DUSK.countUp(en.target, cuRef);
+      cuIO.unobserve(en.target);
+    });
+  }, { threshold: 0.35 });
+  els.forEach(function(el){ cuIO.observe(el); });
+})();
 })();
