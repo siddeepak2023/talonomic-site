@@ -577,6 +577,35 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .sc-delta.up::before{content:"▲";font-size:7px;color:var(--signal)}
 .sc-delta.down::before{content:"▼";font-size:7px;color:var(--signal)}
 .sc-delta.neg{color:var(--signal);border-color:color-mix(in srgb,var(--signal) 35%,transparent)}
+/* favorable/unfavorable deltas — mirror the real dashboard's green/red status
+   (money-roles: gain ≠ loss ≠ brand). Direction (up/down) is orthogonal to
+   good/bad, so color keys off gain/loss, arrow off up/down. */
+.sc-delta.gain{color:var(--gain);border-color:color-mix(in srgb,var(--gain) 32%,transparent);background:color-mix(in srgb,var(--gain) 8%,transparent)}
+.sc-delta.loss{color:var(--loss);border-color:color-mix(in srgb,var(--loss) 32%,transparent);background:color-mix(in srgb,var(--loss) 8%,transparent)}
+/* Arrow shows DIRECTION, color shows GOOD/BAD — they're independent (a falling
+   refund rate is a down arrow AND green). Combine e.g. `sc-delta gain down`. */
+.sc-delta.up::before{content:"\25B2";font-size:7px;color:currentColor}
+.sc-delta.down::before{content:"\25BC";font-size:7px;color:currentColor}
+/* trend sparkline — SVG polyline, animated line-draw via [data-draw] (mirrors
+   the real dashboard SparkCard). Endpoint dot marks the latest value. */
+.sc-spark{display:block;width:100%;height:44px;overflow:visible}
+.sc-spark .sp-line{fill:none;stroke:var(--gain);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sc-spark .sp-line.loss{stroke:var(--loss)}
+.sc-spark .sp-fill{opacity:.10}
+.sc-spark .sp-dot{fill:var(--gain)}
+.sc-spark .sp-dot.loss{fill:var(--loss)}
+/* anatomy still — one dissected KPI + labeled notes (distinct from #demo player) */
+.sc-panel.anat .anat-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(16px,2.4vw,32px);align-items:center}
+.anat-hero{align-self:center}
+.anat-hero .k-val{font-size:clamp(30px,4vw,44px)}
+.anat-notes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:an}
+.anat-notes li{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;position:relative;padding-left:30px}
+.anat-notes li::before{counter-increment:an;content:counter(an);position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--signal) 45%,transparent);color:var(--signal);
+  font-family:"JetBrains Mono",monospace;font-size:10px;display:flex;align-items:center;justify-content:center}
+.anat-notes .an-k{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg);white-space:nowrap}
+.anat-notes .an-v{grid-column:2;font-size:13px;line-height:1.5;color:var(--mut)}
+@media(max-width:760px){.sc-panel.anat .anat-grid{grid-template-columns:1fr;gap:20px}}
 
 /* ── Verified-formula tile ──────────────────────────────────── */
 .sc-formula{padding:18px 20px}

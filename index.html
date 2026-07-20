@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260733">
+<link rel="stylesheet" href="./dusk.css?v=20260735">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -315,86 +315,28 @@
   <div class="wrap">
     <div class="sec-row">
       <div class="sec-head rv">
-        <div class="eyebrow">Inside the product</div>
-        <h2>What your upload becomes.</h2>
-        <p>Drop an order export — margins, LTV, and per-SKU profit are computed in about a minute. Audit any figure — every number carries the formula that produced it. Sample-store numbers below; the structure is the real report.</p>
+        <div class="eyebrow">Anatomy of a number</div>
+        <h2>Every figure carries its math.</h2>
+        <p>No black box. Each metric ships with the exact expression that produced it and the row count behind it — click any number in the product to audit it. The demo below shows the same figures in motion.</p>
       </div>
       <canvas class="art art--inline rv d1" data-art="ghostchart" aria-hidden="true"></canvas>
     </div>
-    <!-- Built mockup fragments (no screenshots) — mirrors the app's metric pack -->
-    <div class="sc-panel rv d1" aria-label="The ProfitFalcon metric pack (illustrative)">
-      <span class="sc-tag">METRIC PACK · SAMPLE STORE</span>
-      <div class="sc-kpis">
-        <div class="sc-card sc-kpi sc-kpi--hero sc-float">
-          <div class="k-label">Net revenue · June <span class="sc-delta up">12.4%</span></div>
+    <!-- Anatomy still — one dissected KPI (distinct from the animated #demo player) -->
+    <div class="sc-panel anat rv d1" aria-label="Anatomy of a computed KPI (illustrative sample)">
+      <span class="sc-tag">ONE KPI, DISSECTED · SAMPLE STORE</span>
+      <div class="anat-grid">
+        <div class="sc-card sc-kpi sc-kpi--hero anat-hero">
+          <div class="k-label">Net revenue · June <span class="sc-delta gain up">12.4%</span></div>
           <div class="k-val">$306,612</div>
           <div class="k-formula"><b>=</b> Σ gross_amount − refunds · 1,616 orders</div>
+          <span class="sc-verified" style="margin-top:10px">verified ✓ inputs checked against your export</span>
         </div>
-        <div class="sc-card sc-kpi sc-float f2">
-          <div class="k-label">Contribution margin <span class="sc-delta up">2.1pt</span></div>
-          <div class="k-val">31.8%</div>
-          <div class="k-formula"><b>=</b> (rev − cogs − ads) / rev</div>
-        </div>
-        <div class="sc-card sc-kpi sc-float f3">
-          <div class="k-label">Refund rate <span class="sc-delta down neg">0.8pt</span></div>
-          <div class="k-val">3.2%</div>
-          <div class="k-formula"><b>=</b> refunds / orders · 52 rows</div>
-        </div>
-      </div>
-      <div class="sc-duo">
-        <div class="sc-card sc-pack sc-float f2" id="scPack">
-          <div class="p-tabs" role="tablist" aria-label="Metric pack tabs">
-            <button type="button" class="on">Overview</button>
-            <button type="button">Peers</button>
-            <button type="button">Operator</button>
-            <button type="button">Deep dive</button>
-            <span class="p-live">4,820 orders · computed</span>
-          </div>
-          <div class="p-body">
-            <div class="p-pane on">
-              <div class="sc-row"><b>Net profit</b><span class="r-val">$41,208</span></div>
-              <div class="sc-row"><b>Net margin</b><span class="r-val">13.4%</span></div>
-              <div class="sc-row"><b>Profit after ads</b><span class="r-val">$28,414</span></div>
-            </div>
-            <div class="p-pane">
-              <div class="sc-bench">
-                <div class="b-label"><span>Contribution margin — <b>you 31.8%</b></span><span>peer median 27%</span></div>
-                <div class="b-track"><span class="b-you" style="width:72%"></span><span class="b-med" style="left:61%"></span></div>
-                <div class="b-label"><span>Refund rate — <b>you 3.2%</b></span><span>peer median 4.1%</span></div>
-                <div class="b-track"><span class="b-you" style="width:44%"></span><span class="b-med" style="left:56%"></span></div>
-              </div>
-            </div>
-            <div class="p-pane">
-              <div class="sc-act"><span class="a-pri">P1</span><p><b>Cut supplier B freight</b> — 7 SKUs ship at a loss</p><span class="a-imp">+$3,412/mo</span></div>
-              <div class="sc-act"><span class="a-pri">P2</span><p><b>Raise AOV floor</b> — free shipping at $45, not $35</p><span class="a-imp">+$1,890/mo</span></div>
-            </div>
-            <div class="p-pane">
-              <table class="sc-table">
-                <thead><tr><th>SKU</th><th class="num">Rev</th><th class="num">Margin</th><th class="num">P&amp;L</th></tr></thead>
-                <tbody>
-                  <tr><td>HDL-201</td><td class="num">$48.2K</td><td class="num">41%</td><td class="num">$19.8K</td></tr>
-                  <tr><td>ACC-090</td><td class="num">$12.4K</td><td class="num sig">−4%</td><td class="num sig">−$496</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="sc-card sc-costd sc-float f3">
-          <div class="cd-ring">
-            <svg width="120" height="120" viewBox="0 0 42 42" aria-hidden="true">
-              <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--line-soft)" stroke-width="5.5"/>
-              <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--signal)" stroke-width="5.5" stroke-dasharray="38 62" stroke-dashoffset="25"/>
-              <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--mut)" stroke-width="5.5" stroke-dasharray="24 76" stroke-dashoffset="-13" opacity=".55"/>
-            </svg>
-            <div class="cd-center"><b>$41.2K</b><span>Net profit</span></div>
-          </div>
-          <div class="cd-rows">
-            <div class="cd-row"><i style="background:var(--signal)"></i>COGS<span class="cd-val">38%</span></div>
-            <div class="cd-row"><i style="background:var(--mut)"></i>Ads<span class="cd-val">24%</span></div>
-            <div class="cd-row"><i style="background:var(--line)"></i>Other<span class="cd-val">38%</span></div>
-            <div class="cd-row"><i style="background:transparent;border:1px solid var(--line)"></i>Net margin<span class="cd-val">13.4%</span></div>
-          </div>
-        </div>
+        <ol class="anat-notes">
+          <li><span class="an-k">The value</span><span class="an-v">Computed from your rows, never estimated or rounded to a headline.</span></li>
+          <li><span class="an-k">The delta</span><span class="an-v">Green for favorable, red for not — same status colors as the live dashboard.</span></li>
+          <li><span class="an-k">The formula</span><span class="an-v">The exact expression, with the order count it ran over — reproducible.</span></li>
+          <li><span class="an-k">Verified ✓</span><span class="an-v">Every input reconciled against the file you uploaded. Nothing invented.</span></li>
+        </ol>
       </div>
     </div>
   </div>
@@ -877,7 +819,7 @@
   </div>
 </footer>
 
-<script src="./dusk-art.js?v=20260733"></script>
+<script src="./dusk-art.js?v=20260735"></script>
 <script>
 (function(){
 "use strict";
@@ -898,7 +840,7 @@ window.DUSK.clipPlayer({
         '<span class="sc-tag">SKU SCREENER · SAMPLE STORE</span>' +
         '<div class="sc-kpis">' +
           '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">SKUs below water</div><div class="k-val"><b data-count="2">0</b> of <b data-count="214">0</b></div><div class="k-formula"><b>=</b> margin(rev − cogs − fees − ads) &lt; 0</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Worst margin / unit <span class="sc-delta down neg">LEAK</span></div><div class="k-val">−$1.82</div><div class="k-formula"><b>=</b> TRAIL-MINI · every ad dollar loses</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Worst margin / unit <span class="sc-delta loss">LEAK</span></div><div class="k-val">−$1.82</div><div class="k-formula"><b>=</b> TRAIL-MINI · every ad dollar loses</div></div>' +
           '<div class="sc-card sc-kpi"><div class="k-label">Monthly leak, both SKUs</div><div class="k-val">−$<b data-count="496">0</b></div><div class="k-formula"><b>=</b> Σ negative-margin units × velocity</div></div>' +
         '</div>' +
         '<table class="sc-table"><thead><tr><th>SKU</th><th>Tag</th><th class="num">Rev</th><th class="num">Margin</th><th class="num">P&amp;L / mo</th></tr></thead><tbody>' +
@@ -911,21 +853,26 @@ window.DUSK.clipPlayer({
     {
       label: "METRIC PACK", cap: "EVERY NUMBER CARRIES ITS FORMULA — AUDIT ANY FIGURE",
       foot: { left: "SAMPLE DATA · REAL STRUCTURE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
-      body: '<div class="sc-panel" aria-label="Metric pack with verified formulas (sample data)">' +
+      body: '<div class="sc-panel" aria-label="Metric pack with a revenue trend and verified formulas (sample data)">' +
         '<span class="sc-tag">METRIC PACK · SAMPLE STORE</span>' +
         '<div class="sc-kpis">' +
-          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">Net revenue · June <span class="sc-delta up">12.4%</span></div><div class="k-val">$<b data-count="306612">0</b></div><div class="k-formula"><b>=</b> Σ gross_amount − refunds · 1,616 orders</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Contribution margin <span class="sc-delta up">2.1pt</span></div><div class="k-val"><b data-count="31" data-suffix=".8%">0</b></div><div class="k-formula"><b>=</b> (rev − cogs − ads) / rev</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Net profit</div><div class="k-val">$<b data-count="41208">0</b></div><div class="k-formula"><b>=</b> rev − cogs − fees − ads − ship</div></div>' +
+          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">Net revenue · 6-mo trend <span class="sc-delta gain up">12.4%</span></div><div class="k-val">$<b data-count="306612">0</b></div>' +
+            '<svg class="sc-spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">' +
+              '<path class="sp-line" d="M2,38 L35,34 L68,31 L101,33 L134,21 L167,16 L198,8" data-draw="0" data-len="230" style="stroke-dasharray:230;stroke-dashoffset:230"></path>' +
+              '<circle class="sp-dot" cx="198" cy="8" r="3"></circle>' +
+            '</svg>' +
+            '<div class="k-formula"><b>=</b> Σ gross_amount − refunds · 1,616 orders</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Contribution margin <span class="sc-delta gain up">2.1pt</span></div><div class="k-val"><b data-count="31" data-suffix=".8%">0</b></div><div class="k-formula"><b>=</b> (rev − cogs − ads) / rev</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Refund rate <span class="sc-delta gain down">0.8pt</span></div><div class="k-val"><b data-count="3" data-suffix=".2%">0</b></div><div class="k-formula"><b>=</b> refunds / orders · 52 rows</div></div>' +
         '</div>' +
         '<div class="sc-bench">' +
           '<div class="b-label"><span>Contribution margin — <b>you 31.8%</b></span><span>peer median 27%</span></div>' +
-          '<div class="b-track"><span class="b-you" data-grow="72%"></span><span class="b-med" style="left:61%"></span></div>' +
+          '<div class="b-track"><span class="b-you" style="width:72%"></span><span class="b-med" style="left:61%"></span></div>' +
           '<div class="b-label"><span>Refund rate — <b>you 3.2%</b></span><span>peer median 4.1%</span></div>' +
-          '<div class="b-track"><span class="b-you" data-grow="44%"></span><span class="b-med" style="left:56%"></span></div>' +
+          '<div class="b-track"><span class="b-you" style="width:44%"></span><span class="b-med" style="left:56%"></span></div>' +
         '</div>' +
         '<div class="sc-formula sc-verified" style="margin-top:12px">verified — formulas ship with every figure</div></div>',
-      ins: "<b>Peer bars are computed, not vibes</b> — your margin vs the category median, every input auditable."
+      ins: "<b>The trend and the number both carry their math</b> — revenue up 12.4% over six months, every input auditable."
     },
     {
       label: "OPERATOR", cap: "RECOMMEND → YOU APPROVE — NOTHING EXECUTES WITHOUT YOU",
