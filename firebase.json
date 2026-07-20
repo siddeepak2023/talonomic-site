@@ -2,20 +2,84 @@
   "hosting": {
     "site": "talonomic-site",
     "public": ".",
-    "ignore": ["firebase.json", ".firebaserc", "*.md", ".gitignore", ".git"],
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "*.md",
+      ".gitignore",
+      ".git"
+    ],
     "rewrites": [
-      { "source": "/teardown", "destination": "/app/index.html" },
-      { "source": "/dashboard", "destination": "/app/index.html" },
-      { "source": "/dashboard/**", "destination": "/app/index.html" },
-      { "source": "/auth", "destination": "/app/index.html" },
-      { "source": "/billing", "destination": "/app/index.html" },
-      { "source": "/portal/**", "destination": "/app/index.html" }
+      {
+        "source": "/teardown",
+        "destination": "/app/index.html"
+      },
+      {
+        "source": "/dashboard",
+        "destination": "/app/index.html"
+      },
+      {
+        "source": "/dashboard/**",
+        "destination": "/app/index.html"
+      },
+      {
+        "source": "/auth",
+        "destination": "/app/index.html"
+      },
+      {
+        "source": "/billing",
+        "destination": "/app/index.html"
+      },
+      {
+        "source": "/portal/**",
+        "destination": "/app/index.html"
+      },
+      {
+        "source": "/live",
+        "destination": "/app/index.html"
+      },
+      {
+        "source": "/live/**",
+        "destination": "/app/index.html"
+      }
     ],
     "headers": [
-      { "source": "/app/assets/**", "headers": [{ "key": "Cache-Control", "value": "max-age=31536000,immutable" }] },
-      { "source": "**/*.@(js|css|woff2|png|jpg|svg|ico)", "headers": [{ "key": "Cache-Control", "value": "max-age=2592000,immutable" }] },
-      { "source": "index.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
-      { "source": "/app/index.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] }
+      {
+        "source": "/app/assets/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000,immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(js|css|woff2|png|jpg|svg|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=2592000,immutable"
+          }
+        ]
+      },
+      {
+        "source": "index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/app/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      }
     ]
   }
 }
