@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260735">
+<link rel="stylesheet" href="./dusk.css?v=20260736">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -326,15 +326,15 @@
       <span class="sc-tag">ONE KPI, DISSECTED · SAMPLE STORE</span>
       <div class="anat-grid">
         <div class="sc-card sc-kpi sc-kpi--hero anat-hero">
-          <div class="k-label">Net revenue · June <span class="sc-delta gain up">12.4%</span></div>
-          <div class="k-val">$306,612</div>
-          <div class="k-formula"><b>=</b> Σ gross_amount − refunds · 1,616 orders</div>
+          <div class="k-label">Net revenue · sample store</div>
+          <div class="k-val">$254.8K</div>
+          <div class="k-formula"><b>=</b> Σ (gross_amount − discounts) · 1,588 orders</div>
           <span class="sc-verified" style="margin-top:10px">verified ✓ inputs checked against your export</span>
         </div>
         <ol class="anat-notes">
           <li><span class="an-k">The value</span><span class="an-v">Computed from your rows, never estimated or rounded to a headline.</span></li>
-          <li><span class="an-k">The delta</span><span class="an-v">Green for favorable, red for not — same status colors as the live dashboard.</span></li>
           <li><span class="an-k">The formula</span><span class="an-v">The exact expression, with the order count it ran over — reproducible.</span></li>
+          <li><span class="an-k">The status</span><span class="an-v">Green for favorable, red for not — the same gain/loss colors as the live dashboard.</span></li>
           <li><span class="an-k">Verified ✓</span><span class="an-v">Every input reconciled against the file you uploaded. Nothing invented.</span></li>
         </ol>
       </div>
@@ -360,10 +360,10 @@
         <div class="scm sc-drift" aria-hidden="true">
           <span class="scm-tag">Screener</span>
           <div class="scm-acts">
-            <div class="ar"><span class="pri">−8.2%</span><p>SKU-2231 · bamboo organizer</p><span class="imp">−$1,204/mo</span></div>
-            <div class="ar"><span class="pri">−3.1%</span><p>SKU-0917 · travel kit</p><span class="imp">−$688/mo</span></div>
+            <div class="ar"><span class="pri">16.1%</span><p>Overstock Graphic Tee · below 20%</p><span class="imp">$6.6K rev</span></div>
+            <div class="ar"><span class="pri">16.2%</span><p>Last-Season Travel Mug · below 20%</p><span class="imp">$5.1K rev</span></div>
           </div>
-          <div class="scm-meta"><span>Sorted <b>contribution margin</b></span><span>Rows <b>1,616</b></span><span>Engine <b>Python</b></span></div>
+          <div class="scm-meta"><span>Sorted <b>contribution margin</b></span><span>Rows <b>1,588</b></span><span>Engine <b>Python</b></span></div>
         </div>
       </article>
       <article class="cell rv d1">
@@ -394,7 +394,7 @@
           <span class="scm-tag">Queue</span>
           <div class="scm-sched">
             <div class="sr2"><b>REC</b> pause ad set "US-broad"<span class="st live">queued</span></div>
-            <div class="sr2"><b>REC</b> reorder SKU-0441 ×200<span class="st">✓ approved</span></div>
+            <div class="sr2"><b>REC</b> reprice Overstock Graphic Tee<span class="st">✓ approved</span></div>
           </div>
         </div>
       </article>
@@ -419,7 +419,7 @@
         <div class="scm sc-drift dr2" aria-hidden="true">
           <span class="scm-tag">Verified</span>
           <span class="scm-vbadge">Verified</span>
-          <div class="scm-code"><b>(rev - cogs - fees - ads) / rev</b> → 31.8%</div>
+          <div class="scm-code"><b>(rev − cogs − discounts) / rev</b> → 41.3%</div>
           <div class="scm-meta"><span>Share <b>read-only link</b></span><span>Audit <b>every figure</b></span></div>
         </div>
       </article>
@@ -451,7 +451,7 @@
         <div class="scm" aria-hidden="true">
           <span class="scm-tag">Export</span>
           <div class="scm-up"><span class="fchip2">⌁ orders_export.csv</span>
-            <div class="scm-meta" style="margin-top:9px"><span>Period <b>Jun 1–30</b></span><span>Rows <b>1,616</b></span></div>
+            <div class="scm-meta" style="margin-top:9px"><span>Period <b>Mar–May</b></span><span>Rows <b>1,588</b></span></div>
           </div>
         </div>
       </div>
@@ -475,8 +475,8 @@
         <div class="scm" aria-hidden="true">
           <span class="scm-tag">Act</span>
           <div class="scm-acts scm-acts--anim">
-            <div class="ar"><span class="pri">P1</span><p>Kill SKU-2231 ad spend</p><span class="imp">+$1,204/mo</span></div>
-            <div class="ar"><span class="pri">P2</span><p>Bundle travel kit + refill</p><span class="imp">+$540/mo</span></div>
+            <div class="ar"><span class="pri">P1</span><p>Fence FLASH35 deep codes</p><span class="imp">~$3,206/mo</span></div>
+            <div class="ar"><span class="pri">P2</span><p>Reprice 2 sub-20% SKUs</p><span class="imp">→ ≥40%</span></div>
           </div>
         </div>
       </div>
@@ -819,7 +819,7 @@
   </div>
 </footer>
 
-<script src="./dusk-art.js?v=20260735"></script>
+<script src="./dusk-art.js?v=20260736"></script>
 <script>
 (function(){
 "use strict";
@@ -834,21 +834,23 @@ window.DUSK.clipPlayer({
   footCtaEl: document.getElementById("clipFootCta"),
   clips: [
     {
-      label: "SCREENER", cap: "PER-SKU PROFIT SCREENER — LEAKS SURFACE FIRST",
-      foot: { left: "SAMPLE DATA · REAL STRUCTURE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
+      label: "SCREENER", cap: "PER-SKU PROFIT SCREENER — WEAK MARGINS SURFACE FIRST",
+      foot: { left: "SAMPLE DATA · REAL STRUCTURE", cta: { label: "RUN IT ON YOUR STORE \u25B8", href: "/auth?mode=signup" } },
       body: '<div class="sc-panel" aria-label="Per-SKU profit screener (sample data)">' +
         '<span class="sc-tag">SKU SCREENER · SAMPLE STORE</span>' +
         '<div class="sc-kpis">' +
-          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">SKUs below water</div><div class="k-val"><b data-count="2">0</b> of <b data-count="214">0</b></div><div class="k-formula"><b>=</b> margin(rev − cogs − fees − ads) &lt; 0</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Worst margin / unit <span class="sc-delta loss">LEAK</span></div><div class="k-val">−$1.82</div><div class="k-formula"><b>=</b> TRAIL-MINI · every ad dollar loses</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Monthly leak, both SKUs</div><div class="k-val">−$<b data-count="496">0</b></div><div class="k-formula"><b>=</b> Σ negative-margin units × velocity</div></div>' +
+          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">SKUs below a healthy margin</div><div class="k-val"><b data-count="2">0</b> of <b data-count="14">0</b></div><div class="k-formula"><b>=</b> contribution margin &lt; 20% target</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Worst margin <span class="sc-delta loss">below 20%</span></div><div class="k-val"><b data-count="16" data-suffix=".1%">0</b></div><div class="k-formula"><b>=</b> Overstock Graphic Tee · 163 orders</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Top SKU margin <span class="sc-delta gain">healthy</span></div><div class="k-val"><b data-count="40" data-suffix=".1%">0</b></div><div class="k-formula"><b>=</b> $47.9K revenue · 107 orders</div></div>' +
         '</div>' +
-        '<table class="sc-table"><thead><tr><th>SKU</th><th>Tag</th><th class="num">Rev</th><th class="num">Margin</th><th class="num">P&amp;L / mo</th></tr></thead><tbody>' +
-        '<tr><td>TRAIL-MINI</td><td class="sig">LEAK</td><td class="num">$12.4K</td><td class="num sig">−4%</td><td class="num sig">−$496</td></tr>' +
-        '<tr><td>HDL-201</td><td>STAR</td><td class="num">$48.2K</td><td class="num">41%</td><td class="num">$19.8K</td></tr>' +
-        '<tr><td>CANDLE-8OZ</td><td>SLEEPER</td><td class="num">$9.1K</td><td class="num">33%</td><td class="num">$3.0K</td></tr>' +
-        '</tbody></table></div>',
-      ins: "<b>“Trail Mini” is below water</b> — every ad dollar spent on it loses money. Pause spend or reprice; the math is attached."
+        '<table class="sc-table"><thead><tr><th>SKU</th><th>Tag</th><th class="num">Rev</th><th class="num">Orders</th><th class="num">Margin</th></tr></thead><tbody>' +
+        '<tr><td>Overstock Graphic Tee</td><td class="sig">LEAK</td><td class="num">$6.6K</td><td class="num">163</td><td class="num sig">16.1%</td></tr>' +
+        '<tr><td>Last-Season Travel Mug</td><td class="sig">LEAK</td><td class="num">$5.1K</td><td class="num">132</td><td class="num sig">16.2%</td></tr>' +
+        '<tr><td>USB-C Hub Pro</td><td>STAR</td><td class="num">$47.9K</td><td class="num">107</td><td class="num">40.1%</td></tr>' +
+        '<tr><td>SPF 50 Daily Fluid</td><td>STAR</td><td class="num">$7.8K</td><td class="num">111</td><td class="num">65.1%</td></tr>' +
+        '</tbody></table>' +
+        '<div class="sc-formula" style="margin-top:10px">14 SKUs screened · 12 healthy (40\u201365%) · 2 below the 20% target</div></div>',
+      ins: "<b>Two Clearance SKUs sell below a healthy margin</b> \u2014 Overstock Graphic Tee at 16.1%, Last-Season Travel Mug at 16.2%. Reprice or cut; the math is attached."
     },
     {
       label: "METRIC PACK", cap: "EVERY NUMBER CARRIES ITS FORMULA — AUDIT ANY FIGURE",
@@ -856,40 +858,33 @@ window.DUSK.clipPlayer({
       body: '<div class="sc-panel" aria-label="Metric pack with a revenue trend and verified formulas (sample data)">' +
         '<span class="sc-tag">METRIC PACK · SAMPLE STORE</span>' +
         '<div class="sc-kpis">' +
-          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">Net revenue · 6-mo trend <span class="sc-delta gain up">12.4%</span></div><div class="k-val">$<b data-count="306612">0</b></div>' +
+          '<div class="sc-card sc-kpi sc-kpi--hero"><div class="k-label">Net revenue · 13-week trend</div><div class="k-val">$<b data-count="254">0</b>.8K</div>' +
             '<svg class="sc-spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">' +
-              '<path class="sp-line" d="M2,38 L35,34 L68,31 L101,33 L134,21 L167,16 L198,8" data-draw="0" data-len="230" style="stroke-dasharray:230;stroke-dashoffset:230"></path>' +
-              '<circle class="sp-dot" cx="198" cy="8" r="3"></circle>' +
+              '<path class="sp-line" d="M0,34 L17,30 L33,27 L50,24 L67,38 L83,24 L100,34 L117,31 L133,22 L150,18 L167,6 L183,27 L200,21" data-draw="0" data-len="260" style="stroke-dasharray:260;stroke-dashoffset:260"></path>' +
+              '<circle class="sp-dot" cx="200" cy="21" r="3"></circle>' +
             '</svg>' +
-            '<div class="k-formula"><b>=</b> Σ gross_amount − refunds · 1,616 orders</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Contribution margin <span class="sc-delta gain up">2.1pt</span></div><div class="k-val"><b data-count="31" data-suffix=".8%">0</b></div><div class="k-formula"><b>=</b> (rev − cogs − ads) / rev</div></div>' +
-          '<div class="sc-card sc-kpi"><div class="k-label">Refund rate <span class="sc-delta gain down">0.8pt</span></div><div class="k-val"><b data-count="3" data-suffix=".2%">0</b></div><div class="k-formula"><b>=</b> refunds / orders · 52 rows</div></div>' +
+            '<div class="k-formula"><b>=</b> Σ (gross_amount − discounts) · 1,588 orders</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Contribution margin <span class="sc-delta gain">healthy</span></div><div class="k-val"><b data-count="41" data-suffix=".3%">0</b></div><div class="k-formula"><b>=</b> (rev − cogs − discounts) / rev</div></div>' +
+          '<div class="sc-card sc-kpi"><div class="k-label">Avg order value</div><div class="k-val">$<b data-count="160" data-suffix=".48">0</b></div><div class="k-formula"><b>=</b> revenue / 1,588 orders</div></div>' +
         '</div>' +
-        '<div class="sc-bench">' +
-          '<div class="b-label"><span>Contribution margin — <b>you 31.8%</b></span><span>peer median 27%</span></div>' +
-          '<div class="b-track"><span class="b-you" style="width:72%"></span><span class="b-med" style="left:61%"></span></div>' +
-          '<div class="b-label"><span>Refund rate — <b>you 3.2%</b></span><span>peer median 4.1%</span></div>' +
-          '<div class="b-track"><span class="b-you" style="width:44%"></span><span class="b-med" style="left:56%"></span></div>' +
-        '</div>' +
-        '<div class="sc-formula sc-verified" style="margin-top:12px">verified — formulas ship with every figure</div></div>',
-      ins: "<b>The trend and the number both carry their math</b> — revenue up 12.4% over six months, every input auditable."
+        '<div class="sc-formula sc-verified" style="margin-top:12px">verified — every figure ships with its formula · gross margin 46.3% · repeat rate 38.6%</div></div>',
+      ins: "<b>Every number carries its math</b> — $254.8K net revenue over 1,588 orders at 41.3% contribution margin, each input auditable against the export."
     },
     {
       label: "OPERATOR", cap: "RECOMMEND → YOU APPROVE — NOTHING EXECUTES WITHOUT YOU",
       foot: { left: "SAMPLE DATA · L1: RECOMMENDS, YOU APPROVE", cta: { label: "RUN IT ON YOUR STORE ▸", href: "/auth?mode=signup" } },
       body: '<div class="sc-panel" aria-label="Operator recommendations awaiting approval (sample data)">' +
         '<span class="sc-tag">OPERATOR QUEUE · SAMPLE STORE</span>' +
-        '<div class="sc-act"><span class="a-pri">P1</span><p><b>Cut supplier B freight</b> — 7 SKUs ship at a loss</p><span class="a-imp">+$<b data-count="3412">0</b>/mo</span></div>' +
-        '<div class="sc-act"><span class="a-pri">P2</span><p><b>Raise AOV floor</b> — free shipping at $45, not $35</p><span class="a-imp">+$<b data-count="1890">0</b>/mo</span></div>' +
-        '<div class="sc-act"><span class="a-pri">P3</span><p><b>+8% price test on Trail Mini</b> — flips −$1.82 to +$0.71/unit in simulation</p><span class="a-imp">+$<b data-count="612">0</b>/mo</span></div>' +
-        '<div class="sc-formula" style="margin-top:14px">QUEUED → YOUR APPROVAL · projected impact attached to every move</div></div>',
-      ins: "<b>Three moves queued, ~$5,914/mo projected</b> — each carries its reasoning. You approve; the ledger keeps score."
+        '<div class="sc-act"><span class="a-pri">P1</span><p><b>Fence or kill the deep codes</b> — FLASH35 ran 27% off on 173 orders; $14,339 given away across 559 discounted orders (5.3% of gross)</p><span class="a-imp">~$<b data-count="4904">0</b>/mo</span></div>' +
+        '<div class="sc-act"><span class="a-pri">P2</span><p><b>Reprice the two sub-20% SKUs</b> — Overstock Graphic Tee (16.1%) &amp; Last-Season Travel Mug (16.2%); target ≥40% contribution margin</p><span class="a-imp">below 20%</span></div>' +
+        '<div class="sc-formula" style="margin-top:14px">QUEUED → YOUR APPROVAL · ~$3,206/mo recoverable · nothing executes without you</div></div>',
+      ins: "<b>Recommends; you approve</b> — the deepest leak is discount depth (FLASH35), ~$3,206/mo recoverable. Every move carries its reasoning; the ledger keeps score after."
     },
     {
       label: "LEDGER", cap: "EVERY APPROVED MOVE, MEASURED AGAINST ITS PROJECTION",
       hold: 5200,
-      foot: { left: "SAMPLE RECOMMENDATION · MARGIN SENTINEL", cta: { label: "SEE THE LEDGER ▸", href: "#ledger" } },
-      body: '<div class="clip-lg" aria-label="Recommendation lifecycle ledger (sample data)">' +
+      foot: { left: "ILLUSTRATIVE — YOUR LEDGER FILLS FROM YOUR FIRST APPROVAL", cta: { label: "SEE THE LEDGER ▸", href: "#ledger" } },
+      body: '<div class="clip-lg" aria-label="Recommendation lifecycle ledger (illustrative example)">' +
         '<div class="lgc-rail">' +
           '<span class="lgc-node done"><i></i><s>Detected</s></span>' +
           '<span class="lgc-node done"><i></i><s>Exact change</s></span>' +
@@ -898,8 +893,8 @@ window.DUSK.clipPlayer({
           '<span class="lgc-node done"><i></i><s>Measured</s></span>' +
           '<span class="lgc-node on"><i></i><s>Realized</s></span>' +
         '</div>' +
-        '<div class="lgc-body">Freight change shipped on 7 SKUs. Thirty days later the ledger compares the projection to what the margin actually did — <span class="lgm">projected +$540/mo</span> vs <span class="lgm">realized +$498/mo</span>.</div>' +
-        '<div class="lgc-tally"><span>LEDGER: PROJECTED +$<b data-count="540">0</b></span><span>REALIZED +$<b data-count="498">0</b></span><span>ACCURACY <b data-count="92" data-suffix="%">0</b></span></div>' +
+        '<div class="lgc-body">How a completed entry reads (illustrative — a first upload has no history yet): after you approve a move, 30 days later the ledger sets what actually happened next to what was projected — e.g. <span class="lgm">projected +$540/mo</span> vs <span class="lgm">realized +$498/mo</span>.</div>' +
+        '<div class="lgc-tally"><span>EXAMPLE ENTRY: PROJECTED +$<b data-count="540">0</b></span><span>REALIZED +$<b data-count="498">0</b></span><span>ACCURACY <b data-count="92" data-suffix="%">0</b></span></div>' +
         '</div>',
       ins: "<b>No competitor grades its own advice</b> — every projection is scored against reality, and the score is yours to audit."
     },
