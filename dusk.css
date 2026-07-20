@@ -271,6 +271,8 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .plan{border:1px solid var(--line);background:var(--card);padding:30px 26px;display:flex;flex-direction:column;position:relative;transition:border-color .25s ease}
 .plan:hover{border-color:var(--fg)}
 .plan.hot{border-color:var(--fg)}
+.plan--addon{border-style:dashed;background:color-mix(in srgb,var(--signal) 3%,var(--card))}
+.plan-flag--addon{background:var(--bg2);color:var(--signal);border:1px solid color-mix(in srgb,var(--signal) 40%,transparent)}
 .plan-flag{
   position:absolute;top:-1px;right:-1px;
   font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;
