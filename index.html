@@ -315,29 +315,37 @@
   <div class="wrap">
     <div class="sec-row">
       <div class="sec-head rv">
-        <div class="eyebrow">Anatomy of a number</div>
+        <div class="eyebrow">Inside the product</div>
         <h2>Every figure carries its math.</h2>
-        <p>No black box. Each metric ships with the exact expression that produced it and the row count behind it — click any number in the product to audit it. The demo below shows the same figures in motion.</p>
+        <p>No black box. Each metric ships with the exact expression that produced it and the row count behind it — click any number in the product to audit it against your export.</p>
       </div>
       <canvas class="art art--inline rv d1" data-art="ghostchart" aria-hidden="true"></canvas>
     </div>
-    <!-- Anatomy still — one dissected KPI (distinct from the animated #demo player) -->
-    <div class="sc-panel anat rv d1" aria-label="Anatomy of a computed KPI (illustrative sample)">
-      <span class="sc-tag">ONE KPI, DISSECTED · SAMPLE STORE</span>
-      <div class="anat-grid">
-        <div class="sc-card sc-kpi sc-kpi--hero anat-hero">
-          <div class="k-label">Total revenue · sample store</div>
+    <!-- Metric pack — the computed KPI cluster (real sample numbers) -->
+    <div class="sc-panel rv d1" aria-label="The ProfitFalcon metric pack (sample store)">
+      <span class="sc-tag">METRIC PACK · SAMPLE STORE</span>
+      <div class="sc-kpis">
+        <div class="sc-card sc-kpi sc-kpi--hero sc-float">
+          <div class="k-label">Total revenue · 13-week trend</div>
           <div class="k-val">$254.8K</div>
+          <svg class="sc-spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">
+            <path class="sp-line" d="M0,31 L17,29 L33,28 L50,24 L67,38 L83,21 L100,34 L117,29 L133,21 L150,19 L167,6 L183,25 L200,22" style="stroke-dasharray:260;stroke-dashoffset:0"></path>
+            <circle class="sp-dot" cx="200" cy="22" r="3"></circle>
+          </svg>
           <div class="k-formula"><b>=</b> Σ gross_amount · 1,588 orders</div>
-          <span class="sc-verified" style="margin-top:10px">verified ✓ inputs checked against your export</span>
         </div>
-        <ol class="anat-notes">
-          <li><span class="an-k">The value</span><span class="an-v">Computed from your rows, never estimated or rounded to a headline.</span></li>
-          <li><span class="an-k">The formula</span><span class="an-v">The exact expression, with the order count it ran over — reproducible.</span></li>
-          <li><span class="an-k">The status</span><span class="an-v">Green for favorable, red for not — the same gain/loss colors as the live dashboard.</span></li>
-          <li><span class="an-k">Verified ✓</span><span class="an-v">Every input reconciled against the file you uploaded. Nothing invented.</span></li>
-        </ol>
+        <div class="sc-card sc-kpi sc-float f2">
+          <div class="k-label">Contribution margin <span class="sc-delta gain">healthy</span></div>
+          <div class="k-val">41.3%</div>
+          <div class="k-formula"><b>=</b> (rev − cogs − discounts) / rev</div>
+        </div>
+        <div class="sc-card sc-kpi sc-float f3">
+          <div class="k-label">Avg order value</div>
+          <div class="k-val">$160.48</div>
+          <div class="k-formula"><b>=</b> revenue / 1,588 orders</div>
+        </div>
       </div>
+      <div class="sc-formula sc-verified" style="margin-top:12px">verified ✓ every figure ships with its formula, inputs checked against your export · gross margin 46.3% · repeat rate 38.6%</div>
     </div>
   </div>
 </section>
