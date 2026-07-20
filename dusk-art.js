@@ -1231,7 +1231,7 @@ window.DUSK = {
           '<video class="clip-video" muted loop playsinline preload="metadata"'
           + (c.video.poster ? ' poster="' + c.video.poster + '"' : "")
           + ' aria-label="' + (c.video.alt || "") + '">'
-          + '<source src="' + c.video.src + '" type="video/mp4"></video>';
+          + '<source src="' + c.video.src + '" type="video/' + (c.video.src.split(".").pop() === "webm" ? "webm" : "mp4") + '"></video>';
       } else {
         cfg.stageEl.innerHTML = c.body;
       }
