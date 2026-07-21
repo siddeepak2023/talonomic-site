@@ -605,6 +605,33 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
   [data-countup] .sc-spark .sp-line{stroke-dashoffset:0;transition:none}
   [data-countup] .sc-spark .sp-dot{opacity:1}
 }
+/* ── Lane-1 scene motion (additive; TrueProfit/TW energy on DUSK skin) ──
+   Staged row-reveal ladder: apply .sc-stagger to a row container; children
+   cascade in when the panel reveals. Delay laddered by --n (JS or nth-child). */
+.sc-stagger>*{opacity:0;transform:translateY(8px)}
+[data-countup].live .sc-stagger>*,.rv.on .sc-stagger>*,.sc-stagger.rv.on>*,[data-countup].live.sc-stagger>*{
+  opacity:1;transform:none;
+  transition:opacity .5s ease,transform .5s cubic-bezier(.22,.8,.24,1);
+  transition-delay:calc(var(--n,0)*90ms + .2s)}
+.sc-stagger>*:nth-child(1){--n:0}.sc-stagger>*:nth-child(2){--n:1}
+.sc-stagger>*:nth-child(3){--n:2}.sc-stagger>*:nth-child(4){--n:3}
+.sc-stagger>*:nth-child(5){--n:4}.sc-stagger>*:nth-child(6){--n:5}
+.sc-stagger>*:nth-child(7){--n:6}.sc-stagger>*:nth-child(8){--n:7}
+/* Hover lift — editorial restraint: lift + border sharpen, no glow/scale. */
+.sc-card,.bn-card{transition:transform .25s cubic-bezier(.22,.8,.24,1),border-color .25s ease,box-shadow .25s ease}
+.sc-card:hover,.bn-card:hover{transform:translateY(-3px);
+  border-color:color-mix(in srgb,var(--fg) 28%,var(--line));
+  box-shadow:0 22px 44px -22px rgba(0,0,0,.5)}
+/* Delta chip lands after the count-up settles — the "verdict arrives" beat. */
+[data-countup] .sc-delta{opacity:0}
+[data-countup].live .sc-delta{animation:scDeltaIn .4s ease .95s both}
+@keyframes scDeltaIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .sc-stagger>*{opacity:1;transform:none;transition:none}
+  .sc-card,.bn-card{transition:none}
+  .sc-card:hover,.bn-card:hover{transform:none}
+  [data-countup] .sc-delta,[data-countup].live .sc-delta{opacity:1;animation:none}
+}
 /* anatomy still — one dissected KPI + labeled notes (distinct from #demo player) */
 .sc-panel.anat .anat-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(16px,2.4vw,32px);align-items:center}
 .anat-hero{align-self:center}
@@ -1153,26 +1180,19 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 }
 .interlude .sec-head h2,.interlude h3{color:var(--fg)}
 .interlude .sec-head p{color:var(--mut)}
-.feed-duo{position:relative;margin-bottom:24px}
-/* keep the bench copy out of the head's column at mid widths */
+/* head = live canvas render in its OWN grid column (right), bottom-aligned.
+   In-flow two-column grid so the head can never cross into the rec-mock card
+   (fixes the absolute-positioned overhang that overlapped the card at mid widths).
+   drawBust / dot field / canvas render are UNTOUCHED — this is layout only; the
+   silhouette draws at the 430:340 aspect exactly as before, just column-contained. */
+.feed-duo{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:stretch;margin-bottom:24px}
 @media(min-width:861px){#bench .sec-head{max-width:min(640px,50%);margin-bottom:36px}}
 .feed-duo .rec-mock{margin:0}
-/* head = live canvas render (crisp). Rendered at the SAME 430:340 aspect, so the
-   silhouette is unchanged — drawBust just draws denser at this size, crisp, never
-   upscaled-soft (no PNG, no transform:scale). Right column, bottom-aligned so it
-   rises as the card shrinks; pushed right so the back of the head reaches past the
-   content edge. */
-/* head = verbatim drawBust at 430x340 native (IDENTICAL dots to committed) then
-   CSS-scaled 1.4 as one bitmap — same picture, not re-rendered. Absolutely placed
-   so the card sizes on its own; anchored bottom-right, scales up-left, right edge
-   pushed past the content edge, bottom at the card line. Neck cut kept (no mask). */
-.art--bust{position:absolute;right:-64px;bottom:35px;width:430px;height:340px;
-  transform:scale(1.17) !important;transform-origin:100% 100%;image-rendering:auto;pointer-events:none}
-@media(max-width:1120px){.art--bust{transform:scale(1.10) !important;right:-24px}}
+.art--bust{width:100%;height:100%;min-height:340px;display:block;align-self:end;pointer-events:none}
 .art--oort{width:320px;height:320px;display:block;justify-self:end;align-self:center;transform:translateY(-35px)}
 @media(max-width:860px){
-  .feed-duo{position:static}
-  .art--bust{position:static;transform:scale(1) !important;width:min(360px,84%);height:auto;aspect-ratio:430/340;margin:8px auto 0}
+  .feed-duo{grid-template-columns:1fr}
+  .art--bust{height:auto;aspect-ratio:430/340;min-height:260px;margin:8px auto 0}
   .art--oort{width:240px;height:240px;justify-self:center;margin-top:8px}
 }
 .interlude--engine{padding:64px 0 72px}

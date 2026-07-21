@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260739">
+<link rel="stylesheet" href="./dusk.css?v=20260740">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -148,19 +148,19 @@
         <div class="lg-line" id="lgLine"><span class="lg-k" id="lgK"></span><span class="lg-v" id="lgV"></span></div>
       </div>
       <div class="lg-prog" aria-hidden="true"><i id="lgProg"></i></div>
-      <div class="lg-foot"><span>SAMPLE RECOMMENDATION · MARGIN SENTINEL</span><span class="lg-tally">LEDGER: PROJECTED +$540 · REALIZED +$498 · 92%</span></div>
+      <div class="lg-foot"><span>SAMPLE RECOMMENDATION · MARGIN SENTINEL</span><span class="lg-tally">LEDGER: PROJECTED reallocate $41.9K · REALIZED — fills from your exports</span></div>
     </div>
   </div>
 </section>
 <script>
 (function(){
   var stages=[
-    ["Detected","Margin Sentinel flagged Meta campaign <b>Prospecting — Broad</b>: CPA up 18% week-over-week, contribution margin negative on 9 of the last 14 days."],
-    ["Exact change","<span class=\"lgm\">Cut daily budget · Meta Ads Manager — Prospecting — Broad: $200 → $176/day (−12%)</span>"],
-    ["Projected","<b>+$540/mo</b> contribution margin · confidence 78% · the formula behind the number is attached to the card."],
+    ["Detected","Margin Sentinel flagged <b>Pinterest — Lifestyle Pins</b>: returning <b>0.90×</b> on spend while Google returns <b>4.82×</b> — the channel is losing money on every dollar."],
+    ["Exact change","<span class=\"lgm\">Reallocate budget · move the $41.9K off Pinterest — Lifestyle Pins toward the higher-return channel</span>"],
+    ["Projected","<b>$41.9K</b> in spend reallocated from a 0.90× channel to a 4.82× one · the formula behind the number is attached to the card."],
     ["Approved","You approved it. The change is yours to apply — one click copies the exact move. Nothing executes without you."],
-    ["Measured","Each new export you drop is scored against the projection: CPA, spend, and margin."],
-    ["Realized","<b>+$498/mo</b> measured over 30 days — 92% of projection. The outcome is stored on the ledger, next to its projection."]
+    ["Measured","Each new export you drop is scored against the projection: MER, spend, and contribution by channel."],
+    ["Realized","Your realized number lands here, scored against the projection over 30 days. The ledger fills from your data — not a demo figure."]
   ];
   var frame=document.getElementById("lgFrame"); if(!frame) return;
   var nodes=frame.querySelectorAll(".lg-node"),k=document.getElementById("lgK"),v=document.getElementById("lgV"),
@@ -208,61 +208,61 @@
       <div class="rm-body">
         <div class="rm-head"><span>MARGIN SENTINEL</span><span>SAMPLE STORE</span></div>
         <p class="rm-title">Fence the deep discount codes</p>
-        <p class="rm-move">FLASH35 ran <b>27% off on 173 orders</b> — cap sitewide depth, gate the rest behind a minimum cart</p>
-        <div class="rm-proj">Projected <b>~$3,206/mo</b> recoverable <span>· the formula is attached to the card</span></div>
+        <p class="rm-move">FLASH35 ran <b>26.6% off on 2,343 orders</b> — cap sitewide depth, gate the rest behind a minimum cart</p>
+        <div class="rm-proj">Projected <b>~$31.0K/mo</b> recoverable <span>· the formula is attached to the card</span></div>
         <div class="rm-actions"><span class="rm-btn rm-btn--approve">Approve</span><span class="rm-btn">Dismiss</span><span class="rm-note">Nothing executes without you</span></div>
       </div>
     </div>
       <canvas class="art art--bust rv d1" data-art="bust" aria-hidden="true"></canvas>
     </div>
-    <div class="bench-grid rv d1">
+    <div class="bench-grid rv d1 sc-stagger">
       <div class="bn-card">
         <div class="bn-name">Margin Sentinel</div>
         <p class="bn-watch">Watches paid campaigns for spend that returns less than it costs — MER, CPA drift, contribution margin by campaign.</p>
         <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
-          <span class="bn-move">Cut daily budget · Meta Ads Manager — Prospecting — Broad: <b>$200 → $176/day</b> · projected +$540/mo</span></div>
+          <span class="bn-move">Reallocate spend · Pinterest — Lifestyle Pins returns <b>0.90×</b> vs Google's 4.82× · $41.9K in spend to move</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
         <div class="bn-name">Discount Leak</div>
         <p class="bn-watch">Watches every discount code for redemptions by customers who were already converting — returning buyers, organic traffic.</p>
         <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
-          <span class="bn-move">Restrict <b>WELCOME10</b> to first-time customers — 57% of its redemptions went to returning buyers · est. +$340/mo</span></div>
+          <span class="bn-move">Across <b>9,713 discounted orders</b>, $436K was given away — FLASH35 alone ran 26.6% off on 2,343 · ~$31.0K/mo recoverable by fencing it</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
         <div class="bn-name">Inventory &amp; Reorder</div>
         <p class="bn-watch">Watches per-SKU sales velocity against what's on hand and works back from the resupply lead time to a reorder-by date.</p>
-        <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
-          <span class="bn-move">Reorder <b>Blue Hoodie</b> by Aug 2 — 6 days of stock left at current velocity · $2,800 of 30-day revenue at stake</span></div>
+        <div class="bn-rec"><span class="bn-tag">How it works</span>
+          <span class="bn-move">Surfaces a reorder-by date per SKU from sales velocity and resupply lead time — active once your export carries on-hand stock</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
         <div class="bn-name">SKU Screener</div>
         <p class="bn-watch">Ranks every product by revenue, margin, and return rate — and flags the ones quietly bleeding under a healthy top line.</p>
         <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
-          <span class="bn-move">Review pricing on <b>Crew Socks</b> — 10.4% margin, below the 20% floor · est. +$210/mo at current volume</span></div>
+          <span class="bn-move">Review pricing on <b>Last-Season Insulated Vest</b> — 17.8% margin on $86.0K revenue, below the 20% floor</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
         <div class="bn-name">LTV : CAC</div>
         <p class="bn-watch">Watches the ratio between what a customer is worth and what you pay to get one — and flags when acquisition outruns lifetime value.</p>
-        <div class="bn-rec"><span class="bn-tag">Sample flag</span>
-          <span class="bn-move">LTV : CAC at <b>1.6</b>, under the 3.0 healthy band — flagged for review with the cohorts behind the number</span></div>
+        <div class="bn-rec"><span class="bn-tag">How it works</span>
+          <span class="bn-move">Pairs contribution LTV (<b>$137/customer</b> at 23.4% repeat) with your blended CAC once ad spend is connected — flags when CAC outruns LTV</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
         <div class="bn-name">Returns &amp; Quality</div>
         <p class="bn-watch">Watches return rates per SKU and flags spikes that eat margin after the sale is already counted.</p>
         <div class="bn-rec"><span class="bn-tag">Sample flag</span>
-          <span class="bn-move">Return rate on <b>Linen Shirt</b> hit 18% — 3× the store average — flagged with the order rows behind it</span></div>
+          <span class="bn-move">Footwear returns running <b>~13%</b> — above the 9.2% store average — flagged with the order rows behind it</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
         <div class="bn-name">Executive Brief</div>
         <p class="bn-watch">Opens your day with what changed, what the agents found, and which recommendations are waiting — with the ledger tally to date.</p>
         <div class="bn-rec"><span class="bn-tag">Sample brief line</span>
-          <span class="bn-move">"On your sample export: 2 SKUs below a 20% margin, FLASH35 over-discounting. <b>2 recommendations waiting</b> · ~$3,206/mo recoverable."</span></div>
+          <span class="bn-move">"On your sample export: 2 SKUs at/below the 20% floor, FLASH35 over-discounting on 2,343 orders. <b>3 recommendations waiting</b> · ~$31.0K/mo recoverable."</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <!-- Honest calculator lives in the bench grid, beside the Executive Brief. -->
@@ -322,26 +322,26 @@
       <span class="sc-tag">METRIC PACK · SAMPLE STORE</span>
       <div class="sc-kpis">
         <div class="sc-card sc-kpi sc-kpi--hero sc-float">
-          <div class="k-label">Total revenue · 13-week trend</div>
-          <div class="k-val"><b data-count="254.8" data-prefix="$" data-suffix="K" data-decimals="1">$254.8K</b></div>
+          <div class="k-label">Total revenue · 6-month trend</div>
+          <div class="k-val"><b data-count="5.20" data-prefix="$" data-suffix="M" data-decimals="2">$5.20M</b></div>
           <svg class="sc-spark" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">
-            <path class="sp-line" d="M0,31 L17,29 L33,28 L50,24 L67,38 L83,21 L100,34 L117,29 L133,21 L150,19 L167,6 L183,25 L200,22"></path>
-            <circle class="sp-dot" cx="200" cy="22" r="3"></circle>
+            <path class="sp-line" d="M0,26 L33,32 L67,27 L100,26 L133,22 L167,8 L200,20"></path>
+            <circle class="sp-dot" cx="200" cy="20" r="3"></circle>
           </svg>
-          <div class="k-formula"><b>=</b> Σ gross_amount · 1,588 orders</div>
+          <div class="k-formula"><b>=</b> Σ gross_amount · 24,623 orders</div>
         </div>
         <div class="sc-card sc-kpi sc-float f2">
           <div class="k-label">Contribution margin <span class="sc-delta gain">healthy</span></div>
-          <div class="k-val"><b data-count="41.3" data-suffix="%" data-decimals="1">41.3%</b></div>
+          <div class="k-val"><b data-count="49.8" data-suffix="%" data-decimals="1">49.8%</b></div>
           <div class="k-formula"><b>=</b> (rev − cogs − discounts) / rev</div>
         </div>
         <div class="sc-card sc-kpi sc-float f3">
           <div class="k-label">Avg order value</div>
-          <div class="k-val"><b data-count="160.48" data-prefix="$" data-decimals="2">$160.48</b></div>
-          <div class="k-formula"><b>=</b> revenue / 1,588 orders</div>
+          <div class="k-val"><b data-count="211.17" data-prefix="$" data-decimals="2">$211.17</b></div>
+          <div class="k-formula"><b>=</b> revenue / 24,623 orders</div>
         </div>
       </div>
-      <div class="sc-formula sc-verified" style="margin-top:12px">verified ✓ every figure ships with its formula, inputs checked against your export · gross margin 46.3% · repeat rate 38.6%</div>
+      <div class="sc-formula sc-verified" style="margin-top:12px">verified ✓ every figure ships with its formula, inputs checked against your export · gross margin 53.8% · repeat rate 23.4%</div>
     </div>
   </div>
 </section>
@@ -364,10 +364,10 @@
         <div class="scm sc-drift" aria-hidden="true">
           <span class="scm-tag">Screener</span>
           <div class="scm-acts">
-            <div class="ar"><span class="pri">16.1%</span><p>Overstock Graphic Tee · below 20%</p><span class="imp">$6.6K rev</span></div>
-            <div class="ar"><span class="pri">16.2%</span><p>Last-Season Travel Mug · below 20%</p><span class="imp">$5.1K rev</span></div>
+            <div class="ar"><span class="pri">17.8%</span><p>Last-Season Insulated Vest · below 20%</p><span class="imp">$86.0K rev</span></div>
+            <div class="ar"><span class="pri">20.1%</span><p>Prior-Year Trail Tee · at the floor</p><span class="imp">$34.1K rev</span></div>
           </div>
-          <div class="scm-meta"><span>Sorted <b>contribution margin</b></span><span>Rows <b>1,588</b></span><span>Engine <b>Python</b></span></div>
+          <div class="scm-meta"><span>Sorted <b>contribution margin</b></span><span>Rows <b>24,623</b></span><span>Engine <b>Python</b></span></div>
         </div>
       </article>
       <article class="cell rv d1">
@@ -387,7 +387,7 @@
             <rect class="bar hot" x="176" y="14" width="14" height="64" rx="2" style="--i:7"/>
             <polyline class="fc" points="202,22 218,17 234,13 252,8" pathLength="160"/>
           </svg>
-          <div class="scm-exp"><b>top 8%</b> of customers · <b>41%</b> of profit<span class="x">whales</span></div>
+          <div class="scm-exp"><b>top 10%</b> of customers · <b>29%</b> of revenue<span class="x">whales</span></div>
         </div>
       </article>
       <article class="cell rv">
@@ -398,7 +398,7 @@
           <span class="scm-tag">Queue</span>
           <div class="scm-sched">
             <div class="sr2"><b>REC</b> pause ad set "US-broad"<span class="st live">queued</span></div>
-            <div class="sr2"><b>REC</b> reprice Overstock Graphic Tee<span class="st">✓ approved</span></div>
+            <div class="sr2"><b>REC</b> reprice Last-Season Insulated Vest<span class="st">✓ approved</span></div>
           </div>
         </div>
       </article>
@@ -423,7 +423,7 @@
         <div class="scm sc-drift dr2" aria-hidden="true">
           <span class="scm-tag">Verified</span>
           <span class="scm-vbadge">Verified</span>
-          <div class="scm-code"><b>(rev − cogs − discounts) / rev</b> → 41.3%</div>
+          <div class="scm-code"><b>(rev − cogs − discounts) / rev</b> → 49.8%</div>
           <div class="scm-meta"><span>Share <b>read-only link</b></span><span>Audit <b>every figure</b></span></div>
         </div>
       </article>
@@ -455,7 +455,7 @@
         <div class="scm" aria-hidden="true">
           <span class="scm-tag">Export</span>
           <div class="scm-up"><span class="fchip2">⌁ orders_export.csv</span>
-            <div class="scm-meta" style="margin-top:9px"><span>Period <b>Mar–May</b></span><span>Rows <b>1,588</b></span></div>
+            <div class="scm-meta" style="margin-top:9px"><span>Period <b>Aug–Jan</b></span><span>Rows <b>24,623</b></span></div>
           </div>
         </div>
       </div>
@@ -479,8 +479,8 @@
         <div class="scm" aria-hidden="true">
           <span class="scm-tag">Act</span>
           <div class="scm-acts scm-acts--anim">
-            <div class="ar"><span class="pri">P1</span><p>Fence FLASH35 deep codes</p><span class="imp">~$3,206/mo</span></div>
-            <div class="ar"><span class="pri">P2</span><p>Reprice 2 sub-20% SKUs</p><span class="imp">→ ≥40%</span></div>
+            <div class="ar"><span class="pri">P1</span><p>Fence FLASH35 deep codes</p><span class="imp">~$31.0K/mo</span></div>
+            <div class="ar"><span class="pri">P2</span><p>Reprice sub-20% SKUs</p><span class="imp">→ ≥40%</span></div>
           </div>
         </div>
       </div>
