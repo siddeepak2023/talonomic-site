@@ -7,7 +7,12 @@
       ".firebaserc",
       "*.md",
       ".gitignore",
-      ".git"
+      ".git",
+      "CNAME",
+      "_*.html",
+      "test-*.html",
+      "_headmesh.js",
+      "tools"
     ],
     "rewrites": [
       {
