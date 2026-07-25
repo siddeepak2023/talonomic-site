@@ -29,9 +29,91 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../dusk.css?v=20260725a">
-<link rel="stylesheet" href="./blog.css?v=20260725a">
+<link rel="stylesheet" href="../dusk.css?v=20260725b">
+<link rel="stylesheet" href="./blog.css?v=20260725b">
 <script>try{var t=localStorage.getItem("bf-theme");if(t==="light"||(!t&&matchMedia("(prefers-color-scheme: light)").matches))document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
+<!-- BF-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://bizfalconai.com/#organization",
+      "name": "BizFalcon AI",
+      "url": "https://bizfalconai.com/",
+      "email": "hello@bizfalconai.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://bizfalconai.com/falcon-bird-white.png",
+        "width": 1190,
+        "height": 933
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Siddharth Deepak"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://profit.bizfalconai.com/#website",
+      "url": "https://profit.bizfalconai.com/",
+      "name": "ProfitFalcon",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@id": "https://bizfalconai.com/#organization"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "mainEntityOfPage": "https://profit.bizfalconai.com/blog/dead-stock-carrying-cost.html",
+      "url": "https://profit.bizfalconai.com/blog/dead-stock-carrying-cost.html",
+      "headline": "Dead Stock Math: What Unmoving Inventory Actually Costs You",
+      "description": "The carrying-cost formula for dead stock: capital, storage, obsolescence — and the clearance break-even that tells you when to stop hoping.",
+      "image": "https://profit.bizfalconai.com/og.png",
+      "datePublished": "2026-07-12",
+      "dateModified": "2026-07-25",
+      "author": {
+        "@type": "Person",
+        "name": "Siddharth Deepak"
+      },
+      "publisher": {
+        "@id": "https://bizfalconai.com/#organization"
+      },
+      "isPartOf": {
+        "@id": "https://profit.bizfalconai.com/blog/#blog"
+      },
+      "inLanguage": "en-US",
+      "wordCount": 298,
+      "articleSection": "Inventory"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://profit.bizfalconai.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://profit.bizfalconai.com/blog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Dead Stock Math: What Unmoving Inventory Actually Costs You",
+          "item": "https://profit.bizfalconai.com/blog/dead-stock-carrying-cost.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- /BF-LD -->
 </head>
 <body>
 <header class="nav">
@@ -52,7 +134,7 @@
 
 <article class="blog-wrap art">
   <a class="art-back" href="./">← All posts</a>
-  <div class="post-meta"><span class="cat">Inventory</span><span>July 2026</span><span>5 min read</span><span>By Siddharth Deepak — Founder</span></div>
+  <div class="post-meta"><span class="cat">Inventory</span><time datetime="2026-07-12">July 12, 2026</time><span>1 min read</span><span>By Siddharth Deepak — Founder</span></div>
   <h1>Dead Stock Math: What Unmoving Inventory Actually Costs You</h1>
   <p class="lede">Inventory that doesn&#x27;t move feels like an asset on the balance sheet. Operationally it&#x27;s a slow leak: capital, storage, and shrinking resale value, compounding monthly.</p>
   <div class="art-body">
@@ -76,6 +158,17 @@
 <p>Compute weeks-of-cover per SKU from your inventory and sales exports monthly. Anything crossing the threshold goes on the clearance-or-bundle list before it ages into a write-off. Dead stock caught at month 4 recovers double what it does at month 10.</p>
 
   </div>
+
+<!-- BF-RELATED -->
+<nav class="art-related" aria-label="Related reading">
+  <div class="eyebrow">Keep reading</div>
+  <ul>
+    <li><a href="./discount-code-margin-leakage.html">Discount Leakage: How Promo Codes Quietly Destroy Margin</a></li>
+    <li><a href="./ltv-cohort-analysis-csv.html">LTV Cohort Analysis From a Single CSV Export</a></li>
+    <li><a href="../compare.html">ProfitFalcon vs Triple Whale vs Polar Analytics</a></li>
+  </ul>
+</nav>
+<!-- /BF-RELATED -->
 
 <div class="art-cta">
   <div class="eyebrow">Computed, not estimated</div>

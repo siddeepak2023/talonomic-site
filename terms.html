@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260725a">
+<link rel="stylesheet" href="./dusk.css?v=20260725b">
 <style>
 .legal{max-width:760px;margin:0 auto;padding:112px 24px 80px}
 .legal h1{font-size:clamp(1.7rem,3.2vw,2.4rem);margin:0 0 10px}
@@ -47,6 +47,70 @@
 .legal-foot a:hover{color:var(--signal)}
 </style>
 <script>try{var t=localStorage.getItem("bf-theme");if(t==="light"||(!t&&matchMedia("(prefers-color-scheme: light)").matches))document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
+<!-- BF-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://bizfalconai.com/#organization",
+      "name": "BizFalcon AI",
+      "url": "https://bizfalconai.com/",
+      "email": "hello@bizfalconai.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://bizfalconai.com/falcon-bird-white.png",
+        "width": 1190,
+        "height": 933
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Siddharth Deepak"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://profit.bizfalconai.com/#website",
+      "url": "https://profit.bizfalconai.com/",
+      "name": "ProfitFalcon",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@id": "https://bizfalconai.com/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "url": "https://profit.bizfalconai.com/terms.html",
+      "name": "Terms of Service — ProfitFalcon by BizFalcon AI",
+      "description": "The terms covering your use of ProfitFalcon — accounts, billing, acceptable use, and the limits of what the product claims.",
+      "isPartOf": {
+        "@id": "https://profit.bizfalconai.com/#website"
+      },
+      "dateModified": "2026-07-25",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://profit.bizfalconai.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Terms",
+          "item": "https://profit.bizfalconai.com/terms.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<!-- /BF-LD -->
 </head>
 <body>
 <header class="nav">

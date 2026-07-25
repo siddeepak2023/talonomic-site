@@ -30,3 +30,12 @@
 .blog-foot{border-top:1px solid var(--line-soft);padding:26px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;max-width:1180px;margin:0 auto;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
 .blog-foot a{margin-left:18px;transition:color .2s ease}
 .blog-foot a:hover{color:var(--signal)}
+
+/* Related reading — posts had zero lateral links; compare.html had one inbound
+   link site-wide despite being the highest-intent page. */
+.art-related{margin-top:52px;border-top:1px solid var(--line);padding-top:26px}
+.art-related ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+.art-related li{border-bottom:1px solid var(--line-soft);padding-bottom:10px}
+.art-related a{font-family:"Instrument Sans","Hanken Grotesk",sans-serif;font-weight:600;font-size:15.5px;letter-spacing:-.01em;color:var(--fg);text-decoration:none}
+.art-related a:hover{color:var(--signal)}
+@media(min-width:761px){.art-related ul{grid-template-columns:1fr 1fr}}
