@@ -306,7 +306,7 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 @media(max-width:760px){.ap-band{grid-template-columns:1fr;text-align:center}.ap-band p{margin-inline:auto}}
 
 /* ============ FAQ ============ */
-.faq{max-width:760px}
+.faq{max-width:none}
 .faq details{border-top:1px solid var(--line)}
 .faq details:last-child{border-bottom:1px solid var(--line)}
 .faq summary{
@@ -316,14 +316,13 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:"+";font-family:"JetBrains Mono",monospace;color:var(--mut);font-size:18px;flex:none}
 .faq details[open] summary::after{content:"−";color:var(--signal)}
-.faq .a{padding:0 4px 24px;color:var(--mut);font-size:15.5px;max-width:60ch}
+.faq .a{padding:0 4px 24px;color:var(--mut);font-size:15.5px;max-width:74ch}
 
 /* ============ CTA / FOOTER ============ */
 .cta-sec{text-align:center}
 .cta-sec h2{font-size:clamp(2.2rem,5vw,3.4rem);margin-bottom:20px}
 .cta-sec p{color:var(--mut);margin-bottom:38px}
 .cta-sec .eyebrow{justify-content:center}
-.footer{border-top:1px solid var(--line-soft);padding:44px 0}
 .foot-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
 .foot-in,.foot-links a{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
 .foot-links{display:flex;gap:26px;flex-wrap:wrap}
@@ -423,8 +422,8 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .replica-tabs button:hover{color:var(--fg)}
 .replica-tabs button.on,.replica-tabs span.on{color:var(--fg);border-bottom-color:var(--signal)}
 
-/* FAQ + in-frame falcon art (art supplements the frame, never its own scroll) */
-.faq-grid{display:grid;grid-template-columns:minmax(0,760px) 300px;gap:56px;align-items:center}
+/* FAQ + in-frame falcon art: the live .faq-grid rule lives with .art--faqfield
+   below (a duplicate declared here was always overridden by it). */
 
 
 
@@ -475,10 +474,21 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .hero-canvas--follow{position:fixed;top:0;left:0;bottom:auto;width:100%;height:100vh;z-index:-1}
 .art--inline{width:400px;height:230px;flex:none;margin-bottom:26px;opacity:.9}
 @media(max-width:920px){.sec-row .art--inline{display:none}}
-.art--faqfield{width:300px;height:280px;margin:0;opacity:.9}
+.art--faqfield{width:100%;max-width:340px;height:300px;margin:0;opacity:.9}
 #pricing .art--inline{transform:translateY(-28px)}
-.faq-grid{display:grid;grid-template-columns:minmax(0,760px) 300px;gap:56px;align-items:center}
-@media(max-width:920px){.faq-grid{grid-template-columns:1fr}.faq-grid .art--faqfield{display:none}}
+/* Two columns of questions. The old second column held .art--faqfield, which
+   has no renderer in dusk-art.js and was never placed in any page — so the FAQ
+   was a 2-col grid with one empty column, i.e. the dead width at the page
+   bottom. `.faq{display:contents}` promotes the <details> to grid items so each
+   column flows independently and opening one only pushes its own column. */
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 56px;align-items:start}
+.faq{display:contents}
+.faq details:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+@media(max-width:920px){
+  .faq-grid{grid-template-columns:1fr}
+  .faq details:nth-last-child(-n+2){border-bottom:0}
+  .faq details:last-child{border-bottom:1px solid var(--line)}
+}
 
 .art--eclipse{animation:eclipse-pulse 5.5s ease-in-out infinite}
 @keyframes eclipse-pulse{0%,100%{opacity:.82}50%{opacity:1}}
@@ -1076,7 +1086,9 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .hero-icp{margin-bottom:16px}
 /* cross-product strip */
 .xprod{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--card)}
-.xprod .xp-in{max-width:1100px;margin:0 auto;padding:26px 32px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+/* band is full-bleed; its content aligns to the .wrap measure (1180 + 24 gutter)
+   instead of the old 1100 cap, so it lines up with every section above it. */
+.xprod .xp-in{max-width:1180px;margin:0 auto;padding:26px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .xprod .xp-k{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);white-space:nowrap}
 .xprod p{margin:0;font-size:14.5px;color:var(--fg);flex:1;min-width:260px}
 .xprod a{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--signal);text-decoration:none;white-space:nowrap}
@@ -1177,7 +1189,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
    ink band (light mode), ink dots on the paper band (dark mode). `fixed`
    keeps the tile aligned with the page atmosphere through the flip. ---------- */
 .interlude{
-  background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,#0A0A0B;padding:76px 0;
+  background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,#0A0A0B;padding:84px 0;
   --bg:#0A0A0B;--bg2:#111110;--card:#141413;--fg:#EDECE8;
   --mut:rgba(237,236,232,.55);--line:rgba(237,236,232,.16);--line-soft:rgba(237,236,232,.09);--dot:rgba(237,236,232,.10);
   color:var(--fg);
@@ -1189,24 +1201,37 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 }
 .interlude .sec-head h2,.interlude h3{color:var(--fg)}
 .interlude .sec-head p{color:var(--mut)}
-/* head = big live canvas render, anchored bottom-right, overhanging the content
-   edge (the intended look). Overlap onto the card is prevented by capping the
-   card width (head can't reach it) + stacking below 1024 (the tight band). Render
-   / dots / drawBust UNTOUCHED — layout only; same 430:340 silhouette as committed. */
-.feed-duo{position:relative;margin-bottom:24px}
-@media(min-width:1025px){#bench .sec-head{max-width:min(640px,50%);margin-bottom:36px}}
-.feed-duo .rec-mock{margin:0;max-width:min(520px,52%)}
-.art--bust{position:absolute;right:-136px;bottom:76px;width:430px;height:340px;
-  transform:scale(1.22) !important;transform-origin:100% 100%;image-rendering:auto;pointer-events:none}
-@media(max-width:1120px){.art--bust{transform:scale(1.10) !important;right:-70px;bottom:48px}}
+/* head = big live canvas render, in flow in the right column, still overhanging
+   the content edge (the intended look). The duo is a REAL grid: the card gets a
+   proper column instead of a 52% cap, so the feed rows wrap short and the row
+   stops stretching vertically. Overhang comes from the negative margin, not from
+   absolute positioning — nothing can collide with the card any more. Render /
+   dots / drawBust UNTOUCHED — layout only; same 430:340 silhouette as committed.
+   The old `#bench .sec-head{max-width:min(640px,50%)}` went with the absolute
+   head and is dropped: the falcon docks beside [data-dock] in #demo, not here,
+   so nothing needed that half-width reservation. */
+.feed-duo{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;
+  align-items:center;margin-bottom:24px}
+@media(min-width:1025px){#bench .sec-head{margin-bottom:36px}}
+.feed-duo .rec-mock{margin:0;max-width:none}
+/* overhang eats the .wrap gutter but never the viewport: it grows only with the
+   slack outside the 1180 measure, so the head can't clip at 1280 or below. */
+.art--bust{justify-self:end;align-self:center;width:100%;max-width:430px;height:340px;
+  margin-right:calc(-1 * clamp(0px,(100vw - 1180px)/2 - 24px,96px));
+  transform:scale(1.22) !important;transform-origin:100% 100%;
+  image-rendering:auto;pointer-events:none}
+@media(max-width:1120px){.art--bust{transform:scale(1.10) !important}}
 .art--oort{width:320px;height:320px;display:block;justify-self:end;align-self:center;transform:translateY(-35px)}
 @media(max-width:1024px){
-  .feed-duo{position:static}
-  .feed-duo .rec-mock{max-width:none}
-  .art--bust{position:static;transform:scale(1) !important;width:min(380px,86%);height:auto;aspect-ratio:430/340;margin:10px auto 0}
+  .feed-duo{grid-template-columns:1fr;gap:10px}
+  .art--bust{justify-self:center;transform:scale(1) !important;width:min(380px,86%);height:auto;
+    aspect-ratio:430/340;margin:10px auto 0}
   .art--oort{width:240px;height:240px;justify-self:center;margin-top:8px}
 }
-.interlude--engine{padding:64px 0 72px}
+/* Section rhythm is two tiers: full sections 120px (`section`), interlude bands
+   84px (`.interlude`, incl. #integrations). No third ad-hoc value. */
+.interlude--engine{padding:84px 0}
+#integrations{padding:84px 0}
 .interlude--engine .wrap{position:relative}
 .eng-stream{position:absolute;left:4%;right:4%;height:1px;pointer-events:none;opacity:.45;
   background:repeating-linear-gradient(90deg,var(--line) 0 12px,transparent 12px 30px);
