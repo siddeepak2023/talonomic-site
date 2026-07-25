@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260740">
+<link rel="stylesheet" href="./dusk.css?v=20260741">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -345,7 +345,7 @@
         </div>
       </div>
       <!-- Anatomy of a number — what each part of the card above is telling you -->
-      <ol class="anat-notes" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px;margin-top:20px">
+      <ol class="anat-notes anat-notes--2col">
         <li><span class="an-k">The value</span><span class="an-v">Computed from your rows, never estimated or rounded to a headline.</span></li>
         <li><span class="an-k">The delta</span><span class="an-v">Green for favorable, red for not — same status colors as the live dashboard.</span></li>
         <li><span class="an-k">The formula</span><span class="an-v">The exact expression, with the order count it ran over — reproducible.</span></li>
@@ -372,7 +372,7 @@
         <h3>Per-SKU profit screener</h3>
         <p>Revenue − COGS − fees − ad cost, per SKU. Ranked so the products quietly draining cash surface first — with the computation attached.</p>
         <div class="scr-live" data-countup aria-label="Per-SKU profit screener — weak margins surface first (sample store)">
-          <div class="sc-kpis sc-stagger" style="grid-template-columns:1.25fr 1fr">
+          <div class="sc-kpis sc-stagger">
             <div class="sc-card sc-kpi sc-kpi--hero">
               <div class="k-label">Worst margin <span class="sc-delta loss">under floor</span></div>
               <div class="k-val"><b data-count="17.8" data-decimals="1" data-suffix="%">17.8%</b></div>

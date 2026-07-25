@@ -644,6 +644,15 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .anat-notes .an-k{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg);white-space:nowrap}
 .anat-notes .an-v{grid-column:2;font-size:13px;line-height:1.5;color:var(--mut)}
 @media(max-width:760px){.sc-panel.anat .anat-grid{grid-template-columns:1fr;gap:20px}}
+/* recovered anatomy notes, two-up beside the metric pack (one-up when narrow) */
+.anat-notes--2col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px;margin-top:20px}
+/* screener clip living inside a bento cell: the mono table is wider than a phone */
+.scr-live{overflow-x:auto}
+.scr-live .sc-kpis{grid-template-columns:1.25fr 1fr}
+@media(max-width:760px){
+  .anat-notes--2col{grid-template-columns:1fr;gap:12px}
+  .scr-live .sc-kpis{grid-template-columns:1fr}
+}
 
 /* ── Verified-formula tile ──────────────────────────────────── */
 .sc-formula{padding:18px 20px}
