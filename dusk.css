@@ -1187,9 +1187,9 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .feed-duo{position:relative;margin-bottom:24px}
 @media(min-width:1025px){#bench .sec-head{max-width:min(640px,50%);margin-bottom:36px}}
 .feed-duo .rec-mock{margin:0;max-width:min(520px,52%)}
-.art--bust{position:absolute;right:-64px;bottom:35px;width:430px;height:340px;
-  transform:scale(1.17) !important;transform-origin:100% 100%;image-rendering:auto;pointer-events:none}
-@media(max-width:1120px){.art--bust{transform:scale(1.10) !important;right:-24px}}
+.art--bust{position:absolute;right:-136px;bottom:76px;width:430px;height:340px;
+  transform:scale(1.22) !important;transform-origin:100% 100%;image-rendering:auto;pointer-events:none}
+@media(max-width:1120px){.art--bust{transform:scale(1.10) !important;right:-70px;bottom:48px}}
 .art--oort{width:320px;height:320px;display:block;justify-self:end;align-self:center;transform:translateY(-35px)}
 @media(max-width:1024px){
   .feed-duo{position:static}

@@ -26,7 +26,7 @@
 .rec-mini .rt{display:flex;justify-content:space-between;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
 .rec-mini .sv{color:var(--signal);font-weight:700}
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I have to connect my store?", "acceptedAnswer": {"@type": "Answer", "text": "No — it runs on the order export you already download. Direct connectors are in review; until they ship, it's exports, and we say so."}}, {"@type": "Question", "name": "Will the AI Product Manager touch my store?", "acceptedAnswer": {"@type": "Answer", "text": "No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust."}}, {"@type": "Question", "name": "Is my store data safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your file is parsed and your numbers are computed in your browser. When you use AI insights or save a report, the data needed is sent over an encrypted connection and stored in your account until you delete it. Your data is never sold or used to train our models."}}, {"@type": "Question", "name": "What exports do you support?", "acceptedAnswer": {"@type": "Answer", "text": "Standard order exports from Shopify, WooCommerce, BigCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works."}}, {"@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — one click from your billing page. Your plan stays active until the end of the period you paid for, and your reports stay exportable."}}, {"@type": "Question", "name": "How is margin actually computed?", "acceptedAnswer": {"@type": "Answer", "text": "Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — executed as real pandas against your export. Click any figure and ProfitFalcon shows the code that produced it."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I have to connect my store?", "acceptedAnswer": {"@type": "Answer", "text": "No — it runs on the order export you already download. Direct connectors are in review; until they ship, it's exports, and we say so."}}, {"@type": "Question", "name": "Will the AI Product Manager touch my store?", "acceptedAnswer": {"@type": "Answer", "text": "No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust."}}, {"@type": "Question", "name": "Is my store data safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your file is parsed and your numbers are computed in your browser. When you use AI insights or save a report, the data needed is sent over an encrypted connection and stored in your account until you delete it. Your data is never sold or used to train our models."}}, {"@type": "Question", "name": "What exports do you support?", "acceptedAnswer": {"@type": "Answer", "text": "Standard order exports from Shopify, WooCommerce, BigCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works."}}, {"@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — one click from your billing page. Your plan stays active until the end of the period you paid for, and your reports stay exportable."}}, {"@type": "Question", "name": "How is margin actually computed?", "acceptedAnswer": {"@type": "Answer", "text": "Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — computed deterministically in your browser from your export, never estimated by a model. Click any figure and ProfitFalcon shows the exact expression and the row count behind it; the built-in Python console re-runs the same rows in pandas whenever you want to check it yourself."}}]}</script>
   <script>
     /* Belt-and-suspenders with sw.js: drop any root-scoped worker from the old SPA-at-root setup so this page is not forwarded to /dashboard. */
     if ("serviceWorker" in navigator) {
@@ -203,13 +203,16 @@
     </div>
 
     <div class="feed-duo rv d1">
-    <div class="rec-mock" aria-label="Sample recommendation card as it appears in the product">
-      <div class="rm-bar"><span>agent feed — one card</span><span>SAMPLE DATA · LIVE PRODUCT UI</span></div>
+    <div class="rec-mock" data-countup aria-label="Operator queue — recommendations awaiting approval (sample store)">
+      <div class="rm-bar"><span>agent feed — operator queue</span><span>SAMPLE DATA · YOU APPROVE</span></div>
       <div class="rm-body">
-        <div class="rm-head"><span>MARGIN SENTINEL</span><span>SAMPLE STORE</span></div>
-        <p class="rm-title">Fence the deep discount codes</p>
-        <p class="rm-move">FLASH35 ran <b>26.6% off on 2,343 orders</b> — cap sitewide depth, gate the rest behind a minimum cart</p>
-        <div class="rm-proj">Projected <b>~$31.0K/mo</b> recoverable <span>· the formula is attached to the card</span></div>
+        <div class="rm-head"><span>QUEUED → YOUR APPROVAL</span><span>SAMPLE STORE</span></div>
+        <div class="sc-stagger">
+          <div class="sc-act"><span class="a-pri">P1</span><p><b>Fence or kill the deep codes</b> — FLASH35 ran 26.6% off on 2,343 orders; $436,203 given away across 9,713 discounted orders (7.7% of gross)</p><span class="a-imp">~$<b data-count="30993">30,993</b>/mo</span></div>
+          <div class="sc-act"><span class="a-pri">P2</span><p><b>Reprice the two flagged products</b> — Last-Season Insulated Vest (17.8%) and Prior-Year Trail Tee (20.1%); the other 26 hold 50–66%</p><span class="a-imp">at the floor</span></div>
+          <div class="sc-act"><span class="a-pri">P3</span><p><b>Fix the top return drivers</b> — Stormpeak 3L Hardshell (Black / M) returning 20.0% against a 9.2% store average, before more spend goes behind it</p><span class="a-imp">9.2% avg</span></div>
+        </div>
+        <div class="rm-proj">Projected <b>~$31.0K/mo</b> recoverable <span>· every card carries the formula that produced it</span></div>
         <div class="rm-actions"><span class="rm-btn rm-btn--approve">Approve</span><span class="rm-btn">Dismiss</span><span class="rm-note">Nothing executes without you</span></div>
       </div>
     </div>
@@ -341,6 +344,13 @@
           <div class="k-formula"><b>=</b> revenue / 24,623 orders</div>
         </div>
       </div>
+      <!-- Anatomy of a number — what each part of the card above is telling you -->
+      <ol class="anat-notes" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px;margin-top:20px">
+        <li><span class="an-k">The value</span><span class="an-v">Computed from your rows, never estimated or rounded to a headline.</span></li>
+        <li><span class="an-k">The delta</span><span class="an-v">Green for favorable, red for not — same status colors as the live dashboard.</span></li>
+        <li><span class="an-k">The formula</span><span class="an-v">The exact expression, with the order count it ran over — reproducible.</span></li>
+        <li><span class="an-k">Verified ✓</span><span class="an-v">Every input reconciled against the file you uploaded. Nothing invented.</span></li>
+      </ol>
       <div class="sc-formula sc-verified" style="margin-top:12px">verified ✓ every figure ships with its formula, inputs checked against your export · gross margin 53.8% · repeat rate 23.4%</div>
     </div>
   </div>
@@ -360,14 +370,30 @@
       <article class="cell wide rv">
         <span class="cell-idx">B1 / CORE</span>
         <h3>Per-SKU profit screener</h3>
-        <p>Revenue − COGS − fees − ad cost, per SKU. Sorted by contribution margin so the SKUs quietly draining cash surface first — with the computation attached.</p>
-        <div class="scm sc-drift" aria-hidden="true">
-          <span class="scm-tag">Screener</span>
-          <div class="scm-acts">
-            <div class="ar"><span class="pri">17.8%</span><p>Last-Season Insulated Vest · below 20%</p><span class="imp">$86.0K rev</span></div>
-            <div class="ar"><span class="pri">20.1%</span><p>Prior-Year Trail Tee · at the floor</p><span class="imp">$34.1K rev</span></div>
+        <p>Revenue − COGS − fees − ad cost, per SKU. Ranked so the products quietly draining cash surface first — with the computation attached.</p>
+        <div class="scr-live" data-countup aria-label="Per-SKU profit screener — weak margins surface first (sample store)">
+          <div class="sc-kpis sc-stagger" style="grid-template-columns:1.25fr 1fr">
+            <div class="sc-card sc-kpi sc-kpi--hero">
+              <div class="k-label">Worst margin <span class="sc-delta loss">under floor</span></div>
+              <div class="k-val"><b data-count="17.8" data-decimals="1" data-suffix="%">17.8%</b></div>
+              <div class="k-formula"><b>=</b> Last-Season Insulated Vest</div>
+            </div>
+            <div class="sc-card sc-kpi">
+              <div class="k-label">Under the floor <span class="sc-delta gain">26 healthy</span></div>
+              <div class="k-val"><b data-count="1">1</b> of <b data-count="28">28</b></div>
+              <div class="k-formula"><b>=</b> margin below the 20% floor</div>
+            </div>
           </div>
-          <div class="scm-meta"><span>Sorted <b>contribution margin</b></span><span>Rows <b>24,623</b></span><span>Engine <b>Python</b></span></div>
+          <table class="sc-table">
+            <thead><tr><th>Product</th><th>Tag</th><th class="num">Rev</th><th class="num">Orders</th><th class="num">Margin</th></tr></thead>
+            <tbody class="sc-stagger">
+              <tr><td>Last-Season Insulated Vest</td><td class="sig">LEAK</td><td class="num">$86.0K</td><td class="num">926</td><td class="num sig">17.8%</td></tr>
+              <tr><td>Prior-Year Trail Tee</td><td class="sig">WATCH</td><td class="num">$34.1K</td><td class="num">950</td><td class="num sig">20.1%</td></tr>
+              <tr><td>Stormpeak 3L Hardshell</td><td>STAR</td><td class="num">$660.4K</td><td class="num">1,406</td><td class="num">54.1%</td></tr>
+              <tr><td>Basecamp Down Parka</td><td>STAR</td><td class="num">$671.7K</td><td class="num">1,292</td><td class="num">52.0%</td></tr>
+            </tbody>
+          </table>
+          <div class="scm-meta" style="margin-top:12px"><span>Screened <b>28 products</b></span><span>Orders <b>24,623</b></span><span>Healthy <b>50–66%</b></span></div>
         </div>
       </article>
       <article class="cell rv d1">
@@ -757,7 +783,7 @@
       </details>
       <details>
         <summary>How is margin actually computed?</summary>
-        <div class="a">Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — executed as real pandas against your export. Click any figure and ProfitFalcon shows the code that produced it.</div>
+        <div class="a">Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — computed deterministically in your browser from your export, never estimated by a model. Click any figure and ProfitFalcon shows the exact expression and the row count behind it; the built-in Python console re-runs the same rows in pandas whenever you want to check it yourself.</div>
       </details>
     </div>
     </div>
