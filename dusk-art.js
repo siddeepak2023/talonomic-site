@@ -21,12 +21,29 @@ try { stored = localStorage.getItem("bf-theme"); } catch(e){}
 if (stored !== "dark") {  // default light; toggle (stored) overrides
   root.setAttribute("data-theme","light");
 }
+/* The embedded live preview is a separate document, so it can't read this page's
+   theme. Hand it the current one on load, and push every flip. */
+function currentTheme(){ return root.getAttribute("data-theme") === "light" ? "light" : "dark"; }
+function pushThemeToEmbeds(t){
+  document.querySelectorAll("iframe.live-frame").forEach(function(fr){
+    try { fr.contentWindow.postMessage({ type: "bf-theme", theme: t }, "*"); } catch(e){}
+  });
+}
+document.querySelectorAll("iframe.live-frame").forEach(function(fr){
+  var src = fr.getAttribute("src");
+  if (src && src.indexOf("theme=") === -1) {
+    fr.setAttribute("src", src + (src.indexOf("?") === -1 ? "?" : "&") + "theme=" + currentTheme());
+  }
+  fr.addEventListener("load", function(){ pushThemeToEmbeds(currentTheme()); });
+});
+
 var toggle = document.getElementById("themeToggle");
 if (toggle) toggle.addEventListener("click", function(){
   var light = root.getAttribute("data-theme") === "light";
   if (light) root.removeAttribute("data-theme");
   else root.setAttribute("data-theme","light");
   try { localStorage.setItem("bf-theme", light ? "dark" : "light"); } catch(e){}
+  pushThemeToEmbeds(light ? "dark" : "light");
   syncColors();
 });
 
