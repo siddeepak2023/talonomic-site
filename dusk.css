@@ -433,8 +433,8 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 /* accent serif + halftone atmosphere (DUSK 2.5) */
 .accent-serif{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-0.01em;color:#B0453B}
 [data-theme="light"] .accent-serif{color:#8E2A22}
-body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var(--bg)}
-[data-theme="light"] body{background:url(textures/halftone-ink.png) repeat fixed 0 0/720px 720px,var(--bg)}
+body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,var(--bg)}
+[data-theme="light"] body{background:url(textures/halftone-ink.webp) repeat fixed 0 0/720px 720px,var(--bg)}
 
 /* Design-system footer */
 .footer{border-top:1px solid var(--line-soft);padding:64px 0 36px}
@@ -736,7 +736,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .sc-act{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line-soft)}
 .sc-act:first-child{border-top:none}
 .sc-act .a-pri{
-  flex:none;font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:600;
+  flex:none;font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:700;
   letter-spacing:.1em;color:var(--signal);border:1px solid color-mix(in srgb,var(--signal) 40%,transparent);
   border-radius:5px;padding:2px 6px;margin-top:2px;
 }
@@ -1118,7 +1118,7 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
 .calc-row input{width:110px;padding:7px 10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:7px;font-family:"JetBrains Mono",monospace;font-size:13px;text-align:right}
 .calc-row input:focus{outline:2px solid var(--signal);outline-offset:1px}
 .calc-out{text-align:center}
-.calc-out .co-n{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;letter-spacing:-.02em;color:var(--signal)}
+.calc-out .co-n{font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;letter-spacing:-.02em;color:var(--signal);font-variant-numeric:tabular-nums}
 .calc-out .co-l{font-size:12.5px;color:var(--mut);max-width:300px;margin:8px auto 0;line-height:1.5}
 
 /* ── integrations hub — exports in, product core, artifacts out ── */
@@ -1189,13 +1189,13 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
    ink band (light mode), ink dots on the paper band (dark mode). `fixed`
    keeps the tile aligned with the page atmosphere through the flip. ---------- */
 .interlude{
-  background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,#0A0A0B;padding:84px 0;
+  background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,#0A0A0B;padding:84px 0;
   --bg:#0A0A0B;--bg2:#111110;--card:#141413;--fg:#EDECE8;
   --mut:rgba(237,236,232,.55);--line:rgba(237,236,232,.16);--line-soft:rgba(237,236,232,.09);--dot:rgba(237,236,232,.10);
   color:var(--fg);
 }
 :root:not([data-theme="light"]) .interlude{
-  background:url(textures/halftone-ink.png) repeat fixed 0 0/720px 720px,#F8F7F3;
+  background:url(textures/halftone-ink.webp) repeat fixed 0 0/720px 720px,#F8F7F3;
   --bg:#F8F7F3;--bg2:#FFFFFF;--card:#FFFFFF;--fg:#111110;
   --mut:rgba(17,17,16,.55);--line:rgba(17,17,16,.16);--line-soft:rgba(17,17,16,.09);--dot:rgba(17,17,16,.10);
 }
@@ -1282,3 +1282,49 @@ body{background:url(textures/halftone-bone.png) repeat fixed 0 0/720px 720px,var
   .clip-lg .lgc-rail .lgc-node:nth-child(n+5){display:none} /* keep 4 lifecycle steps on tiny screens */
 }
 @media(prefers-reduced-motion:reduce){.clip-stage{transition:none}}
+
+/* ============================================================
+   EDITORIAL LAYER — numbered sections, figure discipline
+   The page is a document, not a scroll of blocks. Numerals ride the
+   existing mono eyebrow; the signal hairline that used to sit inside
+   the eyebrow migrates out to the section's own top border, where it
+   reads as a printed rule rather than a bullet.
+   ============================================================ */
+body{counter-reset:sec}
+section[id]{counter-increment:sec}
+
+/* the eyebrow's 22px rule becomes the section folio */
+section[id] .sec-head > .eyebrow::before{
+  content:"§ " counter(sec,decimal-leading-zero);
+  width:auto;height:auto;background:none;
+  color:var(--signal);letter-spacing:.14em;
+  transform:none;transition:opacity .7s ease .15s;
+}
+/* the draw-in at :1242 scales a hairline; a numeral fades instead */
+section[id] .sec-head.rv:not(.on) > .eyebrow::before{opacity:0}
+@media(prefers-reduced-motion:reduce){
+  section[id] .sec-head.rv:not(.on) > .eyebrow::before{opacity:1;transition:none}
+}
+
+/* 64px signal tick riding the hairline `section` already draws */
+section[id]::before{
+  content:"";position:absolute;top:-1px;left:0;
+  width:64px;height:1px;background:var(--signal);
+}
+
+/* Figures stop reflowing mid-count. Proportional digits change width as
+   they tick, which is the loudest amateur tell on the best animation
+   on the page. */
+.tile b,.plan-price,.apprice,.lg-v b,.w-total b,
+[data-countup] b,.scr-live b,.sc-kpi .k-val,.calc-v{
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+}
+
+/* Measure: a display line and a reading line are not the same measure.
+   `.sec-head` keeps its 640px box (the falcon dock is measured off it) —
+   only the children get their own. */
+.sec-head h2{max-width:20ch;text-wrap:balance;letter-spacing:-.035em}
+.sec-head p{max-width:58ch;text-wrap:pretty}
+.bento p{max-width:38ch;text-wrap:pretty}
+.step p{text-wrap:pretty}
+.faq .a{max-width:68ch;text-wrap:pretty}
