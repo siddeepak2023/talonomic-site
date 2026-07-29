@@ -264,7 +264,11 @@ function resizeTerrain(){
   }
   var pb = document.querySelector(".hero .promptbox");
   if (pb) txr = Math.max(txr, pb.getBoundingClientRect().right - crL);
-  document.querySelectorAll(".hero .hero-sub, .hero .trust").forEach(function(el){
+  /* .hero-ctas is measured too. Without it, company-site — which has no
+     .promptbox and no .trust — took its whole right-edge clearance from
+     .hero-sub, and .hero-sub is capped at 52ch while the three-button CTA row
+     runs far wider, so the falcon formed straight through the buttons. */
+  document.querySelectorAll(".hero .hero-sub, .hero .trust, .hero .hero-ctas").forEach(function(el){
     txr = Math.max(txr, glyphRight(el));
   });
   if (dockSec) wsr = glyphRight(dockSec);

@@ -130,7 +130,10 @@ section{padding:120px 0;border-top:1px solid var(--line-soft);position:relative}
 .hero h1{font-size:clamp(2.6rem,6.4vw,4.8rem);max-width:16ch}
 .hero-sub{max-width:52ch;color:var(--mut);font-size:18px;margin:28px 0 34px}
 .hero-sub strong{color:var(--fg);font-weight:600}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+/* capped like .hero-sub above. Uncapped, a three-button row ran ~820px into
+   the falcon's airspace on company-site; the cap also gives the art's
+   right-edge measurement a stable bound to clear. */
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;max-width:56ch}
 .hero-chip{margin-bottom:30px;display:inline-flex}
 .trust{
   margin-top:26px;font-family:"JetBrains Mono",monospace;font-size:10.5px;
@@ -1210,13 +1213,16 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
    The old `#bench .sec-head{max-width:min(640px,50%)}` went with the absolute
    head and is dropped: the falcon docks beside [data-dock] in #demo, not here,
    so nothing needed that half-width reservation. */
+/* align-items:end, not center: the head canvas is a fixed 340px against a
+   430-520px .rec-mock, so centring left 45-90px of dead space above it. The
+   item-level align-self on .art--bust below must agree — it wins over this. */
 .feed-duo{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;
-  align-items:center;margin-bottom:24px}
-@media(min-width:1025px){#bench .sec-head{margin-bottom:36px}}
+  align-items:end;margin-bottom:24px}
+#bench .sec-head{margin-bottom:36px}
 .feed-duo .rec-mock{margin:0;max-width:none}
 /* overhang eats the .wrap gutter but never the viewport: it grows only with the
    slack outside the 1180 measure, so the head can't clip at 1280 or below. */
-.art--bust{justify-self:end;align-self:center;width:100%;max-width:430px;height:340px;
+.art--bust{justify-self:end;align-self:end;width:100%;max-width:430px;height:340px;
   margin-right:calc(-1 * clamp(0px,(100vw - 1180px)/2 - 24px,96px));
   transform:scale(1.22) !important;transform-origin:100% 100%;
   image-rendering:auto;pointer-events:none}
