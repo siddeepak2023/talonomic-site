@@ -409,7 +409,7 @@ function loadArtImage(src){
   img.src = src;
 }
 
-/* ---------- DATA OBSERVATORY KIT (ported from Talon landing) ---------- */
+/* ---------- DATA OBSERVATORY KIT (ported from BizFalcon Analyst landing) ---------- */
 function scopedVar(cv, name){
   var el = cv.__styleFrom || cv;
   if (el && el.nodeType === 1) {
