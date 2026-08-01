@@ -1330,6 +1330,15 @@ section[id]::before{
    `.sec-head` keeps its 640px box (the falcon dock is measured off it) —
    only the children get their own. */
 .sec-head h2{max-width:20ch;text-wrap:balance;letter-spacing:-.035em}
+/* A max-width box has to centre ITSELF when its parent centres text.
+   .sec-head h2 above is 20ch wide with no auto margin, so in a section whose
+   sec-head sets text-align:center the heading became a 20ch block sitting flush
+   LEFT, with its text centred inside that box -- reading as a heading that
+   ignored the centring while the sibling <p> (no max-width) centred correctly.
+   Exactly the .hero-ctas defect: centring content inside a box that is not
+   itself centred. Scoped to the inline attribute so left-aligned sec-heads,
+   which are the majority, keep their flush-left box. */
+.sec-head[style*="text-align:center"] h2{margin-inline:auto}
 .sec-head p{max-width:58ch;text-wrap:pretty}
 .bento p{max-width:38ch;text-wrap:pretty}
 .step p{text-wrap:pretty}
