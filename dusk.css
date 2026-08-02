@@ -1347,7 +1347,6 @@ section[id]::before{
 .bento p{max-width:38ch;text-wrap:pretty}
 .step p{text-wrap:pretty}
 .faq .a{max-width:68ch;text-wrap:pretty}
-
 /* Button glyph. Replaced `&#x2913;` (⤓), which renders as a hairline next to bold
    button text — a text arrow asked to do an icon's job. Sized to the cap height so it
    sits on the text baseline rather than floating. */
