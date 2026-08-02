@@ -105,7 +105,11 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
 .brand{display:flex;align-items:center;gap:11px;font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif;font-size:16px;font-weight:800;letter-spacing:-.01em}
 .brand img{height:30px;width:auto;display:block}
 [data-theme="light"] .brand img{filter:invert(1)}
-.brand .sub{color:var(--mut);font-weight:500}
+/* text-transform:none is a GUARD, not styling. The nav sub-labels were ALL-CAPS
+   as literal strings in content, not via CSS, so there was no single rule to flip
+   and no rule stopping a future session from adding one. The labels are now title
+   case at every call site; this keeps CSS from re-uppercasing them behind that. */
+.brand .sub{color:var(--mut);font-weight:500;text-transform:none}
 .nav-links{display:flex;gap:28px;margin-left:12px}
 .nav-links a{
   font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;
