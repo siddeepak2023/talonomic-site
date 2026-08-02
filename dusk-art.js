@@ -126,10 +126,20 @@ function measureDock(){
     if (dockShown) drawDockFalcon();
   }
 }
+var dockQueued = false;
 function heroScroll(){
+  /* scrollY is a cheap read and mT must track the wheel exactly, so it stays here. */
   sc = window.scrollY;
   mT = Math.min(1, Math.max(0, sc / (Math.max(1, waveH) * 0.25)));
-  measureDock();
+  /* measureDock() is NOT cheap: docTopOf walks the offsetParent chain and reads
+     offsetHeight, which forces synchronous layout. Running it per scroll EVENT —
+     and a trackpad fires several per frame — was the site-wide lag. Coalesced to at
+     most one layout read per animation frame; the dock only moves when the document
+     reflows, which cannot happen twice inside one frame. */
+  if (!dockQueued) {
+    dockQueued = true;
+    requestAnimationFrame(function(){ dockQueued = false; measureDock(); });
+  }
 }
 function falconGeom(){
   var minL = Math.max(txr, wsr) > 0 ? Math.max(txr, wsr) + 24 : 0;
@@ -195,7 +205,12 @@ function drawFrame(t){
     if (dcv) dcv.style.opacity = docked ? "1" : "0";
   }
   if (docked) { ctx.clearRect(0, 0, W, H); return; }
-  if (follow && waveTopDoc + Hw - sc < -60 && fY + g.fH < -60) return;
+  /* Scrolled past the hero. CLEAR before bailing — the follow canvas is
+     position:fixed, so returning early left the last painted frame stuck on screen
+     and the falcon's particle cloud hung over the sections below it (reported on
+     ClientFalcon §07). Bailing without clearing is only correct for a canvas that
+     scrolls away with its section; this one does not. */
+  if (follow && waveTopDoc + Hw - sc < -60 && fY + g.fH < -60) { ctx.clearRect(0, 0, W, H); return; }
   var nPts = falconPts ? falconPts.length / 2 : 0;
   for (var r = 0; r < ROWS; r++) {
     var d = r / (ROWS - 1);
