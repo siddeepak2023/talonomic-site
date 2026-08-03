@@ -1428,3 +1428,27 @@ section[id]::before{
 .nav-signin{font-family:"Instrument Sans","Hanken Grotesk",sans-serif;font-size:14.5px;
   font-weight:600;color:var(--mut);white-space:nowrap;letter-spacing:.005em}
 .nav-signin:hover{color:var(--fg)}
+
+/* ── measured collision + alignment fixes (sweep, 2026-08-03 — shared) ─────────────────
+   Every gap below was measured on the live page, not eyeballed. The shared cause is
+   the same one that put the product links 4px apart: a parent left at display:block
+   with inline-flex children, so only a collapsed whitespace character separates
+   them. Spacing the parents is the fix; none of these need markup changes. */
+
+/* Ledger lifecycle tabs measured 0px apart — Detected/Exact change/Projected/
+   Approved/Measured/Realized read as one run-on string. */
+.lg-nodes,.lg-rail{display:flex;flex-wrap:wrap;column-gap:22px;row-gap:10px;align-items:center}
+
+/* Approve / Dismiss measured 10px apart, and the reassurance note ran into them. */
+.rm-actions,.rec-actions{display:flex;flex-wrap:wrap;column-gap:18px;row-gap:8px;align-items:center}
+
+/* A centred .sec-head centres its h2 and p (both have max-width + margin-inline
+   auto), but .eyebrow is a flex row, so it stayed full-width with its content hard
+   left — measuring 44px off the headings it labels. Centre its content too. */
+.sec-head[style*="text-align:center"] .eyebrow{justify-content:center}
+
+/* The bust was vertically centred in a cell much taller than itself, which put the
+   dead space ABOVE the head — reported as "too much empty space above the head".
+   Top-align the pair so the head's top meets the heading text beside it.
+   LAYOUT ONLY: the render, the dot field and drawBust are untouched. */
+.feed-duo{align-items:start}
