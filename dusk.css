@@ -1404,3 +1404,19 @@ section[id]::before{
   .mod--flip .mod-copy,.mod--flip .mod-shot-link{order:initial}
   .mods{gap:48px;margin-top:38px}
 }
+
+/* ── sweep-2026-08-03: measured per-component spacing ────────────────────────
+   Companion to the site.css sweep. Every number here was measured, not guessed. */
+
+/* The LTV chart was a fixed 86px pinned to the bottom of its cell by
+   `.cell > .scm{margin-top:auto}`, so a short paragraph left a large hole between
+   the copy and the artifact — reported as "too much space in the LTV and whales
+   card". Bottom-pinning is kept (it keeps the three bento artifacts on one
+   baseline); the artifact is extended vertically instead, which is what fills the
+   hole. The bars already animate via scmBar with a per-bar --i stagger. */
+.scm-chart{height:150px}
+
+/* The two stat cards sat hard against the PRODUCT/TAG/REV/ORDERS/MARGIN header
+   below and tight to the paragraph above. Give the block its own breathing room
+   rather than letting it touch both neighbours. */
+.scr-live .sc-kpis{margin:18px 0 22px}
