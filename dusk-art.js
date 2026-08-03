@@ -298,6 +298,19 @@ var heroFrozen = false, probeN = 0, probeStart = 0;
 document.addEventListener("visibilitychange", function(){
   if (!document.hidden) { probeN = 0; probeStart = 0; }
 });
+/* Keeps a frozen hero from smearing over the page. See the freeze branch in loop(). */
+var frozenGuardOn = false, frozenCleared = false;
+function installFrozenGuard(){
+  if (frozenGuardOn || !canvas || !ctx) return;
+  frozenGuardOn = true;
+  var onFrozenScroll = function(){
+    var past = follow && (waveTopDoc + waveH - window.scrollY < -60);
+    if (past && !frozenCleared) { ctx.clearRect(0, 0, W, H); frozenCleared = true; }
+    else if (!past && frozenCleared) { frozenCleared = false; drawFrame(last / 1000); }
+  };
+  window.addEventListener("scroll", onFrozenScroll, { passive: true });
+  onFrozenScroll();
+}
 function loop(ts){
   if (heroFrozen) return; /* weak device: hero left as a static frame */
   requestAnimationFrame(loop);
@@ -313,7 +326,19 @@ function loop(ts){
   if (probeStart === 0) { probeStart = ts; return; }
   if (probeN - 40 >= 90) {                 /* sustained 90-frame window (~3s) */
     var fps = 90000 / Math.max(1, ts - probeStart);
-    if (fps < 18) { window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true; }
+    if (fps < 18) {
+      window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true;
+      /* A stopped loop can never clear a position:fixed canvas.
+         The bail at the top of drawFrame clears the canvas once the hero has
+         scrolled away -- but it only runs if something is still calling drawFrame.
+         Freezing stopped the loop, so that clear became unreachable and the last
+         painted frame stayed on a fixed, full-viewport, z-index:-1 layer for the
+         rest of the session: the particle field hung behind EVERY section below the
+         hero. Reported as "hero animation frozen behind the entire scroll".
+         So the freeze installs its own guard: clear when past the hero, repaint the
+         single still frame when back in range. One comparison per scroll event. */
+      installFrozenGuard();
+    }
     probeN = 41; probeStart = ts;          /* re-arm; freeze only on a truly weak GPU */
   }
 }
