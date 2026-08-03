@@ -1452,3 +1452,10 @@ section[id]::before{
    Top-align the pair so the head's top meets the heading text beside it.
    LAYOUT ONLY: the render, the dot field and drawBust are untouched. */
 .feed-duo{align-items:start}
+
+/* Bottom-pinning (.cell > .scm{margin-top:auto}) keeps the bento artifacts on one
+   baseline, but when one artifact is much shorter than its row-mates the auto margin
+   has a lot to distribute and shows up as a hole under the copy — measured 79px on
+   ClientFalcon's "Batch every client" card, whose .scm is only 132px. A floor on the
+   artifact box equalises the row so the auto margin has little left to push. */
+.cell > .scm{min-height:172px}
