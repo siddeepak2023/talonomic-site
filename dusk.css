@@ -1343,6 +1343,14 @@ section[id]::before{
    itself centred. Scoped to the inline attribute so left-aligned sec-heads,
    which are the majority, keep their flush-left box. */
 .sec-head[style*="text-align:center"] h2{margin-inline:auto}
+/* The sibling <p> has the SAME defect, re-introduced by the max-width below.
+   The h2 rule above was written when `.sec-head p` had no max-width, and its
+   comment says so explicitly -- "the sibling <p> (no max-width) centred
+   correctly". Then 58ch was added to p, which turned it back into an
+   un-centred box centring its own text. Measured on profit.: leftGap 0,
+   rightGap 580 in a 1132px parent, so the subtitle read ~290px left of the
+   heading it belongs to. Same cause, same fix, applied to both children. */
+.sec-head[style*="text-align:center"] p{margin-inline:auto}
 .sec-head p{max-width:58ch;text-wrap:pretty}
 .bento p{max-width:38ch;text-wrap:pretty}
 .step p{text-wrap:pretty}
