@@ -195,9 +195,11 @@
           <a href="#engine" role="menuitem">Engine</a>
         </div>
       </div>
+      <div class="nav-dd">\n        <button class="nav-dd-btn" type="button" aria-haspopup="true" aria-expanded="false">Solutions <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>\n        <div class="nav-dd-menu" role="menu">\n          <a href="https://profit.bizfalconai.com/" role="menuitem">Ecommerce brand</a>\n          <a href="https://client.bizfalconai.com/" role="menuitem">Agency</a>\n          <a href="https://talon.bizfalconai.com/" role="menuitem">Any spreadsheet</a>\n          <a href="https://talon.bizfalconai.com/solutions" role="menuitem">By industry</a>\n        </div>\n      </div>
       <a href="#bench">Agents</a>
       <a href="#integrations">Integrations</a>
       <a href="#pricing">Pricing</a>
+      <div class="nav-dd">\n        <button class="nav-dd-btn" type="button" aria-haspopup="true" aria-expanded="false">Company <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>\n        <div class="nav-dd-menu" role="menu">\n          <a href="https://talon.bizfalconai.com/about" role="menuitem">About</a>\n          <a href="https://talon.bizfalconai.com/security" role="menuitem">Security</a>\n          <a href="https://talon.bizfalconai.com/help" role="menuitem">Docs</a>\n          <a href="https://talon.bizfalconai.com/blog" role="menuitem">Blog</a>\n        </div>\n      </div>
       <a href="./blog/">Blog</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -1026,12 +1028,30 @@ document.addEventListener("click",function(e){var t=e.target.closest&&e.target.c
 
 <script>
 (function(){
-  var dd=document.getElementById("navDD"); if(!dd) return;
-  var btn=dd.querySelector(".nav-dd-btn");
-  btn.addEventListener("click",function(e){e.stopPropagation();var open=dd.classList.toggle("open");btn.setAttribute("aria-expanded",open?"true":"false");});
-  document.addEventListener("click",function(){dd.classList.remove("open");btn.setAttribute("aria-expanded","false");});
-  dd.querySelectorAll(".nav-dd-menu a").forEach(function(a){a.addEventListener("click",function(){dd.classList.remove("open");});});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"){dd.classList.remove("open");btn.setAttribute("aria-expanded","false");}});
+  /* Every .nav-dd, not just #navDD. The original bound a single hard-coded id, so a
+     second dropdown in the nav would render but never open. Opening one closes the
+     others, so two menus can never be on screen together. */
+  var dds=[].slice.call(document.querySelectorAll(".nav-dd")); if(!dds.length) return;
+  function closeAll(except){
+    dds.forEach(function(dd){
+      if(dd===except) return;
+      dd.classList.remove("open");
+      var b=dd.querySelector(".nav-dd-btn"); if(b) b.setAttribute("aria-expanded","false");
+    });
+  }
+  dds.forEach(function(dd){
+    var btn=dd.querySelector(".nav-dd-btn"); if(!btn) return;
+    btn.addEventListener("click",function(e){
+      e.stopPropagation(); closeAll(dd);
+      var open=dd.classList.toggle("open");
+      btn.setAttribute("aria-expanded",open?"true":"false");
+    });
+    dd.querySelectorAll(".nav-dd-menu a").forEach(function(a){
+      a.addEventListener("click",function(){dd.classList.remove("open");btn.setAttribute("aria-expanded","false");});
+    });
+  });
+  document.addEventListener("click",function(){closeAll(null);});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeAll(null);}});
 })();
 </script>
 </body>
