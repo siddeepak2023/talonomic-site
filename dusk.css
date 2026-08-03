@@ -186,7 +186,20 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
   border:1px solid var(--line);background:var(--card);padding:28px;
   transition:border-color .25s ease;
   min-width:0; /* grid items default min-width:auto — nowrap p-tabs content forced 375px pages to 407px */
+  /* The grid stretches cells to the tallest in the row (align-items defaults to
+     normal/stretch), so a short card paired with a tall one grew a void under its
+     content rather than under the row. Measured on profit.: "B2 / RETENTION" (the LTV
+     chart) was stretched to 528px against the 528px screener beside it while holding
+     only ~333px of content -- 195px of dead space, with 103px on "B5 / TRUST".
+     Becoming a flex column lets the card's own visual take up the slack (see the
+     margin-top:auto below) instead of leaving it at the bottom. Equal-height rows are
+     kept deliberately -- ragged card bottoms read as a bug, not a choice. */
+  display:flex;flex-direction:column;
 }
+/* The card's figure absorbs the stretch. `auto` and not `flex:1` because these
+   visuals have fixed aspect ratios -- growing them distorts the chart, whereas
+   pushing them to the baseline just closes the gap. */
+.cell > .scm{margin-top:auto}
 .bento .cell:hover{border-color:var(--fg)}
 .bento .cell.wide{grid-column:span 2}
 .bento h3{font-size:19px;margin-bottom:10px}
