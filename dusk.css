@@ -1375,3 +1375,32 @@ section[id]::before{
 .btn-ico{width:15px;height:15px;display:inline-block;vertical-align:-0.12em;margin-right:.4em;flex:none}
 /* Explicit px, not 1em: something in the button stack resolved 1em to 2em and the
    glyph rendered at 29px beside 14.5px text. Measured, then pinned. */
+
+/* ── MODULE SLIDES ─────────────────────────────────────────────────────────────
+   Alternating copy/screenshot rows, the shape the competitive set uses for showing
+   a product (Reaktion runs 3-12 images per module slide). Deliberately NOT a card
+   grid: a full-width row gives a real product screenshot enough space to be read,
+   which is the entire point of putting one on the page.
+   `align-items:center` here and not `end` -- unlike the bench duo, there is no
+   scaled overhanging canvas to keep on a baseline, just two blocks of similar mass. */
+.mods{display:flex;flex-direction:column;gap:64px;margin-top:52px}
+.mod{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:40px;align-items:center}
+/* `order` swaps which side each block sits on but NOT the column widths, so on a
+   flipped row the screenshot inherited the NARROW column -- measured 468px against
+   620px on the un-flipped rows, i.e. alternating rows showed the product at two
+   different sizes. Mirror the track sizes too so the shot always gets the wide one. */
+.mod--flip{grid-template-columns:minmax(0,1.14fr) minmax(0,.86fr)}
+.mod--flip .mod-copy{order:2}
+.mod--flip .mod-shot-link{order:1}
+.mod-copy h3{font-size:clamp(1.35rem,2.1vw,1.75rem);letter-spacing:-.03em;margin:6px 0 12px;max-width:22ch;text-wrap:balance}
+.mod-copy p{color:var(--mut);max-width:46ch;text-wrap:pretty;margin-bottom:18px}
+.mod-shot-link{display:block;border:1px solid var(--line);background:var(--card);text-decoration:none;min-width:0}
+.mod-shot-link:hover{border-color:var(--signal)}
+/* height:auto or a fixed intrinsic ratio stretches the shot -- the defect that made
+   the product cards look squashed before. Let the width drive it. */
+.mod-shot-link .prod-shot{display:block;width:100%;height:auto}
+@media(max-width:900px){
+  .mod{grid-template-columns:1fr;gap:22px}
+  .mod--flip .mod-copy,.mod--flip .mod-shot-link{order:initial}
+  .mods{gap:48px;margin-top:38px}
+}
