@@ -540,6 +540,67 @@ function checkField(u, v){
   if (d < 0.070) return 1;
   return Math.exp(-Math.pow((d - 0.070) / 0.022, 2)) * 0.55;
 }
+/* ---------- CELL SPHERE ----------
+   Replaces the static glitch-sphere still. The brief was "morph in and out like a
+   cool sphere, not rotate — like an AI organism cell", so nothing here spins: the
+   silhouette itself breathes and its membrane wanders.
+
+   Three coupled motions, all driven by the existing fbm() so this stays in the same
+   noise family as the terrain and dust pieces rather than introducing a second idiom:
+     1. BREATH  — the radius scales on a slow sine, so it swells and recedes.
+     2. MEMBRANE— the rim is displaced per-angle by fbm, so the boundary is organic
+                  and never a clean circle. This is what reads as "cell" instead of
+                  "ball".
+     3. NUCLEUS — a brighter interior mass drifts on its own slower fbm path, so the
+                  inside is alive too and the eye has something to track.
+   Rendered through ditherField() at the same cell size, so it carries the identical
+   halftone register as every other art canvas on the page. */
+function cellFieldAt(t){
+  return function(u, v){
+    var dx = u - 0.5, dy = v - 0.5;
+    var r = Math.sqrt(dx * dx + dy * dy);
+    var a = Math.atan2(dy, dx);
+    /* 1. breath */
+    var base = 0.335 + 0.028 * Math.sin(t * 0.55);
+    /* 2. membrane: fbm sampled around the rim, wrapped so theta 0 and 2pi agree */
+    var wob = fbm(Math.cos(a) * 1.6 + 11.3, Math.sin(a) * 1.6 + 4.1, t * 0.16) - 0.5;
+    var R = base * (1 + 0.16 * wob);
+    if (r > R) return 0;
+    var q = r / R;                                  /* 0 centre -> 1 rim */
+    /* soft interior falloff, brighter at the rim like a lit membrane */
+    var b = 0.30 + 0.55 * Math.pow(q, 2.4);
+    /* 3. nucleus, drifting on its own slow path */
+    var nx = 0.085 * (fbm(3.7, 8.2, t * 0.09) - 0.5) * 2;
+    var ny = 0.085 * (fbm(6.1, 2.4, t * 0.11) - 0.5) * 2;
+    var nr = Math.sqrt(Math.pow(dx - nx, 2) + Math.pow(dy - ny, 2));
+    b += 0.62 * Math.exp(-Math.pow(nr / 0.075, 2));
+    /* thin bright edge so the silhouette stays legible while it morphs */
+    b += 0.40 * Math.exp(-Math.pow((q - 0.97) / 0.05, 2));
+    return Math.max(0, Math.min(1, b));
+  };
+}
+var cellRAF = 0, cellCv = null, cellT0 = 0;
+function drawCellSphere(cv){
+  if (!cv) return;
+  cellCv = cv;
+  if (reduceMotion) { ditherField(cv, cellFieldAt(0), 2); return; }
+  if (cellRAF) return;                              /* one loop, however many calls */
+  cellT0 = 0;
+  var step = function(ts){
+    cellRAF = requestAnimationFrame(step);
+    if (!cellT0) cellT0 = ts;
+    if (document.hidden) return;
+    /* Offscreen check, and the probe lesson from loop(): skipping work must not
+       leave state that later reads as something it is not. Nothing accumulates
+       here — t is derived from ts — so a skipped frame is simply a skipped frame. */
+    var rect = cellCv.getBoundingClientRect();
+    if (rect.bottom < -80 || rect.top > window.innerHeight + 80) return;
+    if (ts - (step.last || 0) < 66) return;         /* ~15fps: dither is fill-heavy */
+    step.last = ts;
+    ditherField(cellCv, cellFieldAt((ts - cellT0) / 1000), 2);
+  };
+  cellRAF = requestAnimationFrame(step);
+}
 function drawGlitchSphere(cv){
   var w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
   ditherField(cv, checkField, 2);
@@ -999,6 +1060,7 @@ function renderArts(){
     else if (kind === "oort") drawOort(cv);
     else if (kind === "sphere") ditherField(cv, sphereField, 3);
     else if (kind === "glitchsphere") drawGlitchSphere(cv);
+    else if (kind === "cell") drawCellSphere(cv);
     else if (kind === "ghostchart") drawGhostChart(cv);
     else if (kind === "ascent") drawAscent(cv);
     else if (kind === "curve") drawCurveFam(cv);
@@ -1044,6 +1106,7 @@ function finalDrawFor(cv){
   var kind = cv.getAttribute("data-art");
   if (kind === "bust") return drawBust;
   if (kind === "oort") return drawOort;
+  if (kind === "cell") return drawCellSphere;
   if (kind === "glitchsphere") return drawGlitchSphere;
   if (kind === "ghostchart") return drawGhostChart;
   if (kind === "ascent") return drawAscent;

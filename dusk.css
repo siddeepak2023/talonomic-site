@@ -176,7 +176,9 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
 .sec-head p{color:var(--mut)}
 .sec-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
 .art{display:block}
-.art--sphere{width:190px;height:190px;flex:none;margin-bottom:64px}
+/* margin-bottom lifts this: .sec-row is align-items:flex-end, so a larger bottom
+   margin raises the canvas. 64 -> 74 for the ~10px the founder measured it low by. */
+.art--sphere{width:190px;height:190px;flex:none;margin-bottom:74px}
 #benefits .art--sphere{margin-right:105px} /* nudge checkmark left to the timer column (transform conflicts with .rv reveal) */
 @media(max-width:920px){.art--sphere{display:none}}
 
@@ -916,10 +918,22 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
     radial-gradient(130% 170% at 90% 125%, rgba(142,42,34,.07), transparent 60%),
     linear-gradient(155deg, #FFFFFF, var(--bg) 72%);
 }
+/* The step mockups sit in a row between generative-dust canvases, and a crisp CSS dot
+   grid was what made them read as drawn UI rather than part of the same family. Same
+   halftone plate the body and every art canvas use, scaled down and held faint — so the
+   frames share the dither register instead of introducing a second texture idiom. The
+   dot grid stays as the fallback for anything that cannot load the texture. */
 .scm::before{
   content:"";position:absolute;inset:0;pointer-events:none;
   background-image:radial-gradient(var(--dot) 1px,transparent 1px);
   background-size:22px 22px;opacity:.3;
+}
+.scm::before{
+  background-image:url(textures/halftone-bone.webp);
+  background-size:240px 240px;background-repeat:repeat;opacity:.16;
+}
+[data-theme="light"] .scm::before{
+  background-image:url(textures/halftone-ink.webp);opacity:.13;
 }
 .scm > *{position:relative}
 .scm-tag{
