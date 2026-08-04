@@ -1331,7 +1331,10 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
    past the curve — a radius alone does not clip a replaced element in every engine. */
 .live-frame{display:block;width:100%;height:min(72vh,640px);border:0;background:var(--bg);
   border-bottom-left-radius:10px;border-bottom-right-radius:10px}
-.live-wrap,.shot-wrap{overflow:hidden;border-radius:10px}
+/* RADIUS: .shot is the bordered wrapper -- NOT .live-wrap, which appears zero times in
+   any HTML. That wrong class name is why two deploys changed nothing. overflow:hidden
+   clips the iframe, which a radius alone does not do to a replaced element. */
+.shot{overflow:hidden}
 @media(max-width:700px){.live-frame{height:78vh}}
 .clip-stage .sc-kpis{margin-bottom:12px}
 .clip-video{width:100%;display:block;border-radius:10px;border:1px solid var(--line-soft);background:#000}
