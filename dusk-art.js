@@ -299,14 +299,25 @@ document.addEventListener("visibilitychange", function(){
   if (!document.hidden) { probeN = 0; probeStart = 0; }
 });
 /* Keeps a frozen hero from smearing over the page. See the freeze branch in loop(). */
-var frozenGuardOn = false, frozenCleared = false;
+var frozenGuardOn = false, frozenCleared = false, freezeCount = 0;
 function installFrozenGuard(){
   if (frozenGuardOn || !canvas || !ctx) return;
   frozenGuardOn = true;
   var onFrozenScroll = function(){
     var past = follow && (waveTopDoc + waveH - window.scrollY < -60);
     if (past && !frozenCleared) { ctx.clearRect(0, 0, W, H); frozenCleared = true; }
-    else if (!past && frozenCleared) { frozenCleared = false; drawFrame(last / 1000); }
+    else if (!past && frozenCleared) {
+      frozenCleared = false; drawFrame(last / 1000);
+      /* One recovery attempt. A 3-second sample is too small to retire the hero for a whole
+         session — a background compile or a Time Machine run is enough to trip it. So the
+         first time the hero comes back into view after freezing, re-arm and re-measure. A
+         genuinely weak GPU re-freezes within ~3s and nothing is lost; a transient recovers.
+         Bounded at one attempt so a slow machine cannot oscillate. */
+      if (heroFrozen && freezeCount <= 1) {
+        heroFrozen = false; probeN = 0; probeStart = 0; last = 0;
+        requestAnimationFrame(loop);
+      }
+    }
   };
   window.addEventListener("scroll", onFrozenScroll, { passive: true });
   onFrozenScroll();
@@ -315,7 +326,14 @@ function loop(ts){
   if (heroFrozen) return; /* weak device: hero left as a static frame */
   requestAnimationFrame(loop);
   if (document.hidden) { probeN = 0; probeStart = 0; return; } /* don't probe while hidden */
-  if (!heroVisible && !dockShown && mE < 0.01) return; /* resting + offscreen: skip redraw */
+  /* Reset the probe here for the SAME reason the visibilitychange handler above does.
+     fps is 90 frames / wall-clock elapsed, which is only a frame rate if all 90 were
+     drawn back to back. Scrolling past the hero stops draws while ts keeps advancing, so
+     returning without resetting made the next completed window read ~4fps after a 20s
+     detour and pinned heroFrozen on ANY machine, however fast. That is the reported
+     "scroll down, come back, hero is dead". The hidden-tab branch got this fix; this
+     branch was missed. */
+  if (!heroVisible && !dockShown && mE < 0.01) { probeN = 0; probeStart = 0; return; } /* resting + offscreen: skip redraw */
   if (ts - last < 33) return; /* 30fps cap always — halves scroll-morph draw cost, no visible change */
   last = ts;
   drawFrame(ts / 1000);
@@ -327,7 +345,7 @@ function loop(ts){
   if (probeN - 40 >= 90) {                 /* sustained 90-frame window (~3s) */
     var fps = 90000 / Math.max(1, ts - probeStart);
     if (fps < 18) {
-      window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true;
+      window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true; freezeCount++;
       /* A stopped loop can never clear a position:fixed canvas.
          The bail at the top of drawFrame clears the canvas once the hero has
          scrolled away -- but it only runs if something is still calling drawFrame.
