@@ -83,6 +83,12 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
   font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:500;
   letter-spacing:.12em;text-transform:uppercase;
   padding:15px 26px;min-height:44px;cursor:pointer;
+  /* Transparent border so every variant reserves the same 2px. .btn--ghost adds a
+     1px border and .btn--primary had none, so a ghost sat 47.2px tall beside a 45.2px
+     primary in the same row. box-sizing:border-box does not help: it only governs
+     boxes with an explicit height, and these are auto. .btn--ghost still wins on
+     border-color further down, same specificity, later in the file. */
+  border:1px solid transparent;
   transition:background .2s ease,color .2s ease,border-color .2s ease;
 }
 .btn--primary{background:var(--fg);color:var(--bg)}

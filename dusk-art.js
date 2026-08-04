@@ -293,6 +293,17 @@ function resizeTerrain(){
   drawFrame(last / 1000);
 }
 var heroFrozen = false, probeN = 0, probeStart = 0;
+/* The draw cap and the freeze threshold are ONE decision, so they live together.
+   probeN counts DRAWN frames, so CAP_MS sets the ceiling on what the probe can ever
+   measure. When the cap went in at 33ms to lighten the page, the threshold was left at
+   an absolute 18fps chosen when the loop drew every rAF at 16.7ms -- which cut the
+   detector's headroom from 39ms of tolerable jitter per frame to 22ms and started
+   freezing healthy machines whenever something else on the page was busy (Pyodide
+   compiling in the demo iframe is enough). Expressed as a FRACTION of the capped target
+   it cannot drift again: change CAP_MS and the threshold follows. */
+var CAP_MS = 33;                                /* ~30fps draw cap */
+var FREEZE_FPS = (1000 / CAP_MS) * 0.4;         /* ~12.1fps: under half of what we ask for */
+var badWindows = 0;                             /* consecutive sub-threshold windows */
 /* Reset the fps probe when the tab returns to foreground — background frames
    throttle to ~1fps and would otherwise trip a false freeze. */
 document.addEventListener("visibilitychange", function(){
@@ -313,8 +324,8 @@ function installFrozenGuard(){
          first time the hero comes back into view after freezing, re-arm and re-measure. A
          genuinely weak GPU re-freezes within ~3s and nothing is lost; a transient recovers.
          Bounded at one attempt so a slow machine cannot oscillate. */
-      if (heroFrozen && freezeCount <= 1) {
-        heroFrozen = false; probeN = 0; probeStart = 0; last = 0;
+      if (heroFrozen && freezeCount <= 3) {
+        heroFrozen = false; probeN = 0; probeStart = 0; last = 0; badWindows = 0;
         requestAnimationFrame(loop);
       }
     }
@@ -334,7 +345,7 @@ function loop(ts){
      "scroll down, come back, hero is dead". The hidden-tab branch got this fix; this
      branch was missed. */
   if (!heroVisible && !dockShown && mE < 0.01) { probeN = 0; probeStart = 0; return; } /* resting + offscreen: skip redraw */
-  if (ts - last < 33) return; /* 30fps cap always — halves scroll-morph draw cost, no visible change */
+  if (ts - last < CAP_MS) return; /* 30fps cap always — halves scroll-morph draw cost, no visible change */
   last = ts;
   drawFrame(ts / 1000);
   /* adaptive freeze — only after a warmup (skip initial load jank), measured
@@ -344,7 +355,11 @@ function loop(ts){
   if (probeStart === 0) { probeStart = ts; return; }
   if (probeN - 40 >= 90) {                 /* sustained 90-frame window (~3s) */
     var fps = 90000 / Math.max(1, ts - probeStart);
-    if (fps < 18) {
+    /* TWO consecutive bad windows (~6s), not one. Three seconds is too small a sample to
+       retire the hero for a whole session -- one GC pause or one background compile was
+       enough. A genuinely weak GPU fails both windows and still freezes within seconds. */
+    if (fps < FREEZE_FPS) { badWindows++; } else { badWindows = 0; }
+    if (badWindows >= 2) {
       window.__morphPin = 0; drawFrame(ts / 1000); heroFrozen = true; freezeCount++;
       /* A stopped loop can never clear a position:fixed canvas.
          The bail at the top of drawFrame clears the canvas once the hero has
