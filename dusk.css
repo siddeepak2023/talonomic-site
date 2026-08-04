@@ -184,7 +184,7 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
 .art{display:block}
 /* margin-bottom lifts this: .sec-row is align-items:flex-end, so a larger bottom
    margin raises the canvas. 64 -> 74 for the ~10px the founder measured it low by. */
-.art--sphere{width:190px;height:190px;flex:none;margin-bottom:74px}
+.art--sphere{width:190px;height:190px;flex:none;margin-bottom:64px}
 #benefits .art--sphere{margin-right:105px} /* nudge checkmark left to the timer column (transform conflicts with .rv reveal) */
 @media(max-width:920px){.art--sphere{display:none}}
 
@@ -502,6 +502,31 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 .hero-canvas--follow{position:fixed;top:0;left:0;bottom:auto;width:100%;height:100vh;z-index:-1}
 .art--inline{width:400px;height:230px;flex:none;margin-bottom:26px;opacity:.9}
 @media(max-width:920px){.sec-row .art--inline{display:none}}
+/* The head sits in .sec-row now, beside the section description, instead of in a
+   .feed-duo row underneath it — which is where the dead space above it came from.
+   .sec-row is align-items:flex-end and other arts rely on that (.art--sphere is
+   positioned by a bottom margin against it), so this scopes to the bust rather
+   than changing the row for every art. */
+.sec-row .art--bust{align-self:flex-start}
+/* .sec-row is align-items:flex-end for every other art (.art--sphere is positioned by a
+   bottom margin measured against it — that is why the checkmark's margin-bottom reads as a
+   lift). The head is the tallest child of its row, so flex-end pushed the SHORTER .sec-head
+   to the row's bottom and the head ended up 101px ABOVE the description instead of beside
+   it. Scoped with :has() so only rows that actually hold a bust top-align. */
+.sec-row:has(.art--bust){align-items:flex-start}
+/* .calc was built full-width: a 2-col grid with a 44px top margin. In a feed-duo
+   cell it stacks and drops the margin. */
+.feed-duo .calc{margin-top:0;grid-template-columns:1fr}
+/* company-site and the Talon landing have no estimator to pair with, so their
+   feed spans the row instead of leaving an empty second column. */
+.feed-duo > :only-child{grid-column:1/-1}
+@media(max-width:920px){
+  /* Every other .sec-row art is display:none here; the head is the brand mark, so
+     the row wraps and the canvas shrinks instead of vanishing. */
+  .sec-row{flex-wrap:wrap}
+  .sec-row .art--bust{max-width:340px;height:260px;margin-inline:auto}
+}
+
 .art--faqfield{width:100%;max-width:340px;height:300px;margin:0;opacity:.9}
 #pricing .art--inline{transform:translateY(-28px)}
 /* Two columns of questions. The old second column held .art--faqfield, which
@@ -1259,7 +1284,7 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 .feed-duo .rec-mock{margin:0;max-width:none}
 /* overhang eats the .wrap gutter but never the viewport: it grows only with the
    slack outside the 1180 measure, so the head can't clip at 1280 or below. */
-.art--bust{justify-self:end;align-self:end;width:100%;max-width:430px;height:340px;
+.art--bust{justify-self:end;align-self:start;width:100%;max-width:430px;height:340px;
   margin-right:calc(-1 * clamp(0px,(100vw - 1180px)/2 - 24px,96px));
   transform:scale(1.22) !important;transform-origin:100% 100%;
   image-rendering:auto;pointer-events:none}

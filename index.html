@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260803n">
+<link rel="stylesheet" href="./dusk.css?v=20260804a">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -355,6 +355,9 @@
         <h2>Every agent shows its work. Every move lands in the ledger.</h2>
         <p>Each one watches a different way money leaks out of a store, proposes the exact change — and you approve every move. Nothing executes on its own. Sample recommendations below; your ledger fills from your first approval.</p>
       </div>
+      <!-- MOVED: head sits beside the description, not in a row below it. -->
+<canvas class="art art--bust rv d1" data-art="bust" aria-hidden="true"></canvas>
+
     </div>
 
     <div class="feed-duo rv d1">
@@ -371,7 +374,20 @@
         <div class="rm-actions"><span class="rm-btn rm-btn--approve">Approve</span><span class="rm-btn">Dismiss</span><span class="rm-note">Nothing executes without you</span></div>
       </div>
     </div>
-      <canvas class="art art--bust rv d1" data-art="bust" aria-hidden="true"></canvas>
+      <!-- MOVED: estimator shares the feed's row. -->
+      <div class="calc rv d2" id="leakCalc">
+      <div>
+        <div class="calc-k">Discount-leak estimator</div>
+        <div class="calc-row"><label for="lcOrders">Orders per month</label><input id="lcOrders" type="number" min="0" step="50" value="800" inputmode="numeric"></div>
+        <div class="calc-row"><label for="lcAov">Average order value ($)</label><input id="lcAov" type="number" min="0" step="5" value="60" inputmode="decimal"></div>
+        <div class="calc-row"><label for="lcShare">Orders with a discount (%)</label><input id="lcShare" type="number" min="0" max="100" step="5" value="30" inputmode="numeric"></div>
+        <div class="calc-row"><label for="lcPct">Average discount (%)</label><input id="lcPct" type="number" min="0" max="100" step="5" value="15" inputmode="numeric"></div>
+      </div>
+      <div class="calc-out">
+        <div class="co-n" id="lcOut">$648–$1,296/mo</div>
+        <div class="co-l">ESTIMATE — your numbers × the share of discounted orders that typically go to already-converting customers (30–60%). Upload your export and ProfitFalcon computes the real figure per code.</div>
+      </div>
+    </div>
     </div>
     <div class="bench-grid rv d1 sc-stagger">
       <div class="bn-card">
@@ -424,19 +440,7 @@
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <!-- Honest calculator lives in the bench grid, beside the Executive Brief. -->
-    <div class="calc rv d2" id="leakCalc">
-      <div>
-        <div class="calc-k">Discount-leak estimator</div>
-        <div class="calc-row"><label for="lcOrders">Orders per month</label><input id="lcOrders" type="number" min="0" step="50" value="800" inputmode="numeric"></div>
-        <div class="calc-row"><label for="lcAov">Average order value ($)</label><input id="lcAov" type="number" min="0" step="5" value="60" inputmode="decimal"></div>
-        <div class="calc-row"><label for="lcShare">Orders with a discount (%)</label><input id="lcShare" type="number" min="0" max="100" step="5" value="30" inputmode="numeric"></div>
-        <div class="calc-row"><label for="lcPct">Average discount (%)</label><input id="lcPct" type="number" min="0" max="100" step="5" value="15" inputmode="numeric"></div>
-      </div>
-      <div class="calc-out">
-        <div class="co-n" id="lcOut">$648–$1,296/mo</div>
-        <div class="co-l">ESTIMATE — your numbers × the share of discounted orders that typically go to already-converting customers (30–60%). Upload your export and ProfitFalcon computes the real figure per code.</div>
-      </div>
-    </div>
+    
     </div>
 
 
@@ -519,7 +523,7 @@
         <h2>Unit economics, computed.</h2>
         <p>Blended ROAS hides losers. ProfitFalcon computes profit per SKU, per cohort, per order — from your actual exports, not estimates.</p>
       </div>
-      <canvas class="art art--sphere rv d1" data-art="cell" aria-hidden="true"></canvas>
+      <canvas class="art art--sphere rv d1" data-art="glitchsphere" aria-hidden="true"></canvas>
     </div>
     <div class="bento">
       <article class="cell wide rv">
@@ -1007,7 +1011,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260803n"></script>
+<script defer src="./dusk-art.js?v=20260804a"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.
