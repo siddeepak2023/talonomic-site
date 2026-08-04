@@ -1459,3 +1459,22 @@ section[id]::before{
    ClientFalcon's "Batch every client" card, whose .scm is only 132px. A floor on the
    artifact box equalises the row so the auto margin has little left to push. */
 .cell > .scm{min-height:172px}
+
+/* ── the top bar must never wrap ──────────────────────────────────────────────
+   Reported as two bugs — the "ProfitFalcon / BizFalcon AI" wordmark breaking onto
+   three lines and "Free teardown" onto two. One cause: `.nav-in` is a fixed
+   max-width:1180px flex row, PF and CF carried EIGHT top-level nav entries, and
+   `white-space:nowrap` on `.brand` and `.nav .btn` existed only inside
+   @media(max-width:480px). At desktop the row overflowed and flex resolved it by
+   wrapping the two elements at the ends. Nothing was wrong with the button or the
+   wordmark in isolation; they were the two things being squeezed.
+
+   `flex:none` on both ends is the structural half of the fix: it makes the brand and
+   the right cluster incompressible, so overflow can never again be paid for by
+   wrapping them. The nav is down to five entries, and the gap reduction buys the
+   remaining headroom -- five entries + brand + right cluster measures ~996px inside
+   the 1180px container. */
+.brand{white-space:nowrap;flex:none}
+.nav-right{flex:none}
+.nav .btn{white-space:nowrap}
+.nav-links{gap:22px;min-width:0}
