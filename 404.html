@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page not found &mdash; ProfitFalcon</title>
+<!-- Deliberately self-contained: inline styles, no stylesheet, no webfont, no JS. An error
+     page has to render when the asset pipeline is what broke, so a 404 that depends on a
+     404-ing stylesheet would be worthless. Firebase Hosting serves this automatically when
+     no rewrite matches -- no firebase.json change needed. -->
+<style>
+  :root{color-scheme:light dark}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:#F8F7F3;color:#111110;
+    font:400 16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  main{max-width:34rem;padding:2rem 1.25rem;text-align:center}
+  .eyebrow{font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(17,17,16,.45)}
+  h1{margin:.9rem 0 0;font-size:1.9rem;font-weight:800;letter-spacing:-.02em}
+  p{margin:.75rem 0 0;color:rgba(17,17,16,.62);font-size:.95rem}
+  .row{margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center}
+  a.primary{background:#111110;color:#F8F7F3;text-decoration:none;padding:.7rem 1.1rem;
+    border-radius:6px;font-weight:700;font-size:.9rem}
+  a.ghost{color:#8E2A22;text-decoration:none;font-weight:600;font-size:.9rem;padding:.7rem .4rem}
+  a.ghost:hover,a.primary:hover{opacity:.88}
+  @media (prefers-color-scheme:dark){
+    body{background:#0A0A0B;color:#EDECE8}
+    .eyebrow{color:rgba(237,236,232,.45)} p{color:rgba(237,236,232,.62)}
+    a.primary{background:#F8F7F3;color:#0A0A0B} a.ghost{color:#B0453B}
+  }
+</style>
+<main>
+  <p class="eyebrow">404 &middot; ProfitFalcon</p>
+  <h1>That page doesn&rsquo;t exist.</h1>
+  <p>The address you asked for isn&rsquo;t a page here. It may have been renamed, or the link that
+     brought you may be out of date.</p>
+  <div class="row">
+    <a class="primary" href="/teardown">Analyse your orders</a>
+    <a class="ghost" href="/">Go to the home page</a>
+  </div>
+</main>
