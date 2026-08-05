@@ -6,7 +6,7 @@
 <script>try{if(localStorage.getItem("bf-theme")!=="dark")document.documentElement.setAttribute("data-theme","light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
 <meta name="theme-color" content="#F8F7F3">
 <title>ProfitFalcon — Know which SKUs actually make money</title>
-<meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI Product Manager that drafts your next move.">
+<meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI product manager that drafts your next move.">
 <link rel="icon" href="favicon.ico?v=20260803k">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260803k">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260803k">
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260805f">
+<link rel="stylesheet" href="./dusk.css?v=20260805g">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -26,7 +26,7 @@
 .rec-mini .rt{display:flex;justify-content:space-between;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
 .rec-mini .sv{color:var(--signal);font-weight:700}
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I have to connect my store?", "acceptedAnswer": {"@type": "Answer", "text": "No — it runs on the order export you already download. Direct connectors are in review; until they ship, it's exports, and we say so."}}, {"@type": "Question", "name": "Will the AI Product Manager touch my store?", "acceptedAnswer": {"@type": "Answer", "text": "No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust."}}, {"@type": "Question", "name": "Is my store data safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your file is parsed and your numbers are computed in your browser. When you use AI insights or save a report, the data needed is sent over an encrypted connection and stored in your account until you delete it. Your data is never sold or used to train our models."}}, {"@type": "Question", "name": "What exports do you support?", "acceptedAnswer": {"@type": "Answer", "text": "Standard order exports from Shopify, WooCommerce, BigCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works."}}, {"@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — one click from your billing page. Your plan stays active until the end of the period you paid for, and your reports stay exportable."}}, {"@type": "Question", "name": "How is margin actually computed?", "acceptedAnswer": {"@type": "Answer", "text": "Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — computed deterministically in your browser from your export, never estimated by a model. Click any figure and ProfitFalcon shows the exact expression and the row count behind it; the built-in Python console re-runs the same rows in pandas whenever you want to check it yourself."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I have to connect my store?", "acceptedAnswer": {"@type": "Answer", "text": "No — it runs on the order export you already download. Direct connectors are in review; until they ship, it's exports, and we say so."}}, {"@type": "Question", "name": "Will Autopilot touch my store?", "acceptedAnswer": {"@type": "Answer", "text": "No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust."}}, {"@type": "Question", "name": "Is my store data safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your file is parsed and your numbers are computed in your browser. When you use AI insights or save a report, the data needed is sent over an encrypted connection and stored in your account until you delete it. Your data is never sold or used to train our models."}}, {"@type": "Question", "name": "What exports do you support?", "acceptedAnswer": {"@type": "Answer", "text": "Standard order exports from Shopify, WooCommerce, BigCommerce, and Amazon Seller Central. If your platform exports orders as CSV, it almost certainly works."}}, {"@type": "Question", "name": "Can I cancel anytime?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — one click from your billing page. Your plan stays active until the end of the period you paid for, and your reports stay exportable."}}, {"@type": "Question", "name": "How is margin actually computed?", "acceptedAnswer": {"@type": "Answer", "text": "Revenue − COGS − platform fees − allocated ad cost, per SKU, per period — computed deterministically in your browser from your export, never estimated by a model. Click any figure and ProfitFalcon shows the exact expression and the row count behind it; the built-in Python console re-runs the same rows in pandas whenever you want to check it yourself."}}]}</script>
   <script>
     /* Belt-and-suspenders with sw.js: drop any root-scoped worker from the old SPA-at-root setup so this page is not forwarded to /dashboard. */
     if ("serviceWorker" in navigator) {
@@ -40,7 +40,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:url" content="https://profit.bizfalconai.com/">
 <meta property="og:title" content="ProfitFalcon — Know which SKUs actually make money">
-<meta property="og:description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI Product Manager that drafts your next move.">
+<meta property="og:description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI product manager that drafts your next move.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="canonical" href="https://profit.bizfalconai.com/">
 <meta property="og:image" content="https://profit.bizfalconai.com/og.png">
@@ -50,7 +50,7 @@
 <meta property="og:image:alt" content="ProfitFalcon — per-SKU contribution margin and discount-leak dashboard">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ProfitFalcon — Know which SKUs actually make money">
-<meta name="twitter:description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI Product Manager that drafts your next move.">
+<meta name="twitter:description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI product manager that drafts your next move.">
 <meta name="twitter:image" content="https://profit.bizfalconai.com/og.png">
 <meta name="twitter:image:alt" content="ProfitFalcon — per-SKU contribution margin and discount-leak dashboard">
 <!-- BF-LD -->
@@ -90,7 +90,7 @@
       "@id": "https://profit.bizfalconai.com/#software",
       "name": "ProfitFalcon",
       "url": "https://profit.bizfalconai.com/",
-      "description": "AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI Product Manager that drafts your next move.",
+      "description": "AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI product manager that drafts your next move.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web",
       "image": "https://profit.bizfalconai.com/og.png",
@@ -568,11 +568,11 @@
         </div>
       </article>
             <!-- SWAPPED: the queue artifact carries only two rows and left a gap in the taller
-           cell, so AI Product Manager and LTV-and-whales trade slots. Reveal classes travel
+           cell, so Autopilot and LTV-and-whales trade slots. Reveal classes travel
            with each article, so the d1 timing stays with the POSITION. -->
 <article class="cell rv">
         <span class="cell-idx">B3 / AGENTIC</span>
-        <h3>AI Product Manager</h3>
+        <h3>Autopilot</h3>
         <p>Deterministic playbooks watch your data and queue recommendations — cut spend, reorder, price test. You approve or dismiss. Execution stays off until the hit rate earns it.</p>
         <div class="scm" aria-hidden="true">
           <span class="scm-tag">Queue</span>
@@ -939,7 +939,7 @@
         <div class="a">No — it runs on the order export you already download. Direct connectors are in review; until they ship, it's exports, and we say so.</div>
       </details>
       <details>
-        <summary>Will the AI Product Manager touch my store?</summary>
+        <summary>Will Autopilot touch my store?</summary>
         <div class="a">No. It ships in shadow mode: playbooks queue recommendations and every one waits for your explicit approval. It executes nothing — and execution stays off until its tracked hit rate earns your trust.</div>
       </details>
       <details>
@@ -1036,7 +1036,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260805f"></script>
+<script defer src="./dusk-art.js?v=20260805g"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.
