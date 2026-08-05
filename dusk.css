@@ -1583,3 +1583,10 @@ section[id]::before{
 .promptbox .pb-tools b{display:inline-flex;align-items:center}
 .btn .btn-ico,
 .btn-ico{width:15px;height:15px;display:inline-block;vertical-align:-0.12em;margin-right:.4em;flex:none}
+
+/* The estimator's figure pulses when it recomputes -- the live computation is the feature,
+   and a silent textContent swap shows none of it. Short and small on purpose: this fires on
+   every keystroke, so anything longer would still be running when the next one lands. */
+.calc-out--tick{animation:calcTick .28s ease-out}
+@keyframes calcTick{0%{transform:scale(1)}38%{transform:scale(1.045)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.calc-out--tick{animation:none}}
