@@ -208,6 +208,12 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
    visuals have fixed aspect ratios -- growing them distorts the chart, whereas
    pushing them to the baseline just closes the gap. */
 .cell > .scm{margin-top:auto}
+/* Explicit separation, because shrinking the chart did NOT produce it: the LTV cell sets
+   its own row height, so `margin-top:auto` had no slack to redistribute and the artifact
+   stayed 7px off the copy. Safe for the Autopilot card, whose auto margin is already
+   fully consumed (row height comes from its .cell.wide sibling) -- there this grows the
+   card instead of reopening the hole the previous card closed. */
+.bento .cell > p{margin-bottom:16px}
 .bento .cell:hover{border-color:var(--fg)}
 .bento .cell.wide{grid-column:span 2}
 .bento h3{font-size:19px;margin-bottom:10px}
