@@ -138,7 +138,7 @@ var dockQueued = false;
 function heroScroll(){
   /* scrollY is a cheap read and mT must track the wheel exactly, so it stays here. */
   sc = window.scrollY;
-  mT = Math.min(1, Math.max(0, sc / (Math.max(1, waveH) * 0.25)));
+  mT = Math.min(1, Math.max(0, sc / (Math.max(1, waveH) * 0.6)));
   /* measureDock() is NOT cheap: docTopOf walks the offsetParent chain and reads
      offsetHeight, which forces synchronous layout. Running it per scroll EVENT —
      and a trackpad fires several per frame — was the site-wide lag. Coalesced to at
@@ -185,7 +185,7 @@ function drawDockFalcon(){
 function drawFrame(t){
   if (follow) {
     sc = window.scrollY;
-    mT = Math.min(1, Math.max(0, sc / (Math.max(1, waveH) * 0.25)));
+    mT = Math.min(1, Math.max(0, sc / (Math.max(1, waveH) * 0.6)));
   }
   var Hw = follow ? waveH : H;
   var yOff = follow ? waveTopDoc - sc : 0;
