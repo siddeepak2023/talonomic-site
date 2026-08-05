@@ -519,7 +519,10 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
    .sec-row is align-items:flex-end and other arts rely on that (.art--sphere is
    positioned by a bottom margin against it), so this scopes to the bust rather
    than changing the row for every art. */
-.sec-row .art--bust{align-self:flex-start}
+/* flex-start, plus a little room: pinned flush to the row's ceiling the head read as
+   crowded against the section's top edge. 22px is deliberately small -- the defect this
+   replaced was a whole row of separation (~100px), and over-correcting reopens it. */
+.sec-row .art--bust{align-self:flex-start;margin-top:22px}
 /* .sec-row is align-items:flex-end for every other art (.art--sphere is positioned by a
    bottom margin measured against it — that is why the checkmark's margin-bottom reads as a
    lift). The head is the tallest child of its row, so flex-end pushed the SHORTER .sec-head
