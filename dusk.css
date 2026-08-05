@@ -301,12 +301,13 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
    plan, which contradicts its own "Add-on" flag. Laid out horizontally so the row carries content
    across its width instead of one tall column beside empty space. No markup change -- .plan--addon
    was already on the element. */
-.plan--addon{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px 30px}
-.plan--addon .plan-name{flex:none}
-.plan--addon ul{display:flex;flex-wrap:wrap;gap:8px 22px;flex:1 1 380px;margin:0}
-.plan--addon ul li{border:0;padding:0}
-.plan--addon .btn{margin-left:auto;flex:none}
-@media(max-width:860px){.plan--addon{display:block}.plan--addon ul{display:block}.plan--addon .btn{margin-left:0}}
+/* Reverted: Autopilot is a normal card again. The dead columns beside it are filled by the
+   flat-pricing comparison, which is content rather than stretched whitespace.
+   2/-1, not span 3: .plans is auto-fit so the column count moves with the viewport --
+   anchoring to the last line takes whatever remains instead of assuming four. */
+.cmp--inplans{grid-column:2/-1;margin-top:0!important}
+@media(max-width:900px){.cmp--inplans{grid-column:1/-1}}
+
 .plan{border:1px solid var(--line);background:var(--card);padding:30px 26px;display:flex;flex-direction:column;position:relative;transition:border-color .25s ease}
 .plan:hover{border-color:var(--fg)}
 .plan.hot{border-color:var(--fg)}

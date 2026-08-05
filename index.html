@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260804f">
+<link rel="stylesheet" href="./dusk.css?v=20260804g">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -879,9 +879,9 @@
         </ul>
         <a class="btn btn--primary" href="/auth?mode=signup">Get Autopilot</a>
       </div>
-    </div>
-    <style>@media(max-width:640px){.cmp-grid{grid-template-columns:1fr!important}}</style>
-    <div class="cmp rv" aria-label="Price comparison" style="margin-top:16px;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:22px">
+      <!-- The flat-pricing comparison lives INSIDE .plans so it fills the columns beside
+       Autopilot. It used to sit outside the grid, which is what left row two empty. -->
+      <div class="cmp rv cmp--inplans" aria-label="Price comparison" style="margin-top:16px;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:22px">
       <div class="eyebrow">Priced flat, on purpose</div>
       <h3 style="margin:8px 0 0;font-size:20px;letter-spacing:-.01em">Order-metered profit tools bill you more the better you do.</h3>
       <div class="cmp-grid" style="display:grid;gap:12px;margin-top:18px;grid-template-columns:1fr auto 1fr;align-items:stretch">
@@ -899,6 +899,9 @@
       </div>
       <p style="margin:14px 0 0;font-size:11px;line-height:1.6;opacity:.5">Competitor figures as of July 2026 — check their site for current pricing. TrueProfit is a trademark of its respective owner; ProfitFalcon is not affiliated with or endorsed by it.</p>
     </div>
+    </div>
+    <style>@media(max-width:640px){.cmp-grid{grid-template-columns:1fr!important}}</style>
+    
 </div>
 </section>
 
@@ -1013,7 +1016,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260804f"></script>
+<script defer src="./dusk-art.js?v=20260804g"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.
