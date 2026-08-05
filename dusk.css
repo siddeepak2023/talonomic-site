@@ -305,7 +305,11 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
    flat-pricing comparison, which is content rather than stretched whitespace.
    2/-1, not span 3: .plans is auto-fit so the column count moves with the viewport --
    anchoring to the last line takes whatever remains instead of assuming four. */
-.cmp--inplans{grid-column:2/-1;margin-top:0!important}
+.cmp--inplans{grid-column:2/-1;margin-top:0!important;align-self:start}
+/* align-self:start, not a height: .plans is align-items:stretch, so this card was
+   stretched to the .plan--addon beside it (both 540px) while holding 328px of
+   content -- 212px of measured dead space below the disclaimer. A px height would
+   be wrong at every width where that neighbour is a different size. */
 @media(max-width:900px){.cmp--inplans{grid-column:1/-1}}
 
 .plan{border:1px solid var(--line);background:var(--card);padding:30px 26px;display:flex;flex-direction:column;position:relative;transition:border-color .25s ease}
@@ -1348,6 +1352,22 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 /* Section rhythm is two tiers: full sections 120px (`section`), interlude bands
    84px (`.interlude`, incl. #integrations). No third ad-hoc value. */
 .interlude--engine{padding:84px 0}
+/* The engine band FOLLOWS the theme -- light on light, dark on dark -- while every
+   other .interlude stays deliberately flipped (see the block at the top of this
+   section: bone dots on the ink band in light mode). Founder call, scoped to this
+   one band so no other section is restyled. No !important needed: this ties
+   .interlude on specificity and wins on source order, and the dark override below
+   is (0,3,0) against the base rule's (0,2,0). */
+.interlude--engine{
+  background:url(textures/halftone-ink.webp) repeat fixed 0 0/720px 720px,#F8F7F3;
+  --bg:#F8F7F3;--bg2:#FFFFFF;--card:#FFFFFF;--fg:#111110;
+  --mut:rgba(17,17,16,.55);--line:rgba(17,17,16,.16);--line-soft:rgba(17,17,16,.09);--dot:rgba(17,17,16,.10);
+}
+:root:not([data-theme="light"]) .interlude--engine{
+  background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,#0A0A0B;
+  --bg:#0A0A0B;--bg2:#111110;--card:#141413;--fg:#EDECE8;
+  --mut:rgba(237,236,232,.55);--line:rgba(237,236,232,.16);--line-soft:rgba(237,236,232,.09);--dot:rgba(237,236,232,.10);
+}
 #integrations{padding:84px 0}
 .interlude--engine .wrap{position:relative}
 .eng-stream{position:absolute;left:4%;right:4%;height:1px;pointer-events:none;opacity:.45;
@@ -1517,7 +1537,12 @@ section[id]::before{
    card". Bottom-pinning is kept (it keeps the three bento artifacts on one
    baseline); the artifact is extended vertically instead, which is what fills the
    hole. The bars already animate via scmBar with a per-bar --i stagger. */
-.scm-chart{height:150px}
+/* REVERSED 2026-08-05: 86 -> 150 above closed a hole; the founder reports the result
+   as too big and too close to the copy. Shrinking alone fixes both, because
+   `.cell > .scm{margin-top:auto}` pins the artifact to the baseline and the row
+   height comes from the sibling cells -- the 32px taken out reappears ABOVE the
+   chart as separation. A margin-bottom on .bento p would double-count it. */
+.scm-chart{height:118px}
 
 /* The two stat cards sat hard against the PRODUCT/TAG/REV/ORDERS/MARGIN header
    below and tight to the paragraph above. Give the block its own breathing room
