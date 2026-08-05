@@ -1073,6 +1073,9 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 .rv.on .scm-sched .sr2:nth-child(1){animation-delay:.05s}
 .rv.on .scm-sched .sr2:nth-child(2){animation-delay:.30s}
 .rv.on .scm-sched .sr2:nth-child(3){animation-delay:.55s}
+/* rows 4 and 5 were inheriting delay 0 and popping ahead of rows 2-3. */
+.rv.on .scm-sched .sr2:nth-child(4){animation-delay:.80s}
+.rv.on .scm-sched .sr2:nth-child(5){animation-delay:1.05s}
 @keyframes scmRowIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
 /* the scan: one pass of the agent reading that row, timed to land just after it does */
@@ -1083,6 +1086,8 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 .rv.on .scm-sched .sr2:nth-child(1)::after{animation-delay:.35s}
 .rv.on .scm-sched .sr2:nth-child(2)::after{animation-delay:.60s}
 .rv.on .scm-sched .sr2:nth-child(3)::after{animation-delay:.85s}
+.rv.on .scm-sched .sr2:nth-child(4)::after{animation-delay:1.10s}
+.rv.on .scm-sched .sr2:nth-child(5)::after{animation-delay:1.35s}
 @keyframes scmScan{to{transform:translateX(100%)}}
 
 /* approval lands last, so the eye reads recommend -> approve as a sequence */
@@ -1593,3 +1598,40 @@ section[id]::before{
 .calc-out--tick{animation:calcTick .28s ease-out}
 @keyframes calcTick{0%{transform:scale(1)}38%{transform:scale(1.045)}100%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.calc-out--tick{animation:none}}
+
+/* ── the agent feed, worked ────────────────────────────────────────────────────
+   The founder asked twice for this card to animate. My earlier rules were scoped to
+   `.scm-sched .sr2`, which lives only in the Autopilot bench cell -- `.rec-mock` has
+   neither class, so nothing reached it. It is gated by [data-countup].live (observer
+   threshold 0.35), not .rv.on, which is the other half of why it looked inert.
+   Same vocabulary as the bench queue: a scan sweep as each row lands, approve last. */
+[data-countup] .sc-act{position:relative;overflow:hidden}
+[data-countup] .sc-act::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--signal) 20%,transparent),transparent);
+  transform:translateX(-100%)}
+[data-countup].live .sc-act::after{animation:scActScan .9s ease-out both}
+[data-countup].live .sc-act:nth-child(1)::after{animation-delay:.30s}
+[data-countup].live .sc-act:nth-child(2)::after{animation-delay:.55s}
+[data-countup].live .sc-act:nth-child(3)::after{animation-delay:.80s}
+@keyframes scActScan{to{transform:translateX(100%)}}
+[data-countup].live .rm-btn--approve{animation:scmApprove .45s ease-out 1.15s both}
+
+/* ── the estimator, computing ──────────────────────────────────────────────────
+   Only the base .rv fade before this. calcTick is keystroke-only and the initial
+   calc() runs before reveal, so its tick was never seen. The rows ladder in and the
+   figure pulses on arrival, so the card shows live computation without waiting for
+   the visitor to type. */
+.rv .calc-row{opacity:0;transform:translateY(6px)}
+.rv.on .calc-row{animation:calcRowIn .45s cubic-bezier(.2,.7,.3,1) both}
+.rv.on .calc-row:nth-child(2){animation-delay:.10s}
+.rv.on .calc-row:nth-child(3){animation-delay:.20s}
+.rv.on .calc-row:nth-child(4){animation-delay:.30s}
+.rv.on .calc-row:nth-child(5){animation-delay:.40s}
+@keyframes calcRowIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.rv.on .co-n{animation:calcTick .4s ease-out .55s both}
+
+@media(prefers-reduced-motion:reduce){
+  [data-countup].live .sc-act::after,[data-countup].live .rm-btn--approve,
+  .rv.on .calc-row,.rv.on .co-n{animation:none}
+  .rv .calc-row{opacity:1;transform:none}
+}

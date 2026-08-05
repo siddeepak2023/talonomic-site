@@ -76,7 +76,7 @@ var W = 0, H = 0, dotColor = "#EDECE8", sigColor = "#B0453B", last = 0, heroVisi
 var gmx = -1e4, gmy = -1e4, ggx = -1e4, ggy = -1e4, gAmp = 0;
 var DPRc = Math.min(window.devicePixelRatio || 1, 2);
 var follow = !reduceMotion && !!canvas;
-var falconPts = null, falconAspect = 1.336;
+var falconPts = null, falconAspect = 1.336, falconPxMax = 0;
 var mT = 0, mE = 0, sc = 0, txr = 0, wsr = 0;
 var waveTopDoc = 0, waveH = 0, dockBotDoc = 0, dockSecTop = 0, dockShown = false;
 var dockSec = document.querySelector("[data-dock]");
@@ -105,7 +105,14 @@ if (follow && dockSection) {
     for (var y = 0; y < SH; y++) for (var x = 0; x < SW; x++) {
       if (px[(y * SW + x) * 4 + 3] > 60) pts.push(x / SW, y / SH);
     }
-    if (pts.length) falconPts = new Float32Array(pts);
+    if (pts.length) {
+      falconPts = new Float32Array(pts);
+      /* Rightmost kept pixel. pts only holds alpha > 60, so the sprite's bounding box is wider
+         than the bird -- aligning fX+fW to anything would align transparent padding. */
+      var pxm = 0;
+      for (var pi = 0; pi < pts.length; pi += 2) if (pts[pi] > pxm) pxm = pts[pi];
+      falconPxMax = pxm;
+    }
   };
   img.src = "./falcon-bird-white-sm.webp";
 })();
@@ -160,22 +167,32 @@ function falconGeom(){
 function drawDockFalcon(){
   if (!falconPts || !dcv) return;
   var g = falconGeom();
+  /* Dock-only x: put the rightmost DRAWN wing pixel on the demo frame's right edge. Computed
+     here rather than in falconGeom() on purpose -- that function is shared with the hero follow
+     path, so re-anchoring it would move the hero bird as a side effect. Clamped to the same
+     bounds falconGeom uses, so it still cannot cross into the copy or leave the viewport. */
+  var dockFX = g.fX;
+  var frame = dockSection ? dockSection.querySelector('.shot') : null;
+  if (frame && falconPxMax > 0) {
+    var fr = frame.getBoundingClientRect();
+    dockFX = Math.min(Math.max(fr.right - falconPxMax * g.fW, g.minL), W - g.fW - 8);
+  }
   var fYdoc = dockBotDoc - g.fH, pad = 8;
   var bw = Math.ceil(g.fW + pad * 2), bh = Math.ceil(g.fH + pad * 2);
   dcv.width = bw * DPRc; dcv.height = bh * DPRc;
   dcv.style.width = bw + "px"; dcv.style.height = bh + "px";
-  dcv.style.left = Math.round(g.fX - pad) + "px";
+  dcv.style.left = Math.round(dockFX - pad) + "px";
   dcv.style.top = Math.round(fYdoc - pad - dockSecTop) + "px";
   var d2 = dcv.getContext("2d"); if (!d2) return;
   d2.setTransform(DPRc, 0, 0, DPRc, 0, 0);
   d2.clearRect(0, 0, bw, bh);
   var nPts = falconPts.length / 2;
   var ROWS = 92, COLS = Math.min(340, Math.max(150, Math.floor(W / 4)));
-  var ox = g.fX - pad, oyDoc = fYdoc - pad;
+  var ox = dockFX - pad, oyDoc = fYdoc - pad;
   d2.fillStyle = dotColor;
   for (var r = 0; r < ROWS; r++) for (var c = 0; c <= COLS; c++) {
     var ti = (Math.floor(hash2(c + 13, r + 7) * nPts)) % nPts;
-    var tx = g.fX + falconPts[ti * 2] * g.fW + (hash2(c + 3, r + 5) - 0.5) * 5;
+    var tx = dockFX + falconPts[ti * 2] * g.fW + (hash2(c + 3, r + 5) - 0.5) * 5;
     var ty = fYdoc + falconPts[ti * 2 + 1] * g.fH + (hash2(c + 9, r + 1) - 0.5) * 5;
     d2.globalAlpha = 0.55 + hash2(c, r + 41) * 0.4;
     d2.fillRect(tx - ox, ty - oyDoc, 1.4, 1.4);
