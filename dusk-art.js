@@ -120,6 +120,14 @@ function measureDock(){
   // ("Three instruments. / One engine."); ours is 1, so without this the falcon
   // docks ~34px higher and its top wing crosses the hero/demo divider.
   var next = docTopOf(dockSec) + dockSec.offsetHeight + 66;
+  /* ...but never cross the demo frame. +66 above is tuned to company-site's two-line
+     dock heading; on a page where [data-dock] is followed by the .shot live-preview
+     frame, that constant puts the claws ON the frame. Clamping beats retuning: any
+     constant is right for one heading length at one viewport, and the heading reflows
+     to two lines on a narrower window, which would bring the overlap straight back.
+     Where there is room the +66 still governs; where a frame follows, the frame wins. */
+  var dockFrame = dockSection ? dockSection.querySelector('.shot') : null;
+  if (dockFrame) next = Math.min(next, docTopOf(dockFrame) - 18);
   if (dockSection) dockSecTop = docTopOf(dockSection);
   if (Math.abs(next - dockBotDoc) > 1) {
     dockBotDoc = next;
