@@ -296,6 +296,17 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
 
 /* ============ PRICING ============ */
 .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;align-items:stretch}
+/* Autopilot is an ADD-ON, not a fifth tier. auto-fit puts four cards across, so as a card it left
+   three dead columns on row two. Spanning beats stretching: a stretched card reads as the biggest
+   plan, which contradicts its own "Add-on" flag. Laid out horizontally so the row carries content
+   across its width instead of one tall column beside empty space. No markup change -- .plan--addon
+   was already on the element. */
+.plan--addon{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px 30px}
+.plan--addon .plan-name{flex:none}
+.plan--addon ul{display:flex;flex-wrap:wrap;gap:8px 22px;flex:1 1 380px;margin:0}
+.plan--addon ul li{border:0;padding:0}
+.plan--addon .btn{margin-left:auto;flex:none}
+@media(max-width:860px){.plan--addon{display:block}.plan--addon ul{display:block}.plan--addon .btn{margin-left:0}}
 .plan{border:1px solid var(--line);background:var(--card);padding:30px 26px;display:flex;flex-direction:column;position:relative;transition:border-color .25s ease}
 .plan:hover{border-color:var(--fg)}
 .plan.hot{border-color:var(--fg)}
