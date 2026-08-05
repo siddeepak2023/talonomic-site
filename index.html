@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260805c">
+<link rel="stylesheet" href="./dusk.css?v=20260805d">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -574,9 +574,15 @@
         <div class="scm" aria-hidden="true">
           <span class="scm-tag">Queue</span>
           <div class="scm-sched">
-            <div class="sr2"><b>REC</b> pause ad set "US-broad"<span class="st live">queued</span></div>
-            <div class="sr2"><b>REC</b> reprice Last-Season Insulated Vest<span class="st">✓ approved</span></div>
+            <!-- Five rows, every one traceable to a figure this sample produces: FLASH35's leak
+                 ($74.2K/mo), the two sub-floor SKUs (17.8% / 20.1%), the returns outlier (46.7% vs a
+                 9.2% store average) and the 50-day median gap to a second order. The apply guard
+                 asserts each named entity exists in sampleDatasets.ts. -->
             <div class="sr2"><b>REC</b> fence FLASH35 to first orders<span class="st live">queued</span></div>
+            <div class="sr2"><b>REC</b> reprice Last-Season Insulated Vest<span class="st">✓ approved</span></div>
+            <div class="sr2"><b>REC</b> reprice Prior-Year Trail Tee<span class="st live">queued</span></div>
+            <div class="sr2"><b>REC</b> fix returns on Switchback Hiking Short<span class="st live">queued</span></div>
+            <div class="sr2"><b>REC</b> win-back at day 50<span class="st">✓ approved</span></div>
           </div>
         </div>
       </article>
@@ -1027,7 +1033,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260805c"></script>
+<script defer src="./dusk-art.js?v=20260805d"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.
