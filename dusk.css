@@ -1544,3 +1544,13 @@ section[id]::before{
 .nav-right{flex:none}
 .nav .btn{white-space:nowrap}
 .nav-links{gap:22px;min-width:0}
+
+/* Inert here -- talonomic has no .promptbox markup. Carried anyway because this file is the
+   SOURCE of the verbatim copies (dusk.css is propagated to company-site and
+   talon/frontend/public). Without these lines, every propagation silently REVERTED the
+   Analyst landing's tool-row fix; duskCentring.test.ts caught that three times. Keeping them
+   here means the copy carries the fix instead of erasing it. */
+.promptbox .pb-tools{align-items:center}
+.promptbox .pb-tools b{display:inline-flex;align-items:center}
+.btn .btn-ico,
+.btn-ico{width:15px;height:15px;display:inline-block;vertical-align:-0.12em;margin-right:.4em;flex:none}
