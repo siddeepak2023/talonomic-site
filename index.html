@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260804e">
+<link rel="stylesheet" href="./dusk.css?v=20260804f">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -273,7 +273,7 @@
              real route) looked like the product and this one did not. Needed the
              embed contract on ProductShell first; verified chrome-suppressed with
              real computed sample numbers. -->
-        <iframe class="live-frame" src="/dashboard?demo=1&amp;embed=1" title="ProfitFalcon interactive demo — computed on sample data, cross-checked in pandas" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <iframe class="live-frame" id="demoFrame" src="/dashboard?demo=1&amp;embed=1" title="ProfitFalcon interactive demo — computed on sample data, cross-checked in pandas" loading="lazy" referrerpolicy="no-referrer"></iframe>
         <div class="shot-foot"><span>COMPUTED IN YOUR BROWSER</span><a href="/live" target="_blank" rel="noopener">OPEN FULL-SCREEN ▸</a></div>
       </div>
     </div>
@@ -1013,7 +1013,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260804e"></script>
+<script defer src="./dusk-art.js?v=20260804f"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.
@@ -1072,6 +1072,33 @@ document.addEventListener("click",function(e){var t=e.target.closest&&e.target.c
   });
   document.addEventListener("click",function(){closeAll(null);});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeAll(null);}});
+})();
+</script>
+
+<script>
+/* Publish this page's theme to the embedded demo. The app reads ?theme= at mount and a
+   bf-theme postMessage afterwards (lib/duskTheme.ts) -- until both existed the frame painted
+   from its own localStorage, so a light marketing page could hold a dark preview.
+   data-theme on <html> is the single source of truth; the boot script at the top sets it. */
+(function () {
+  var f = document.getElementById("demoFrame");
+  if (!f) return;
+  function hostTheme() {
+    return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  }
+  /* Before load: bake it into the src so the FIRST paint matches. */
+  var src = f.getAttribute("src");
+  if (src && src.indexOf("theme=") === -1) {
+    f.setAttribute("src", src + "&theme=" + hostTheme());
+  }
+  /* After load: the site's toggle must reach an already-mounted frame. */
+  function push() {
+    try { f.contentWindow.postMessage({ type: "bf-theme", theme: hostTheme() }, location.origin); }
+    catch (e) { /* frame not ready yet; the next toggle will land */ }
+  }
+  new MutationObserver(push).observe(document.documentElement, {
+    attributes: true, attributeFilter: ["data-theme"]
+  });
 })();
 </script>
 </body>
