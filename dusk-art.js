@@ -121,10 +121,28 @@ function docTopOf(el){
 }
 function measureDock(){
   if (!dockSec) return;
-  // +66: match company-site's dock position. Its dock heading is 2 lines
-  // ("Three instruments. / One engine."); ours is 1, so without this the falcon
-  // docks ~34px higher and its top wing crosses the hero/demo divider.
-  var next = docTopOf(dockSec) + dockSec.offsetHeight + 66;
+  // Dock to the FRAME, not to the heading above it.
+  //
+  // The +66 below was measured against company-site, whose dock heading wraps to
+  // two lines ("Three instruments. / One engine."). ProfitFalcon and ClientFalcon
+  // have a ONE-line heading and a 44px CSS gap from its bottom to the frame top,
+  // so 66 - 44 = 22 and the claws landed 22px INSIDE the frame's top border on
+  // both — independent of the copy, because one constant cannot describe two
+  // different heading heights. Measuring from the frame is copy-independent: the
+  // claws clear the border by construction rather than by a tuned number, and
+  // every surface docks to the same visual landmark.
+  //
+  // SCOPED to the dock's own section on purpose. ClientFalcon has a second
+  // `.shot` in `<section id="product">`; an unscoped querySelector would return
+  // the right one only by document order, which is not a property worth relying
+  // on. company-site has no `.shot` in its dock section at all — its frame there
+  // is a `.prod-shot` image — so it takes the fallback and its position is
+  // unchanged by this, which is correct, since +66 was tuned for it.
+  var CLAW_CLEARANCE = 8; // same value as `pad` in drawDockFalcon
+  var dockFrame = dockSection ? dockSection.querySelector(".live-shot, .shot") : null;
+  var next = dockFrame
+    ? docTopOf(dockFrame) - CLAW_CLEARANCE
+    : docTopOf(dockSec) + dockSec.offsetHeight + 66;
   if (dockSection) dockSecTop = docTopOf(dockSection);
   if (Math.abs(next - dockBotDoc) > 1) {
     dockBotDoc = next;
