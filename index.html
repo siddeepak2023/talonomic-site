@@ -7,16 +7,16 @@
 <meta name="theme-color" content="#F8F7F3">
 <title>ProfitFalcon — Know which SKUs actually make money</title>
 <meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI product manager that drafts your next move.">
-<link rel="icon" href="favicon.ico?v=20260806k">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260806k">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260806k">
+<link rel="icon" href="favicon.ico?v=20260806l">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260806l">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260806l">
 <link rel="manifest" href="/talonomic-app.webmanifest">
 <meta name="apple-mobile-web-app-title" content="ProfitFalcon">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260806k">
+<link rel="stylesheet" href="./dusk.css?v=20260806l">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -258,7 +258,12 @@
   <div class="wrap">
     <!-- sec-row gives the falcon an open right column to dock into (company-site parity) -->
     <div class="sec-row">
-      <div class="sec-head rv" data-dock>
+      <!-- data-dock-anchor="heading": at the frame anchor the falcon's top sits 21px
+           ABOVE this section's top, so its wing was clipped at the boundary. Measured
+           1280x800 on 2026-08-06; the falcon is 336px tall and this section only has
+           9px of headroom to give. The frame moves down instead, via the margin rule
+           keyed to this same attribute in dusk.css. -->
+      <div class="sec-head rv" data-dock data-dock-anchor="heading">
         <div class="eyebrow">See it run — live</div>
         <h2>Watch it find the money.</h2>
         <p>Not a screenshot &mdash; the real workspace, on a sample order export. Switch views in the sidebar. Every figure opens to the formula behind it, and pandas recomputes the same rows so you can watch the two agree.</p>
@@ -1036,7 +1041,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260806k"></script>
+<script defer src="./dusk-art.js?v=20260806l"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.

@@ -119,29 +119,49 @@ function docTopOf(el){
   while (n) { y += n.offsetTop; n = n.offsetParent; }
   return y;
 }
+var CLAW_CLEARANCE = 8; // default; same value as `pad` in drawDockFalcon
+function dockNumAttr(name, fallback){
+  var v = dockSec ? parseFloat(dockSec.getAttribute(name)) : NaN;
+  return isFinite(v) ? v : fallback;
+}
 function measureDock(){
   if (!dockSec) return;
-  // Dock to the FRAME, not to the heading above it.
+  // WHERE THE FALCON DOCKS IS PER-SURFACE, and it has to be. The falcon's height
+  // is fixed by the viewport (min(H*0.42, avail/aspect) = 336px at 1280x800); the
+  // headroom above each dock section is not. Measured 2026-08-06 at 1280x800,
+  // headroom between the falcon's TOP at the frame anchor and its section's top:
   //
-  // The +66 below was measured against company-site, whose dock heading wraps to
-  // two lines ("Three instruments. / One engine."). ProfitFalcon and ClientFalcon
-  // have a ONE-line heading and a 44px CSS gap from its bottom to the frame top,
-  // so 66 - 44 = 22 and the claws landed 22px INSIDE the frame's top border on
-  // both — independent of the copy, because one constant cannot describe two
-  // different heading heights. Measuring from the frame is copy-independent: the
-  // claws clear the border by construction rather than by a tuned number, and
-  // every surface docks to the same visual landmark.
+  //     ProfitFalcon    -21px   <- wing crosses the boundary and is clipped
+  //     ClientFalcon    +59px
+  //     Analyst         +101px
+  //     company-site    n/a — no `.shot` in its dock section, takes the fallback
   //
-  // SCOPED to the dock's own section on purpose. ClientFalcon has a second
-  // `.shot` in `<section id="product">`; an unscoped querySelector would return
-  // the right one only by document order, which is not a property worth relying
-  // on. company-site has no `.shot` in its dock section at all — its frame there
-  // is a `.prod-shot` image — so it takes the fallback and its position is
-  // unchanged by this, which is correct, since +66 was tuned for it.
-  var CLAW_CLEARANCE = 8; // same value as `pad` in drawDockFalcon
-  var dockFrame = dockSection ? dockSection.querySelector(".live-shot, .shot") : null;
+  // So one rule cannot serve four surfaces: the frame anchor is right for
+  // ClientFalcon and Analyst and wrong for ProfitFalcon, where it spends 30px of
+  // headroom that section does not have. The choice is declared in each site's own
+  // markup instead of branched on here, which is what keeps this file
+  // byte-identical across its four copies (enforced by duskArtDock.test.ts):
+  //
+  //     data-dock-anchor="heading"   measure from the dock heading, not the frame
+  //     data-dock-clearance="32"     how far above the landmark the claws sit
+  //
+  // ProfitFalcon takes the heading anchor and moves its FRAME down instead, via a
+  // margin rule keyed to the same attribute in dusk.css. The falcon's position is
+  // art and the frame's is layout, so the layout is the thing that should move —
+  // and it is the only one of the two with room to.
+  //
+  // The frame lookup is SCOPED to the dock's own section. ClientFalcon has a
+  // second `.shot` in `<section id="product">`; unscoped, correctness would rest
+  // on document order. company-site has no `.shot` in its dock section at all —
+  // its frame there is a `.prod-shot` image — so it takes the heading fallback,
+  // which is where the +66 was measured for it.
+  var clearance = dockNumAttr("data-dock-clearance", CLAW_CLEARANCE);
+  var headingAnchored = dockSec.getAttribute("data-dock-anchor") === "heading";
+  var dockFrame = (!headingAnchored && dockSection)
+    ? dockSection.querySelector(".live-shot, .shot")
+    : null;
   var next = dockFrame
-    ? docTopOf(dockFrame) - CLAW_CLEARANCE
+    ? docTopOf(dockFrame) - clearance
     : docTopOf(dockSec) + dockSec.offsetHeight + 66;
   if (dockSection) dockSecTop = docTopOf(dockSection);
   if (Math.abs(next - dockBotDoc) > 1) {

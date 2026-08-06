@@ -178,6 +178,13 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
 
 /* ============ SECTION HEADERS ============ */
 .sec-head{margin-bottom:44px;max-width:640px}
+/* A dock heading that anchors the falcon to ITSELF (data-dock-anchor="heading" in
+   dusk-art.js) has to carry the clearance in layout, because the falcon can't:
+   its claws land 66px below this heading's bottom, and the default 44px gap puts
+   that 22px inside the frame below. 74px clears it by 8px — the same gap the frame
+   anchor leaves. Inert on every surface without the attribute, so this file stays
+   a verbatim copy across the sites that don't use it. */
+.sec-head[data-dock-anchor="heading"]{margin-bottom:74px}
 .sec-head h2{font-size:clamp(2rem,4.4vw,3.1rem);margin-bottom:18px}
 .sec-head p{color:var(--mut)}
 .sec-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
