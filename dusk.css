@@ -1203,7 +1203,24 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 .lg-prog i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:var(--signal)}
 .lg-prog i.run{transition:transform linear;transform:scaleX(1)}
 @media(max-width:700px){.lg-node .ln-t{font-size:8px}.lg-stage{padding:18px 14px;min-height:150px}.lg-foot{padding:10px 14px;flex-wrap:wrap}}
-@media(prefers-reduced-motion:reduce){.lg-line{opacity:1;transform:none;transition:none}.lg-prog{display:none}}
+/* ── ledger motion ──────────────────────────────────────────────────────────
+   The whole .lg-* block was transitions only, so a stage change cross-faded text
+   and nothing moved -- which is why this section read dead beside the bench minis.
+   Scoped to .lg-* so no other artifact inherits them. Every one is neutralised in
+   the reduced-motion block below, so that path stays fully static rather than
+   partially animated. */
+@keyframes lgDotIn{0%{transform:scale(.4);box-shadow:0 0 0 0 color-mix(in srgb,var(--signal) 40%,transparent)}
+  60%{transform:scale(1.15)}100%{transform:scale(1);box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 18%,transparent)}}
+@keyframes lgDone{0%{transform:scale(1)}45%{transform:scale(1.28)}100%{transform:scale(1)}}
+@keyframes lgValIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes lgTally{0%{opacity:.45}30%{opacity:1}100%{opacity:1}}
+.lg-node.on .ln-dot{animation:lgDotIn .5s cubic-bezier(.2,.8,.2,1) both}
+.lg-node.done .ln-dot{animation:lgDone .34s cubic-bezier(.3,.9,.3,1) both}
+/* the key label leads the value by 60ms so the eye lands on the stage name first */
+.lg-line.show .lg-k{animation:lgValIn .42s cubic-bezier(.22,.8,.24,1) both}
+.lg-line.show .lg-v{animation:lgValIn .42s cubic-bezier(.22,.8,.24,1) 60ms both}
+.lg-foot .lg-tally{animation:lgTally .8s ease both}
+@media(prefers-reduced-motion:reduce){.lg-line{opacity:1;transform:none;transition:none}.lg-prog{display:none}.lg-node.on .ln-dot,.lg-node.done .ln-dot,.lg-line.show .lg-k,.lg-line.show .lg-v,.lg-foot .lg-tally{animation:none}}
 
 /* step time chips — minute-boxed onboarding (Reaktion pattern) */
 .step h3 .stm{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:500;letter-spacing:.08em;color:var(--mut);border:1px solid var(--line-2,var(--line));padding:3px 8px;border-radius:999px;vertical-align:2px;margin-left:9px;white-space:nowrap}
