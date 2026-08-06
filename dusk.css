@@ -536,7 +536,13 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 /* flex-start, plus a little room: pinned flush to the row's ceiling the head read as
    crowded against the section's top edge. 22px is deliberately small -- the defect this
    replaced was a whole row of separation (~100px), and over-correcting reopens it. */
-.sec-row .art--bust{align-self:flex-start;margin-top:22px}
+.sec-row .art--bust{align-self:flex-start;margin-top:58px}
+/* 22 -> 58. transform-origin is 100% 100%, so scale(1.22) on the 340px canvas grows it
+   74.8px UPWARD and layout never sees it -- measured, the head's visual top sat 53px above
+   its own row and only 32px below the section edge, towering 79px over the heading beside
+   it. 36px more margin drops it to 68px of air and a 43px lead on the heading. The canvas
+   and its scale are untouched: shrinking them would change dotwork density, which is the
+   render. The max-width:1024px block overrides this for the stacked layout. */
 /* .sec-row is align-items:flex-end for every other art (.art--sphere is positioned by a
    bottom margin measured against it — that is why the checkmark's margin-bottom reads as a
    lift). The head is the tallest child of its row, so flex-end pushed the SHORTER .sec-head
