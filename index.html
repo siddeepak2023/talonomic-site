@@ -310,16 +310,25 @@
         <div class="lg-line" id="lgLine"><span class="lg-k" id="lgK"></span><span class="lg-v" id="lgV"></span></div>
       </div>
       <div class="lg-prog" aria-hidden="true"><i id="lgProg"></i></div>
-      <div class="lg-foot"><span>SAMPLE RECOMMENDATION · DISCOUNT SENTINEL</span><span class="lg-tally">LEDGER: MEASURED leakage $74.2K/mo · REALIZED — fills from your exports</span></div>
+      <div class="lg-foot"><span>SAMPLE RECOMMENDATION · DISCOUNT SENTINEL</span><span class="lg-tally">LEDGER: MEASURED leakage $45.9K/mo · REALIZED — fills from your exports</span></div>
     </div>
   </div>
 </section>
 <script>
 (function(){
   var stages=[
-    ["Detected","Discount leak: <b>FLASH35</b> is landing on repeat orders \u2014 most of its uses are customers who were coming back anyway. Leakage across the file: <b>$74.2K/mo</b> over <b>24,623</b> orders."],
-    ["Exact change","<span class=\"lgm\">Fence FLASH35 to first orders \u00b7 new customers keep the offer, repeat buyers stop getting it</span>"],
-    ["Projected","The repeat-order share of FLASH35\u2019s discount stops leaving at a <b>49.8%</b> contribution margin \u00b7 the formula behind the number is attached to the card."],
+    /* Every figure below is computed from the ecom-orders sample and mirrored in
+       frontend/src/components/showcase/cascade.ts (CASCADE_LEDGER), where
+       cascade.test.ts asserts it against the engine. This band used to name FLASH35
+       as the code "landing on repeat orders". FLASH35's repeat share is ZERO -- the
+       code that behaves that way is COMEBACK at 82.6%, and 702 rows were re-labelled
+       FLASH35 -> COMEBACK when the Autopilot sample changed. The behaviour moved and
+       the copy did not, so the remedy named here would have recovered nothing.
+       "Leakage" is the repeat-or-organic estimate ($45.9K/mo), NOT total discount
+       ($74.2K/mo) -- the latter counts WELCOME10 acquisition and overstates leak by 62%. */
+    ["Detected","Discount leak: <b>COMEBACK</b> is landing on repeat orders \u2014 <b>82.6%</b> of its <b>702</b> redemptions went to customers who were already coming back. Leakage across the file: <b>$45.9K/mo</b> over <b>24,623</b> orders."],
+    ["Exact change","<span class=\"lgm\">Fence COMEBACK to first orders \u00b7 new customers keep the offer, repeat buyers stop getting it</span>"],
+    ["Projected","Fencing it returns the repeat slice of <b>$52.0K</b> given away at <b>26.4%</b> average depth, at a <b>49.8%</b> contribution margin \u2014 about <b>$7.3K/mo</b> \u00b7 the formula behind the number is attached to the card."],
     ["Approved","You approved it. The change is yours to apply \u2014 one click copies the exact move. Nothing executes without you."],
     ["Measured","Each new export you drop is scored against the projection: discount depth, repeat rate, and contribution by code."],
     ["Realized","Your realized number lands here, scored against the projection over 30 days. The ledger fills from your data \u2014 not a demo figure."]
@@ -373,7 +382,10 @@
       <div class="rm-body">
         <div class="rm-head"><span>QUEUED → YOUR APPROVAL</span><span>SAMPLE STORE</span></div>
         <div class="sc-stagger">
-          <div class="sc-act"><span class="a-pri">P1</span><p><b>Fence or kill the deep codes</b> — FLASH35 ran 26.6% off on 1,641 orders; $436,203 given away across 9,713 discounted orders (7.7% of gross)</p><span class="a-imp">~$<b data-count="30993">30,993</b>/mo</span></div>
+          <!-- 26.7%, not 26.6% (computed 26.705%). $30,993 is the two deep codes'
+               combined monthly discount — which is what "the deep codes" plural means —
+               and is NOT what fencing recovers, so it is not labelled that way. -->
+          <div class="sc-act"><span class="a-pri">P1</span><p><b>Fence or kill the deep codes</b> — FLASH35 ran 26.7% off on 1,641 orders and COMEBACK 26.4% on 702; $436,203 given away across 9,713 discounted orders (7.7% of gross)</p><span class="a-imp">~$<b data-count="30993">30,993</b>/mo</span></div>
           <div class="sc-act"><span class="a-pri">P2</span><p><b>Reprice the two flagged products</b> — Last-Season Insulated Vest (17.8%) and Prior-Year Trail Tee (20.1%); the other 26 hold 50–66%</p><span class="a-imp">at the floor</span></div>
           <div class="sc-act"><span class="a-pri">P3</span><p><b>Fix the top return drivers</b> — Stormpeak 3L Hardshell (Black / M) returning 20.0% against a 9.2% store average, before more spend goes behind it</p><span class="a-imp">9.2% avg</span></div>
         </div>
@@ -388,14 +400,21 @@
         <div class="bn-name">Margin Sentinel</div>
         <p class="bn-watch">Watches paid campaigns for spend that returns less than it costs — MER, CPA drift, contribution margin by campaign.</p>
         <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
-          <span class="bn-move">Reallocate spend · Pinterest — Lifestyle Pins returns <b>0.90×</b> vs Google's 4.82× · $41.9K in spend to move</span></div>
+          <!-- 0.90x / 4.82x / $41.9K and the "Lifestyle Pins" campaign name traced to no
+               sample. Computed from marketing-attribution: Pinterest 0.69x, Klaviyo Email
+               6.87x (Google is the runner-up at 3.20x), Pinterest spend $11.1K. -->
+          <span class="bn-move"><b>Ridgeway Coffee:</b> reallocate spend · Pinterest returns <b>0.69×</b> vs Klaviyo Email's 6.87× · $11.1K in spend to move</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
         <div class="bn-name">Discount Leak</div>
         <p class="bn-watch">Watches every discount code for redemptions by customers who were already converting — returning buyers, organic traffic.</p>
         <div class="bn-rec"><span class="bn-tag">Sample recommendation</span>
-          <span class="bn-move">Across <b>9,713 discounted orders</b>, $436K was given away — FLASH35 alone ran 26.6% off on 1,641 · ~$31.0K/mo recoverable by fencing it</span></div>
+          <!-- Wrong twice before: it attributed both deep codes' total to FLASH35, and
+               fencing a code to first orders recovers only its REPEAT slice, which for
+               FLASH35 is zero. COMEBACK is the repeat-heavy code; fencing it returns
+               ~$7.3K/mo. -->
+          <span class="bn-move">Across <b>9,713 discounted orders</b>, $436K was given away — COMEBACK ran 26.4% off on 702, <b>82.6%</b> of them to repeat buyers · ~$7.3K/mo recoverable by fencing it</span></div>
         <div class="bn-ledger">Ledger · fills from your approvals</div>
       </div>
       <div class="bn-card">
