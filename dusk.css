@@ -184,8 +184,12 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
 .art{display:block}
 /* margin-bottom lifts this: .sec-row is align-items:flex-end, so a larger bottom
    margin raises the canvas. 64 -> 74 for the ~10px the founder measured it low by. */
-.art--sphere{width:190px;height:190px;flex:none;margin-bottom:64px}
-#benefits .art--sphere{margin-right:105px} /* nudge checkmark left to the timer column (transform conflicts with .rv reveal) */
+.art--sphere{width:190px;height:190px;flex:none;margin-bottom:44px} /* 64 -> 44: .sec-row is align-items:flex-end so margin-bottom LIFTS; 20px less lift
+   drops the art, which is the 'a little bit down' that was asked for. */
+/* The 105px nudge is gone. Measured at 1280 with reveal forced: it held the checkmark's
+   right edge at 1101 against a .sec-row edge of 1206 -- the 1180 content measure, which is
+   the same edge the Autopilot card ends on. Aligning to that measure instead of a constant
+   keeps it aligned at every width. */
 @media(max-width:920px){.art--sphere{display:none}}
 
 /* ============ BENTO ============ */
