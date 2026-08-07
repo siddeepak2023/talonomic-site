@@ -44,14 +44,6 @@
       {
         "source": "/portal/**",
         "destination": "/app/index.html"
-      },
-      {
-        "source": "/live",
-        "destination": "/app/index.html"
-      },
-      {
-        "source": "/live/**",
-        "destination": "/app/index.html"
       }
     ],
     "headers": [
