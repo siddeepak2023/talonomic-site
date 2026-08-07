@@ -7,16 +7,16 @@
 <meta name="theme-color" content="#F8F7F3">
 <title>ProfitFalcon — Know which SKUs actually make money</title>
 <meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI product manager that drafts your next move.">
-<link rel="icon" href="favicon.ico?v=20260806l">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260806l">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260806l">
+<link rel="icon" href="favicon.ico?v=20260807a">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260807a">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260807a">
 <link rel="manifest" href="/talonomic-app.webmanifest">
 <meta name="apple-mobile-web-app-title" content="ProfitFalcon">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260806l">
+<link rel="stylesheet" href="./dusk.css?v=20260807a">
 <style>
 .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
@@ -185,7 +185,7 @@
       <img src="./falcon-bird-white-sm.webp" alt="" width="440" height="345">
       ProfitFalcon
     </a>
-    <nav class="nav-links" aria-label="Primary">
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
       <div class="nav-dd">
         <button class="nav-dd-btn" type="button" aria-haspopup="true" aria-expanded="false">Product <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button>
         <div class="nav-dd-menu" role="menu">
@@ -227,6 +227,13 @@
       </button>
       <a class="btn btn--ghost" href="/?install=1" data-install-app>Desktop app</a>
       <a class="btn btn--primary" href="/teardown">Free teardown</a>
+      <!-- Below 920px .nav-links was display:none with no replacement, so every
+           destination above was unreachable on a phone. This is the control that
+           reveals them; dusk-art.js toggles .nav--open on the header. -->
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+        <svg class="nb-bars" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <svg class="nb-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
     </div>
   </div>
 </header>
@@ -1060,7 +1067,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260806l"></script>
+<script defer src="./dusk-art.js?v=20260807a"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.

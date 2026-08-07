@@ -1213,3 +1213,45 @@ window.DUSK = {
   els.forEach(function(el){ cuIO.observe(el); });
 })();
 })();
+
+/* ── Mobile nav disclosure ────────────────────────────────────────────────────
+   Below 920px the stylesheet used to set `.nav-links{display:none}` with nothing
+   in its place, so the primary navigation was deleted rather than collapsed. The
+   CSS now reveals that same list as a stacked panel when `.nav` carries
+   `nav--open`; this is the only thing that toggles it.
+
+   Deliberately small: no focus trap and no scroll lock. The panel is a
+   disclosure inside the header, not a modal — it does not cover the page, the
+   content behind it stays meaningful, and a trap would be a worse experience
+   than none for a list of links. Escape, an outside click, a link click and a
+   resize back to desktop all close it, which are the four ways a person expects
+   to leave it. */
+(function(){
+  var nav = document.querySelector(".nav");
+  if (!nav) return;
+  var burger = nav.querySelector(".nav-burger");
+  if (!burger) return;
+  function set(open){
+    nav.classList.toggle("nav--open", open);
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  burger.addEventListener("click", function(e){
+    e.stopPropagation();
+    set(!nav.classList.contains("nav--open"));
+  });
+  /* Any destination closes it, so the panel never survives a same-page anchor. */
+  nav.addEventListener("click", function(e){
+    if (e.target.closest(".nav-links a")) set(false);
+  });
+  document.addEventListener("click", function(e){
+    if (!nav.contains(e.target)) set(false);
+  });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && nav.classList.contains("nav--open")) { set(false); burger.focus(); }
+  });
+  /* Resizing past the breakpoint leaves `nav--open` on an element whose panel
+     rules no longer apply; clearing it keeps the class honest. */
+  window.addEventListener("resize", function(){
+    if (window.innerWidth > 920) set(false);
+  });
+})();
