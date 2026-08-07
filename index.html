@@ -18,7 +18,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./dusk.css?v=20260807a">
 <style>
-.hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
+/* ONE column, because there is only one child. The 1fr 1.05fr template reserved a
+   second column that nothing has ever filled: measured at 1280px it was 555px of
+   empty grid beside a 529px copy column, and the h1 — whose own max-width is 16ch,
+   831px at its 76.8px cap — was being squeezed to 529px and wrapped to three lines
+   by a column holding nothing. .hero-canvas is position:absolute behind the whole
+   hero, not a grid item, and the falcon docks to #demo, so nothing was ever going
+   to land there. The ch caps on h1 and .hero-sub are the intended measure. */
+.hero-grid{display:grid;grid-template-columns:1fr;gap:48px;align-items:center}
 .sku-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-bottom:16px}
 .sku-bars .bar{flex:1;background:var(--line)}
 .sku-bars .bar.hot{background:var(--signal)}
