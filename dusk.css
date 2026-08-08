@@ -150,6 +150,23 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
 .btn--ghost{border:1px solid var(--line);color:var(--fg)}
 .btn--ghost:hover{border-color:var(--signal);color:var(--signal)}
 
+/* ============ SKIP LINK ============
+   M3. There was no way to bypass the nav on any of the four surfaces: a keyboard
+   or screen-reader visitor tabbed through all five nav slots and both CTAs on
+   EVERY page before reaching content. WCAG 2.4.1, and the one accessibility
+   requirement here that has no visual cost, because the control is invisible
+   until it is focused.
+
+   Moved on :focus rather than toggled with display/visibility — a display:none
+   element cannot receive focus, which is the usual way this gets shipped broken.
+   Kept out of the flow entirely (position:fixed) so it cannot shift the hero. */
+.skip-link{position:fixed;left:-9999px;top:0;z-index:200;
+  background:var(--card);color:var(--fg);border:1px solid var(--line);
+  border-radius:var(--r-2);padding:12px 18px;
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:var(--fs-3);
+  font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+.skip-link:focus{left:14px;top:14px;outline:2px solid var(--signal);outline-offset:2px}
+
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
 .rv.on{opacity:1;transform:none}
 .rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
@@ -1309,9 +1326,29 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 /* ── agent bench — one card per shipped agent; the work, not the count ── */
 .bench-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .bench-grid .calc{grid-column:span 2;margin-top:0}
+/* Fill the trailing hole. Measured at 1280px: talonomic renders 8 cards into a
+   3-wide grid and talonmark 5, so both end on a row holding two of three and
+   leave one empty cell hanging at the bottom of the section. Written against
+   the POSITION rather than a card count, because the count is content and
+   changes; company-site renders 6 and 3 and is already exact, and this rule
+   correctly does nothing there.
+   Reset per breakpoint: at 2 columns the odd one out is the last child at
+   2n+1, and at 1 column any span would create an implicit second column. */
+.bench-grid > :last-child:nth-child(3n+2){grid-column:span 2}
 @media(max-width:960px){.bench-grid .calc{grid-column:1/-1}}
 @media(max-width:960px){.bench-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:620px){.bench-grid{grid-template-columns:1fr}}
+/* The 2-column span is scoped to the 2-column RANGE, and each reset matches the
+   specificity of the rule it undoes. Both matter: `:last-child:nth-child(2n+1)`
+   is (0,3,0), so a plain `.bench-grid > :last-child` reset at (0,2,0) loses to
+   it regardless of source order — which is exactly what happened. At 560px the
+   span survived into the 1fr layout and grid created an implicit second column,
+   computing `38px 460px`. */
+@media(min-width:621px) and (max-width:960px){
+  .bench-grid > :last-child:nth-child(3n+2){grid-column:auto}
+  .bench-grid > :last-child:nth-child(2n+1){grid-column:span 2}}
+@media(max-width:620px){.bench-grid{grid-template-columns:1fr}
+  .bench-grid > :last-child:nth-child(3n+2){grid-column:auto}
+  .bench-grid > :last-child:nth-child(2n+1){grid-column:auto}}
 .bn-card{border:1px solid var(--line);background:var(--card);border-radius:var(--r-3);padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .bn-name{display:flex;align-items:center;gap:8px;font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.1em;text-transform:uppercase;color:var(--fg)}
 .bn-name::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--signal);flex:0 0 auto}
