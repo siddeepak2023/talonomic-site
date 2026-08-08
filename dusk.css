@@ -484,6 +484,15 @@ section{padding:88px 0;border-top:1px solid var(--line-soft);position:relative}
   html{scroll-behavior:auto}
   .rv{opacity:1;transform:none;transition:none}
   .chip .pulse,.caret{animation:none}
+  /* `*{transition-duration}` below does not touch ANIMATION, so every .rv.on
+     keyframe kept running under reduce. The queue-working sequence is the
+     loudest of them: five rows sliding in, five scan sweeps, then an approval
+     pop. Named rather than wildcarded, so a future animation has to opt in
+     deliberately instead of being silently killed. */
+  .rv.on .scm-sched .sr2,
+  .rv.on .scm-sched .sr2::after,
+  .rv.on .scm-sched .sr2 .st:not(.live),
+  .rv.on .scm-sched .sr2 .st.live::before{animation:none}
   *{transition-duration:.01ms!important}
 }
 
