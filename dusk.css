@@ -1320,12 +1320,24 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 @media(prefers-reduced-motion:reduce){.lg-line{opacity:1;transform:none;transition:none}.lg-prog{display:none}.lg-node.on .ln-dot,.lg-node.done .ln-dot,.lg-line.show .lg-k,.lg-line.show .lg-v,.lg-foot .lg-tally{animation:none}}
 
 /* ── Ledger lifecycle (the six-stage record) ──────────────────────────────────
-   Byte-for-byte the rules from talon/frontend/src/styles/showcase.css:501-555,
-   which style LedgerLifecycle.tsx on the SPA landing. Copied rather than
-   reinvented: the statics are plain HTML and cannot render the React component,
-   and the one thing worse than a second implementation is a second implementation
-   that drifts. The markup and the reveal script mirror the component; the tokens
-   are DUSK's, so this themes with the page instead of pinning its own palette.
+   The rules from talon/frontend/src/styles/showcase.css:501-555, which style
+   LedgerLifecycle.tsx on the SPA landing. Copied rather than reinvented: the
+   statics are plain HTML and cannot render the React component, and the one thing
+   worse than a second implementation is a second implementation that drifts. The
+   markup and the reveal script mirror the component; the tokens are DUSK's, so
+   this themes with the page instead of pinning its own palette.
+
+   TYPE IS THE ONE DELIBERATE DIVERGENCE. showcase.css writes literal sizes
+   (9.5/10/10.5/11/12.5/13.5/16/17px) and is not governed by the collapsed scale;
+   these four sheets are, and tokenScale.test.ts caught all fourteen of them on the
+   first copy. They now route through the scale — the sub-11px cluster collapses to
+   --fs-2, 12.5 to --fs-3, 13.5 to --fs-4, 16 and 17 to --fs-6 — which preserves the
+   rank order that carried the meaning and drops the half-pixel continuum the
+   collapse existed to end. Likewise .llc-big takes the clamp already used by
+   .anat-hero .k-val and .calc-out .co-n (1.9rem/4vw/2.7rem): it is the same role,
+   the big computed figure, and its own 30-40px curve crossed .sec-head h2 near
+   768px, inverting the hierarchy mid-viewport. Merged rather than re-coefficiented,
+   per the note on that guard.
 
    It sits BELOW .lg-frame, not instead of it — the SPA landing renders both
    (Landing.tsx:1240 and :1246) and the band and the record are different claims:
@@ -1341,9 +1353,9 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 .llc-st{position:relative;padding-right:10px}
 .llc-tick{width:9px;height:9px;border:1px solid color-mix(in srgb,var(--fg) 22%,transparent);background:var(--bg);border-radius:50%;margin:-5px 0 0;position:relative;z-index:1;transition:background 260ms ease-out,border-color 260ms ease-out,transform 260ms ease-out}
 .llc-st[data-state="pending"] .llc-tick{border-style:dashed}
-.llc-ord{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.1em;color:var(--mut);margin-top:12px;font-variant-numeric:tabular-nums}
-.llc-name{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:5px;color:var(--mut);transition:color 260ms ease-out}
-.llc-sub{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mut);opacity:0;margin-top:4px;transition:opacity 300ms ease-out}
+.llc-ord{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.1em;color:var(--mut);margin-top:12px;font-variant-numeric:tabular-nums}
+.llc-name{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.06em;text-transform:uppercase;margin-top:5px;color:var(--mut);transition:color 260ms ease-out}
+.llc-sub{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);color:var(--mut);opacity:0;margin-top:4px;transition:opacity 300ms ease-out}
 .llc-st[data-on="1"] .llc-tick{background:color-mix(in srgb,var(--fg) 55%,transparent);border-color:color-mix(in srgb,var(--fg) 55%,transparent);transform:scale(1.18)}
 .llc-st[data-on="1"] .llc-name{color:var(--fg)}
 .llc-st[data-on="1"] .llc-sub{opacity:1}
@@ -1353,31 +1365,31 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
 .llc-panel{margin-top:clamp(22px,3.4vw,34px);border:1px solid var(--line);background:var(--card);display:grid;grid-template-columns:1.15fr 1fr}
 .llc-pane{padding:clamp(16px,2.4vw,24px);min-width:0}
 .llc-pane+.llc-pane{border-left:1px solid var(--line)}
-.llc-plabel{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);padding-bottom:10px;border-bottom:1px solid var(--line-soft);margin-bottom:15px;display:flex;justify-content:space-between;gap:10px}
-.llc-src{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mut);letter-spacing:.03em}
-.llc-headline{font-size:17px;font-weight:600;margin:7px 0 3px;letter-spacing:-.01em}
-.llc-big{font-family:"JetBrains Mono",monospace;font-size:clamp(30px,4.6vw,40px);letter-spacing:-.025em;color:var(--loss,#A8453A);font-variant-numeric:tabular-nums;margin:12px 0 2px;line-height:1}
+.llc-plabel{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.13em;text-transform:uppercase;color:var(--mut);padding-bottom:10px;border-bottom:1px solid var(--line-soft);margin-bottom:15px;display:flex;justify-content:space-between;gap:10px}
+.llc-src{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);color:var(--mut);letter-spacing:.03em}
+.llc-headline{font-size:var(--fs-6);font-weight:600;margin:7px 0 3px;letter-spacing:-.01em}
+.llc-big{font-family:"JetBrains Mono",monospace;font-size:clamp(1.9rem,4vw,2.7rem);letter-spacing:-.025em;color:var(--loss,#A8453A);font-variant-numeric:tabular-nums;margin:12px 0 2px;line-height:1}
 .llc-big span{font-size:.42em;letter-spacing:.06em}
-.llc-bigsub{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.llc-bigsub{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 .llc-facts{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;margin-top:20px;border-top:1px solid var(--line-soft);padding-top:14px}
 .llc-fact{display:flex;justify-content:space-between;gap:10px;padding:5px 0;align-items:baseline}
-.llc-fact .k{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
-.llc-fact .v{font-family:"JetBrains Mono",monospace;font-size:12.5px;font-variant-numeric:tabular-nums}
+.llc-fact .k{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.llc-fact .v{font-family:"JetBrains Mono",monospace;font-size:var(--fs-3);font-variant-numeric:tabular-nums}
 .llc-rows{display:flex;flex-direction:column}
 .llc-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 0;border-bottom:1px solid var(--line-soft);opacity:0;transform:translateY(3px);transition:opacity 320ms ease-out,transform 320ms ease-out}
 .llc-row[data-on="1"]{opacity:1;transform:none}
-.llc-row .k{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
-.llc-row .v{font-family:"JetBrains Mono",monospace;font-size:13.5px;font-variant-numeric:tabular-nums}
+.llc-row .k{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.llc-row .v{font-family:"JetBrains Mono",monospace;font-size:var(--fs-4);font-variant-numeric:tabular-nums}
 .llc-row .v.mut{color:var(--mut)}
 .llc-row.await{border-bottom-style:dashed}
 .llc-row.await .v{color:color-mix(in srgb,var(--fg) 28%,transparent)}
 .llc-row.recon{border-bottom:0;border-top:1px solid var(--line);margin-top:7px;padding-top:13px}
 .llc-row.recon .k{color:var(--fg)}
-.llc-note{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.05em;color:var(--mut);border-left:1px solid var(--signal);padding:7px 0 7px 11px;margin-top:16px;opacity:0;transition:opacity 340ms ease-out}
+.llc-note{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.05em;color:var(--mut);border-left:1px solid var(--signal);padding:7px 0 7px 11px;margin-top:16px;opacity:0;transition:opacity 340ms ease-out}
 .llc-note[data-on="1"]{opacity:1}
 .llc-foot{margin-top:clamp(20px,3vw,28px);display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.llc-caption{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:16px;max-width:54ch;margin:0}
-.llc-btn{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--fg);border:1px solid var(--line);padding:9px 15px;cursor:pointer;transition:border-color 180ms ease-out,color 180ms ease-out}
+.llc-caption{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:var(--fs-6);max-width:54ch;margin:0}
+.llc-btn{font-family:"JetBrains Mono",monospace;font-size:var(--fs-2);letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--fg);border:1px solid var(--line);padding:9px 15px;cursor:pointer;transition:border-color 180ms ease-out,color 180ms ease-out}
 .llc-btn:hover{border-color:var(--signal);color:var(--signal)}
 @media(max-width:780px){
   .llc-panel{grid-template-columns:1fr}
