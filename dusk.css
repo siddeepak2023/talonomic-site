@@ -1437,16 +1437,32 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
    Same halftone atmosphere as the page body, opposite tile: bone dots on the
    ink band (light mode), ink dots on the paper band (dark mode). `fixed`
    keeps the tile aligned with the page atmosphere through the flip. ---------- */
+/* The interlude is a THEME ISLAND: it inverts against the page, so on a light page
+   it is dark and on a dark page it is light. It redeclared the SURFACE tokens and
+   stopped there — `--signal`, `--loss` and `--gain` kept the page's values, so on
+   the default light page the accent stayed light oxblood #8E2A22 while the island
+   painted itself #141413 behind it.
+
+   Measured live on all three marketing sites before this fix: `.a-pri` (P1/P2/P3),
+   `.rm-head`, `.rm-proj b` and `.bn-move b` rendered rgb(142,42,34) on rgb(20,20,19)
+   at **2.2:1**, against a stated 4.5:1 non-negotiable — 9 to 14 failing nodes per
+   site, in the theme every visitor gets by default.
+
+   An island has to invert COMPLETELY or not at all. The money roles come with it,
+   because the ledger palette is defined as brand(signal) != loss != gain and
+   flipping only two of the three re-collides them. */
 .interlude{
   background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,#0A0A0B;padding:84px 0;
   --bg:#0A0A0B;--bg2:#111110;--card:#141413;--fg:#EDECE8;
   --mut:rgba(237,236,232,.55);--line:rgba(237,236,232,.16);--line-soft:rgba(237,236,232,.09);--dot:rgba(237,236,232,.10);
+  --signal:#B0453B;--signal-ink:#FFFFFF;--loss:#C56A5B;--gain:#5FA382;
   color:var(--fg);
 }
 :root:not([data-theme="light"]) .interlude{
   background:url(textures/halftone-ink.webp) repeat fixed 0 0/720px 720px,#F8F7F3;
   --bg:#F8F7F3;--bg2:#FFFFFF;--card:#FFFFFF;--fg:#111110;
   --mut:rgba(17,17,16,.55);--line:rgba(17,17,16,.16);--line-soft:rgba(17,17,16,.09);--dot:rgba(17,17,16,.10);
+  --signal:#8E2A22;--signal-ink:#FFFFFF;--loss:#A8453A;--gain:#2F6B4F;
 }
 .interlude .sec-head h2,.interlude h3{color:var(--fg)}
 .interlude .sec-head p{color:var(--mut)}
@@ -1493,11 +1509,16 @@ body{background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,va
   background:url(textures/halftone-ink.webp) repeat fixed 0 0/720px 720px,#F8F7F3;
   --bg:#F8F7F3;--bg2:#FFFFFF;--card:#FFFFFF;--fg:#111110;
   --mut:rgba(17,17,16,.55);--line:rgba(17,17,16,.16);--line-soft:rgba(17,17,16,.09);--dot:rgba(17,17,16,.10);
+  /* Un-flips to a LIGHT surface, so it owes the LIGHT accent. Without this it
+     inherited --signal:#B0453B from .interlude and painted the dark-mode oxblood
+     on white — 4.9:1 where the light token gives 7.5:1. */
+  --signal:#8E2A22;--signal-ink:#FFFFFF;--loss:#A8453A;--gain:#2F6B4F;
 }
 :root:not([data-theme="light"]) .interlude--engine{
   background:url(textures/halftone-bone.webp) repeat fixed 0 0/720px 720px,#0A0A0B;
   --bg:#0A0A0B;--bg2:#111110;--card:#141413;--fg:#EDECE8;
   --mut:rgba(237,236,232,.55);--line:rgba(237,236,232,.16);--line-soft:rgba(237,236,232,.09);--dot:rgba(237,236,232,.10);
+  --signal:#B0453B;--signal-ink:#FFFFFF;--loss:#C56A5B;--gain:#5FA382;
 }
 #integrations{padding:84px 0}
 .interlude--engine .wrap{position:relative}
