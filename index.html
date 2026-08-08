@@ -7,16 +7,16 @@
 <meta name="theme-color" content="#F8F7F3">
 <title>ProfitFalcon — Know which SKUs actually make money</title>
 <meta name="description" content="AI unit economics for ecommerce brands. LTV, contribution margin, and per-SKU profit computed from your Shopify, WooCommerce, BigCommerce, or Amazon exports — plus an AI product manager that drafts your next move.">
-<link rel="icon" href="favicon.ico?v=20260808e">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260808e">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260808e">
+<link rel="icon" href="favicon.ico?v=20260808f">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20260808f">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260808f">
 <link rel="manifest" href="/talonomic-app.webmanifest">
 <meta name="apple-mobile-web-app-title" content="ProfitFalcon">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600&family=Hanken+Grotesk:wght@400;700&family=Inter+Tight:wght@800&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./dusk.css?v=20260808e">
+<link rel="stylesheet" href="./dusk.css?v=20260808f">
 <style>
 /* ONE column, because there is only one child. The 1fr 1.05fr template reserved a
    second column that nothing has ever filled: measured at 1280px it was 555px of
@@ -321,6 +321,103 @@
       <div class="lg-prog" aria-hidden="true"><i id="lgProg"></i></div>
       <div class="lg-foot"><span>SAMPLE RECOMMENDATION · DISCOUNT SENTINEL</span><span class="lg-tally">LEDGER: MEASURED leakage $45.9K/mo · REALIZED — fills from your exports</span></div>
     </div>
+    <!-- ── The ledger's anatomy, the six stages the prose above describes ────────────
+         A hand port of talon/frontend/src/components/showcase/LedgerLifecycle.tsx, which
+         renders this same lifecycle on the SPA landing (Landing.tsx:1246). These sites are
+         plain HTML and cannot run React, which is why the card kept "not being there" after
+         repeated asks -- it was built on the one surface fewest visitors reach. Same markup,
+         same station order, same 260 + i*470ms reveal, written in this page's own idiom.
+
+         Every figure is a CASCADE / CASCADE_LEDGER constant from cascade.ts, each asserted
+         against real runPack output by cascade.test.ts. The headline is leakPerMonth -- the
+         repeat-or-organic union the engine actually estimates -- and total discounting keeps
+         its own name in the fact grid. An earlier band shipped the total labelled "leakage"
+         and overstated the leak by 62%.
+
+         Stages 05 and 06 stay empty on purpose: Cascade has no approval, so there is no
+         realized figure, and inventing one is exactly what the ledger claims not to do. -->
+    <div class="llc rv d1" data-llc>
+      <div class="llc-track">
+        <ol class="llc-stations">
+          <li class="llc-st" data-state="done" data-role="plain" data-on="0"><div class="llc-tick"></div><div class="llc-ord">01</div><div class="llc-name">Detected</div><div class="llc-sub">from cascade_orders.csv</div></li>
+          <li class="llc-st" data-state="done" data-role="plain" data-on="0"><div class="llc-tick"></div><div class="llc-ord">02</div><div class="llc-name">Quantified</div><div class="llc-sub">180 days window</div></li>
+          <li class="llc-st" data-state="done" data-role="plain" data-on="0"><div class="llc-tick"></div><div class="llc-ord">03</div><div class="llc-name">Proposed</div><div class="llc-sub">exact change, editable</div></li>
+          <li class="llc-st" data-state="done" data-role="brand" data-on="0"><div class="llc-tick"></div><div class="llc-ord">04</div><div class="llc-name">Your approval</div><div class="llc-sub">nothing moves without it</div></li>
+          <li class="llc-st" data-state="pending" data-role="plain" data-on="0"><div class="llc-tick"></div><div class="llc-ord">05</div><div class="llc-name">Outcome logged</div><div class="llc-sub">after 30 days</div></li>
+          <li class="llc-st" data-state="pending" data-role="plain" data-on="0"><div class="llc-tick"></div><div class="llc-ord">06</div><div class="llc-name">Realized</div><div class="llc-sub">measured, not projected</div></li>
+        </ol>
+        <div class="llc-rail"><i></i><b></b></div>
+      </div>
+
+      <div class="llc-panel" data-countup>
+        <div class="llc-pane">
+          <div class="llc-plabel"><span>What it found</span><span>Discount leakage</span></div>
+          <div class="llc-src">cascade_orders.csv · 24,623 orders · 180 days</div>
+          <div class="llc-headline">Discounting is outrunning the margin it buys.</div>
+          <div class="llc-big"><b data-count="45.9" data-prefix="$" data-suffix="K" data-decimals="1">$45.9K</b><span> / mo</span></div>
+          <div class="llc-bigsub">Computed leakage, not an estimate</div>
+          <div class="llc-facts sc-stagger">
+            <div class="llc-fact"><span class="k">Revenue</span><span class="v"><b data-count="5.20" data-prefix="$" data-suffix="M" data-decimals="2">$5.20M</b></span></div>
+            <div class="llc-fact"><span class="k">Orders</span><span class="v"><b data-count="24623">24,623</b></span></div>
+            <div class="llc-fact"><span class="k">Avg order</span><span class="v"><b data-count="211.17" data-prefix="$" data-decimals="2">$211.17</b></span></div>
+            <div class="llc-fact"><span class="k">Gross margin</span><span class="v"><b data-count="53.8" data-suffix="%" data-decimals="1">53.8%</b></span></div>
+            <div class="llc-fact"><span class="k">Contribution</span><span class="v"><b data-count="49.8" data-suffix="%" data-decimals="1">49.8%</b></span></div>
+            <div class="llc-fact"><span class="k">Return rate</span><span class="v"><b data-count="9.2" data-suffix="%" data-decimals="1">9.2%</b></span></div>
+            <div class="llc-fact"><span class="k">Refunded</span><span class="v"><b data-count="477.6" data-prefix="$" data-suffix="K" data-decimals="1">$477.6K</b></span></div>
+            <div class="llc-fact"><span class="k">All discounts</span><span class="v"><b data-count="74.2" data-prefix="$" data-suffix="K" data-decimals="1">$74.2K</b> / mo</span></div>
+          </div>
+        </div>
+
+        <div class="llc-pane">
+          <div class="llc-plabel"><span>The record</span><span>One recommendation</span></div>
+          <div class="llc-rows">
+            <div class="llc-row" data-on="0"><span class="k">Trigger</span><span class="v mut">Discount leakage detector</span></div>
+            <div class="llc-row" data-on="0"><span class="k">Measured leak</span><span class="v">$45.9K / mo</span></div>
+            <div class="llc-row" data-on="0"><span class="k">Evidence</span><span class="v mut">the rows + the formula</span></div>
+            <div class="llc-row" data-on="0"><span class="k">Proposed change</span><span class="v mut">fence COMEBACK to first orders</span></div>
+            <div class="llc-row await" data-on="0"><span class="k">Approved</span><span class="v">awaiting you</span></div>
+            <div class="llc-row await" data-on="0"><span class="k">Outcome logged</span><span class="v">—</span></div>
+            <div class="llc-row await recon" data-on="0"><span class="k">Realized</span><span class="v">—</span></div>
+          </div>
+          <div class="llc-note" data-on="0">Your ledger fills from your first approval. Until then these stay empty — we don't pre-fill a number we haven't measured.</div>
+        </div>
+      </div>
+
+      <div class="llc-foot">
+        <p class="llc-caption">Every recommendation is scored against what actually happened — including the ones that miss.</p>
+        <button class="llc-btn" type="button" data-llc-replay>Replay</button>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var root=document.querySelector("[data-llc]"); if(!root) return;
+      var sts=root.querySelectorAll(".llc-st"),rows=root.querySelectorAll(".llc-row"),
+          fill=root.querySelector(".llc-rail i"),note=root.querySelector(".llc-note"),
+          btn=root.querySelector("[data-llc-replay]"),
+          /* which station reveals which record row, so the rail and the record read as one action */
+          ROW_AT=[0,1,1,2,3,4,5],SOLID=4,N=sts.length,
+          still=matchMedia("(prefers-reduced-motion:reduce)").matches,timers=[];
+      function paint(lit){
+        for(var i=0;i<N;i++){sts[i].setAttribute("data-on",i<=lit?"1":"0");}
+        for(var j=0;j<rows.length;j++){rows[j].setAttribute("data-on",lit>=0&&ROW_AT[j]<=lit?"1":"0");}
+        /* The solid rule stops at the human -- lighting a pending station must not extend it. */
+        fill.style.width=(lit<0?0:(Math.min(lit,SOLID-1)+1)/N*100)+"%";
+        note.setAttribute("data-on",lit>=N-1?"1":"0");
+      }
+      function start(){
+        for(var t=0;t<timers.length;t++){clearTimeout(timers[t]);}
+        timers=[];
+        if(still){paint(N-1);return;}
+        paint(-1);
+        for(var i=0;i<N;i++){(function(i){timers.push(setTimeout(function(){paint(i);},260+i*470));})(i);}
+      }
+      if(btn){btn.addEventListener("click",start);}
+      var io=new IntersectionObserver(function(en){
+        for(var i=0;i<en.length;i++){if(en[i].isIntersecting){start();io.disconnect();return;}}
+      },{threshold:.35});
+      io.observe(root);
+    })();
+    </script>
   </div>
 </section>
 <script>
@@ -1069,7 +1166,7 @@
   </div>
 </footer>
 
-<script defer src="./dusk-art.js?v=20260808e"></script>
+<script defer src="./dusk-art.js?v=20260808f"></script>
 <script>
 // Metric-pack tab peek: click to switch, auto-cycle until touched.
 // Skipped entirely under prefers-reduced-motion.
